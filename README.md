@@ -63,13 +63,7 @@ After successfully installing the cytofkit2 package, run the following codes to 
 
 ``` r
 library("cytofkit2")
-cytofkit_GUI()
-```
-
-Using the cytofkit shinyAPP to explore your analysis results:
-
-``` r
-cytofkitShinyAPP()
+cytofkit_shiny_dashboard()
 ```
 
 <u>Check the following vignettes for more details:</u>
