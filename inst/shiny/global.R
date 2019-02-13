@@ -1,5 +1,5 @@
 ## loading package
-require(cytofkit)
+require(cytofkit2)
 require(ggplot2)
 require(reshape2)
 require(plyr)
