@@ -520,7 +520,7 @@ shinyServer = function(input, output, session)
       
       if (i <= length(clusterLabel)){
         x <- clusterLabel[i]
-        colourInput(inputId=paste0('cluster_', i, '_col'), 
+        colourpicker::colourInput(inputId=paste0('cluster_', i, '_col'), 
                     label=paste0('Cluster ', x," Colour :"), 
                     value = clusterColor[i], showColour = "both", 
                     palette = "square")
