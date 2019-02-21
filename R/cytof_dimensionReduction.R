@@ -83,7 +83,7 @@ cytof_dimReduction <- function(data,
                                       , min_dist = umap_min_dist)
              mapped <- umap$fit_transform(as.matrix(x = marker_filtered_data))
            }
-           tsne={
+           ,tsne={
                cat("  Running t-SNE...with seed", tsneSeed)
                if(is.numeric(tsneSeed))
                    set.seed(tsneSeed) # Set a seed if you want reproducible results
