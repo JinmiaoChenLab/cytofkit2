@@ -133,7 +133,9 @@ cytofkit <- function(fcsFiles = getwd(),
                      transformMethod = c("autoLgcl", "cytofAsinh", "logicle", "arcsinh", "none"), 
                      mergeMethod = c("ceil", "all", "min", "fixed"), 
                      fixedNum = 10000, 
-                     dimReductionMethod = c("tsne", "pca", "isomap"), 
+                     dimReductionMethod = c("umap", "tsne", "pca", "isomap"), 
+                     umap_neighbor = 30,
+                     umap_min_dist = 0.3,
                      clusterMethods = c("Rphenograph", "ClusterX", "DensVM", "FlowSOM", "NULL"), 
                      visualizationMethods = c("tsne", "pca", "isomap", "NULL"), 
                      progressionMethod = c("NULL", "diffusionmap", "isomap"),
@@ -233,7 +235,12 @@ cytofkit <- function(fcsFiles = getwd(),
     message("Dimension reduction...")
     alldimReductionMethods <- unique(c(visualizationMethods, dimReductionMethod))
     allDimReducedList <- lapply(alldimReductionMethods, 
-                                cytof_dimReduction, data = exprs_data, markers = markers, tsneSeed = seed)
+                                cytof_dimReduction
+                                , data = exprs_data
+                                , markers = markers
+                                , umap_neighbor = umap_neighbor
+                                , umap_min_dist = umap_min_dist
+                                , tsneSeed = seed)
     names(allDimReducedList) <- alldimReductionMethods
     
     

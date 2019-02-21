@@ -19,7 +19,7 @@
 #' @importFrom Rtsne Rtsne
 #' @importFrom destiny DiffusionMap
 #' @importFrom utils compareVersion packageVersion
-#' @import stats
+#' @import stats reticulate
 #' @export
 #' @examples
 #' data(iris)
@@ -31,9 +31,11 @@
 #' \code{install.packages("https://github.com/igraph/rigraph/releases/download/v1.1.0/igraph_1.1.0.zip", repos=NULL, method="libcurl")}
 cytof_dimReduction <- function(data,
                                markers = NULL,
-                               method = c("tsne", "pca", "isomap", "diffusionmap", "NULL"), 
+                               method = c("umap", "tsne", "pca", "isomap", "diffusionmap", "NULL"), 
                                distMethod = "euclidean", 
                                out_dim = 2,
+                               umap_neighbor = 30,
+                               umap_min_dist = 0.3,
                                tsneSeed = 42,
                                isomap_k = 5, 
                                isomap_ndim = NULL, 
@@ -68,6 +70,19 @@ cytof_dimReduction <- function(data,
     }
     
     switch(method,
+           umap = {
+             if (!py_module_available(module = "umap")) {
+               stop("Cannot find UMAP, please install through pip (e.g. pip install umap-learn).")
+             }
+             cat("  Running UMAP...with seed", tsneSeed)
+             umap_import <- import(module = "umap", delay_load = TRUE)
+
+             umap <- umap_import$UMAP(n_neighbors = as.integer(x = umap_neighbor)
+                                      , n_components = as.integer(x = out_dim)
+                                      , metric = distMethod 
+                                      , min_dist = umap_min_dist)
+             mapped <- umap$fit_transform(as.matrix(x = marker_filtered_data))
+           }
            tsne={
                cat("  Running t-SNE...with seed", tsneSeed)
                if(is.numeric(tsneSeed))

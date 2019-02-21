@@ -539,7 +539,7 @@ load_data_panel = fluidPage(
 dr_panel = fluidPage(
   tags$div(title="The method(s) used for visualizing the clustering results, multiple selections are allowed. Including \"pca\", \"isomap\", \"tsne\". \n\nWARNING: \"tsne\" is the default selection, \"isomap\" may take long time."
                       , selectInput('dr_method', 'Dimensionality reduction methods'
-                                    , choices = c('PCA', 'isoMAP', 'tSNE')
+                                    , choices = c('PCA', 'isoMAP', 'tSNE', 'UMAP')
                                     , multiple = T
                                     , selected = 'tSNE')
            )
