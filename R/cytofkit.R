@@ -227,6 +227,7 @@ cytofkit <- function(fcsFiles = getwd(),
     message("Extract expression data...")
     exprs_data <- cytof_exprsMerge(fcsFiles, comp = ifCompensation, verbose = FALSE, 
                                    transformMethod = transformMethod, 
+                                   markers = markers, 
                                    mergeMethod = mergeMethod, fixedNum = fixedNum, ...)
     cat("  ", nrow(exprs_data), " x ", ncol(exprs_data), " data was extracted!\n")
     

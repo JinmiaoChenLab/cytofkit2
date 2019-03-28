@@ -6,8 +6,8 @@
 \usage{
 cytof_exprsMerge(fcsFiles, comp = FALSE,
   transformMethod = c("autoLgcl", "cytofAsinh", "logicle", "arcsinh",
-  "none"), scaleTo = NULL, mergeMethod = c("ceil", "all", "fixed",
-  "min"), fixedNum = 10000, sampleSeed = 123, ...)
+  "none"), scaleTo = NULL, markers = NULL, mergeMethod = c("ceil",
+  "all", "fixed", "min"), fixedNum = 10000, sampleSeed = 123, ...)
 }
 \arguments{
 \item{fcsFiles}{A vector of FCS file names.}

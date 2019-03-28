@@ -28,10 +28,11 @@ cytof_exprsMerge <- function(fcsFiles,
                              comp = FALSE, 
                              transformMethod = c("autoLgcl", "cytofAsinh", "logicle", "arcsinh", "none"), 
                              scaleTo = NULL, 
+							 markers = NULL,
                              mergeMethod = c("ceil", "all", "fixed", "min"), 
                              fixedNum = 10000, 
                              sampleSeed = 123, ...) {
-    
+    # browser()
     transformMethod <- match.arg(transformMethod)
     mergeMethod <- match.arg(mergeMethod)
     
@@ -40,6 +41,14 @@ cytof_exprsMerge <- function(fcsFiles,
                                      transformMethod = transformMethod, 
                                      scaleTo = scaleTo, ...), 
                      SIMPLIFY = FALSE)
+	if(!is.null(markers)){
+	  for (i in 1:length(exprsL)) {
+	    temp_name = colnames(exprsL[[i]])
+	    markers_id = gsub("(.*)<.*", "\\1", markers)
+	    temp_id = gsub("(.*)<.*", "\\1", temp_name)
+	    exprsL[[i]] = exprsL[[i]][, temp_id %in% markers_id, drop = F]
+	  }
+	}
 
     if(is.numeric(sampleSeed))
         set.seed(sampleSeed)
