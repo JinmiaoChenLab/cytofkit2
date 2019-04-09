@@ -7,6 +7,7 @@ source('./ui.R')
 library(flowCore)
 library(shinyalert)
 source('./global.R')
+library(shinyWidgets)
 # library(ezTools)
 # library(monocle)
 # library(jsTree)
@@ -56,6 +57,7 @@ shinyServer = function(input, output, session)
     markers <- paste(pd$name, "<", pd$desc, ">", sep = "")
     inputs$markers = markers
     updateSelectInput(session, "markers", choices = markers)
+    # updatePickerInput(session, 'pickermarker', choices = markers)
     if (length(markers) == 0) {
       shinyalert(title = "Error", text = "No markers found in the FCS file!", type = "error")
       # stop()
@@ -705,9 +707,9 @@ shinyServer = function(input, output, session)
             cex_row_label= input$M_rowLabelSize, 
             cex_col_label= input$M_colLabelSize, 
             scaleMethod = input$M_scaleMethod)
-    dev.copy2pdf(file = "cytofkit_shinyAPP_marker_heatmap.pdf",
-                 width=as.integer(input$tab_w), 
-                 height=as.integer(input$tab_h))
+    # dev.copy2pdf(file = "cytofkit_shinyAPP_marker_heatmap.pdf",
+    #              width=as.integer(input$tab_w), 
+    #              height=as.integer(input$tab_h))
   })
   
   output$M_heatmapPlot <- renderPlot({

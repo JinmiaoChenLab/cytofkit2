@@ -6,6 +6,7 @@ library(DT)
 library(shinydashboard)
 library(shinyalert)
 library(shinyFiles)
+library(shinyWidgets)
 
 shiny_one_panel = fluidPage(
   titlePanel("Interactive Exploration of cytofkit Analysis Results"),
@@ -507,7 +508,16 @@ load_data_panel = fluidPage(
   )
   , tags$div(title="Select the list of makers to be used for analysis."
              , selectInput('markers', 'Markers', choices = NULL, selected = NULL
+                           , selectize = T
                            , multiple = T)
+             # , pickerInput('pickermarker', label = "Picker Markers", choices = NULL, multiple = T
+             #               ,   options = list(
+             #                 `actions-box` = TRUE
+             #                 , `live-search` = T
+             #                 , `live-search-style` = 'contains'
+             #                 , `show-tick` = T
+             #               )
+             #               )
   )
   , tags$div(title="A prefix that will be added to the names of result files."
              , textInput('project_name', 'Project name', value = 'cytofkit')
@@ -576,7 +586,6 @@ data_analysis_panel = fluidPage(fluidRow(
     title = "Load data",
     status = "primary",
     width = 3,
-    height = 630,
     # background = "orange",
     solidHeader = T,
     collapsible = FALSE,
