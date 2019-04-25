@@ -8,6 +8,90 @@ library(shinyalert)
 library(shinyFiles)
 library(shinyWidgets)
 
+box_paramter = list(
+  status = "primary",
+  width = 3,
+  # background = "orange",
+  solidHeader = T,
+  collapsible = FALSE,
+  collapsed = FALSE
+)
+#### cell debarcode page ####
+cell_debarcode_setting_panel = fluidPage(
+    # fileInput("fcs_debarcode", "FCS to debarcode")
+    # , selectInput('pd_used', label = "Palladium isotope used", choices = NULL
+    #               , multiple = T)
+    # , numericInput('pd_num', label = 'Number of palladium isotope', value = 3)
+    # , numericInput('min_separation', 'Minimum separation', value = 0.3)
+    # , numericInput('max_dist', 'Maximum Mahlanobis distance', value = 30)
+    # , selectInput('debarcode_plot_type', "Select plot type"
+    #               , choices = c("Separation", "Event", "Single biaxial", "All barcode biaxial"))
+    # , actionButton('debarcode_plot', 'Plot data')
+    # , actionButton('debarcode_save_file', 'Save files')
+    fileInput("debarcoderui_select_key", label = "Select key"), 
+    verbatimTextOutput("debarcoderui_dialog_selected_key"),
+    fileInput("debarcoderui_select_fcs", label = "Select FCS"), 
+    verbatimTextOutput("debarcoderui_dialog_selected_fcs")
+    , selectInput('pd_used', label = "Palladium isotope used", choices = NULL
+                  , multiple = T)
+    , numericInput('pd_num', label = 'Number of palladium isotope', value = 3)
+    , numericInput("debarcoderui_separation_threshold", "Minimum separation", value = 0.3, min = 0, max = 1, step = 0.1, width = "100%"),
+    numericInput("debarcoderui_mahal_dist_threshold", "Maxiumum Mahlanobis distance", value = 30, min = 0, max = 30, step = 1, width = "100%"),
+    selectizeInput("debarcoderui_plot_type", "Select plot type", multiple = FALSE, width = "100%",
+                   choices = c("Separation", "Event", "Single biaxial", "All barcode biaxials")),
+    conditionalPanel(
+      condition <- "input.debarcoderui_plot_type != 'Separation'",
+      selectizeInput("debarcoderui_selected_sample", "Select sample", choices = c(""), multiple = FALSE, width = "100%")
+    ),
+    conditionalPanel(
+      condition <- "input.debarcoderui_plot_type == 'Single biaxial'",
+      selectizeInput("debarcoderui_xaxis", "Select x axis", choices = c(""), multiple = FALSE, width = "100%"),
+      selectizeInput("debarcoderui_yaxis", "Select y axis", choices = c(""), multiple = FALSE, width = "100%")
+    ),
+    actionButton("debarcoderui_plot_data",
+                 tagList(tags$div(id = "debarcoderui_plot_data_text", "Plot data"),
+                         tags$div(id = "debarcoderui_plot_data_spinner", class = "spinner", style = "visibility: hidden")),
+                 style = "position: relative"),
+    downloadButton("debarcoderui_save_files", "Save files")
+    
+)
+cell_debarcode_plot_panel = fluidPage(
+  plotOutput("debarcoderui_plot1", height = "200px"),
+  plotOutput("debarcoderui_plot2")
+)
+cell_debarcode_page = fluidPage(
+  do.call(box, ez_param(box_paramter, title = "Cell debarcode settings"
+                 , cell_debarcode_setting_panel))
+  , do.call(box, ez_param(box_paramter, title = "Cell debarcode plots", width = 9
+                 , cell_debarcode_plot_panel))
+
+)
+#### beads normalization page ####
+beads_norm_raw_page = navbarPage(
+  "",
+  tabPanel(
+    "Normalize data",
+    tags$head(tags$script(src = "gate-plot.js")),
+    tags$head(tags$script(src = "d3.min.js")),
+    singleton(tags$head(
+      tags$link(rel = 'stylesheet', type = 'text/css', href = 'gate-plot.css')
+    )),
+    fluidPage(fluidRow(uiOutput("normalizerUI")),
+              fluidRow(uiOutput(
+                "normalizerUI_plot_outputs"
+              )))
+  ),
+  tabPanel("Remove beads",
+           fluidPage(
+             fluidRow(uiOutput("beadremovalUI")),
+             fluidRow(uiOutput("beadremovalUI_plot_outputs"))
+           ))
+)
+beads_norm_page = fluidPage(
+  do.call(box, ez_param(box_paramter, list(title = "Cell normalization settings"), width = 12
+                 , beads_norm_raw_page))
+)
+#### shiny on panel #####
 shiny_one_panel = fluidPage(
   titlePanel("Interactive Exploration of cytofkit Analysis Results"),
   hr(),
@@ -501,23 +585,28 @@ shiny_one_panel = fluidPage(
   )
 )
 
+#### load data panel ####
 load_data_panel = fluidPage(
   tags$div(title='The fcs files to be analyzed. One or multiple fcs files are allowed. When multiple fcs files are selected, cells from each fcs file are combined for analysis.'
              , fileInput("rawfcs", "Raw FCS files", multiple = T
                          , accept = c("FCSfile/fcs", '.fcs'))
   )
   , tags$div(title="Select the list of makers to be used for analysis."
+             , fluidRow(
+               column(4, actionButton("select_all_markers", "Select all markers"))
+               , column(4, actionButton("deselect_all_markers", "Deselect all markers"))
+             ) 
              , selectInput('markers', 'Markers', choices = NULL, selected = NULL
-                           , selectize = T
-                           , multiple = T)
-             # , pickerInput('pickermarker', label = "Picker Markers", choices = NULL, multiple = T
-             #               ,   options = list(
-             #                 `actions-box` = TRUE
-             #                 , `live-search` = T
-             #                 , `live-search-style` = 'contains'
-             #                 , `show-tick` = T
-             #               )
-             #               )
+                                     , selectize = T
+                                     , multiple = T)
+             , pickerInput('pickermarker', label = "Picker Markers", choices = NULL, multiple = T
+                           ,   options = list(
+                             `actions-box` = TRUE
+                             , `live-search` = T
+                             , `live-search-style` = 'contains'
+                             , `show-tick` = T
+                           )
+                           )
   )
   , tags$div(title="A prefix that will be added to the names of result files."
              , textInput('project_name', 'Project name', value = 'cytofkit')
@@ -533,9 +622,6 @@ load_data_panel = fluidPage(
              , selectInput('transform_method', 'Tranformation Method'
                            , choices = c('autoLgcl', 'autoAsinh', 'Fixedlogicle', 'NULL'))
   )
-  
-  
-  
   , fluidRow(
     tags$div(title=''
              , downloadButton('download_analysis_res', 'Save result'))
@@ -580,6 +666,8 @@ pseudotime_panel = fluidPage(
            , selectInput('progressionMethods', 'Cellular Progression'
                          , choices = c('diffusionmap', 'isomap', 'NULL')))
 )
+
+#### data analysis panel ####
 data_analysis_panel = fluidPage(fluidRow(
   h2('Data analysis')
   , box(
@@ -628,8 +716,16 @@ data_analysis_panel = fluidPage(fluidRow(
 )
 )
 
+#### result panel ####
 res_panel = fluidPage()
 ########################################
+
+#### report generation page ####
+report_gen_panel = fluidPage()
+report_gen_page = fluidPage({
+  do.call(box, ez_param(box_paramter, title = "Report generation settings", width = 12
+                 , report_gen_panel))
+})
 
 dbHeader <- dashboardHeader(title = "cytofkit2")
 dbHeader$children[[2]]$children <-  tags$a(href='https://github.com/JinmiaoChenLab',
@@ -641,8 +737,11 @@ dashboardPage(skin = "yellow",
               dbHeader,
               dashboardSidebar(
                 sidebarMenu(id = "sbm",
-                            menuItem(tags$p(style = "display:inline;font-size: 20px;", "Data analysis"), tabName = "data_analysis", icon = icon('cog'))
+                            menuItem(tags$p(style = "display:inline;font-size: 20px;", "Cell debarcode"), tabName = "cell_debarcode", icon = icon('area-chart'))
+                            , menuItem(tags$p(style = "display:inline;font-size: 20px;", "Beads normalization"), tabName = "beads_norm", icon = icon('area-chart'))
+                            , menuItem(tags$p(style = "display:inline;font-size: 20px;", "Data analysis"), tabName = "data_analysis", icon = icon('cog'))
                             , menuItem(tags$p(style = "display:inline;font-size: 20px;", "Results visualization"), tabName = "res_visualize", icon = icon('area-chart'))
+                            , menuItem(tags$p(style = "display:inline;font-size: 20px;", "Report generation"), tabName = "report_gen", icon = icon('area-chart'))
                             
                 )# end of sidebarMenu
               ),#end of dashboardSidebar
@@ -659,6 +758,18 @@ dashboardPage(skin = "yellow",
                   , tabItem(
                     tabName = "res_visualize"
                     , shiny_one_panel
+                  ) # End of tabItem
+                  , tabItem(
+                    tabName = "cell_debarcode"
+                    , cell_debarcode_page
+                  ) # End of tabItem
+                  , tabItem(
+                    tabName = "beads_norm"
+                    , beads_norm_page
+                  ) # End of tabItem
+                  , tabItem(
+                    tabName = "report_gen"
+                    , report_gen_page
                   ) # End of tabItem
                   
                 ) # End of tabItems
