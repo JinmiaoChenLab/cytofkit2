@@ -145,7 +145,8 @@ shiny_one_panel = fluidPage(
                     checkboxInput(inputId = "saveCsv", label = "csv", value = FALSE)
              )
            ),
-           actionButton("saveButton", "Save Data", icon = icon("download")),
+           # actionButton("saveButton", "Save Data", icon = icon("download")),
+           downloadButton("saveButton", "Save Data"),
            
            hr(),
            h4(tags$a(href="mailto:jinmiao@gmail.com,a0124008@u.nus.edu?subject=[cytofkit-question]", 
