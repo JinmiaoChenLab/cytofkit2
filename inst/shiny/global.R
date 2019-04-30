@@ -7,7 +7,7 @@ require(VGAM)
 require(colourpicker)
 require(gplots)
 
-
+max_i = 0
 ## Main function for scatter plot
 scatterPlot <- function(obj, plotMethod, plotFunction, pointSize=1, alpha = 1,
                         addLabel=TRUE, labelSize=1, sampleLabel = TRUE,

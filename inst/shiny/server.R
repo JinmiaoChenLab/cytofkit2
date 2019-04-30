@@ -549,6 +549,7 @@ shinyServer = function(input, output, session)
     # fcsFile = NULL
     markers = NULL
     , selected_markers = NULL
+    , export_figure_selected = list()
   )
   
   inputs = reactiveValues(
@@ -2069,6 +2070,108 @@ shinyServer = function(input, output, session)
       updateTabsetPanel(session, "P_progressionTabs", selected = "P_tab1")
     }
   })
+  
+  
+  ###### export figure page #############
+  # browser()
+  observeEvent(input$sbm, {
+    # browser()
+    if(input$sbm == "report_gen"){
+      
+      ### Cluster plot parameters
+      updateSelectInput(session, inputId = "export_cluster_plot_vis_method"
+                        , choices = visualizationMethods())
+      updateSelectInput(session, inputId = "export_cluster_plot_cluster_by"
+                        , choices = visualizationFunctions())
+      clusterMethod <- input$c_PlotFunction
+      clusterIDs <- sort(unique(v$data$clusterRes[[clusterMethod]]))
+      updateSelectInput(session, inputId = "export_cluster_plot_cluster_filter"
+                        , choices = clusterIDs, selected = clusterIDs)
+      ### Expression heatmap parameters
+      updateSelectInput(session, inputId = "export_expression_heatmap_cluster_method"
+                        , choices = clusterMethods())
+      sorted_markerNames <- colnames(v$data$expressionData)
+      markerNames <- sorted_markerNames[order(sorted_markerNames)]
+      initNum <- ifelse(length(markerNames) >=4, 4, 1)
+      updateSelectInput(session, inputId = "export_expression_heatmap_select_markers"
+                        , choices = markerNames, selected = markerNames[1:initNum])
+      
+      ### Expression level plot
+      updateSelectInput(session, inputId = "export_expression_level_vis_method"
+                        , choices = visualizationMethods())
+      
+      sorted_markers <- colnames(v$data$expressionData)
+      sorted_markers <- sorted_markers[order(sorted_markers)]
+      #markers <- c(sorted_markers, "All Markers", "All Markers(scaled)")
+      updateSelectInput(session, inputId = "export_expression_level_markers"
+                        , choices = sorted_markers, selected = sorted_markers[1])
+      ### Expression histogram
+      stackFactorChoice <- c(names(v$data$clusterRes), "sample") 
+      updateSelectInput(session, inputId = "export_expression_hist_stack_factor"
+                        , choices = stackFactorChoice, selected = stackFactorChoice[1])
+      
+      sorted_markerNames <- colnames(v$data$expressionData)
+      markerNames <- sorted_markerNames[order(sorted_markerNames)]
+      initNum <- ifelse(length(markerNames) >=4, 4, 1)
+      updateSelectInput(session, inputId = "export_expression_hist_select_markers"
+                        , choices = markerNames, selected = markerNames[1:initNum])
+      
+    }
+    
+  })
+  
+  ## reponse to add figure
+  observeEvent(input$add_report_figure, {
+    # browser()
+    num = length(v$export_figure_selected) + 1
+    v$export_figure_selected[[num]] = list()
+    v$export_figure_selected[[num]][["figure"]] = input$export_fig_selection
+  })
+  
+  observeEvent(v$export_figure_selected, {
+    figures = c()
+    for (i in 1:length(v$export_figure_selected)) {
+      figures[i] = v$export_figure_selected[[i]]$figure
+    }
+    figures = paste(figures, collapse = "\n")
+    updateTextAreaInput(session, 'figure_selected', value = figures)
+    max_i <<- length(v$export_figure_selected)
+  })
+  
+  output$report_preview <- renderUI({
+    plot_output_list <- lapply(1:length(v$export_figure_selected), function(i) {
+      plotname <- paste("plot", i, sep="")
+      plotOutput(plotname, height = 280, width = 250)
+    })
+    
+    # Convert the list to a tagList - this is necessary for the list of items
+    # to display properly.
+    do.call(tagList, plot_output_list)
+  })
+  
+  # Call renderPlot for each one. Plots are only actually generated when they
+  # are visible on the web page.
+  for (i in 1:max_i) {
+    # Need local so that each item gets its own number. Without it, the value
+    # of i in the renderPlot() will be the same across all instances, because
+    # of when the expression is evaluated.
+    local({
+      my_i <- i
+      plotname <- paste("plot", my_i, sep="")
+      
+      output[[plotname]] <- renderPlot({
+        plot(1:my_i, 1:my_i,
+             xlim = c(1, max_i),
+             ylim = c(1, max_i),
+             main = paste("1:", my_i, ".  n is ", input$n, sep = "")
+        )
+      })
+    })
+  }
+  # output$figure_selected <- renderText({
+  #   # browser()
+  # 
+  # })
 }
 
 # app = shinyApp(ui = shiny_UI, server = shinyServer)

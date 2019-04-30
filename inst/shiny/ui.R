@@ -721,12 +721,63 @@ res_panel = fluidPage()
 ########################################
 
 #### report generation page ####
-report_gen_panel = fluidPage()
-report_gen_page = fluidPage({
-  do.call(box, ez_param(box_paramter, title = "Report generation settings", width = 12
-                 , report_gen_panel))
+report_gen_panel = fluidPage(
+  selectInput("export_fig_selection", "Select figure", choices = c("Cluster plot", "Expression heatmap"
+                                                                   , "Expression level plot", "Expression histogram")
+  )
+  , conditionalPanel(condition = "input.export_fig_selection == 'Cluster plot'"
+                     , selectInput("export_cluster_plot_vis_method", "Visualization Method:"
+                                   , choices = NULL)
+                     , selectInput("export_cluster_plot_cluster_by", "Cluster By:"
+                                   , choices = NULL)
+                     , selectInput("export_cluster_plot_cluster_filter", "Clusters Filter:"
+                                   , choices = NULL, multiple = T)
+  )
+  , conditionalPanel(condition = "input.export_fig_selection == 'Expression heatmap'"
+                     , selectInput("export_expression_heatmap_cluster_method", "Cluster Method:"
+                                   , choices = NULL)
+                     , selectInput("export_expression_heatmap_heatmap_type", "Heatmap Type:"
+                                   , choices = c("mean", "median"))
+                     , selectInput("export_expression_heatmap_scale_data", "Scale Data:"
+                                   , choices = c("none", "row", "column"))
+                     , selectInput("export_expression_heatmap_select_markers", "Select Markers:"
+                                   , choices = NULL, multiple = T)
+  )
+  , conditionalPanel(condition = "input.export_fig_selection == 'Expression level plot'"
+                     , selectInput("export_expression_level_vis_method", "Visualization Method:"
+                                   , choices = NULL)
+                     , selectInput("export_expression_level_color_palette", "Color Palette:"
+                                   , choices = c('bluered', 'spectral1', 'spectral2', 'heat'))
+                     , selectInput("export_expression_level_scaling_range", "Scaling Range:"
+                                   , choices = c("Local", "Global"))
+                     , selectInput("export_expression_level_centering", "Centering:"
+                                   , choices = c("Un-centered", "Centered"))
+                     , selectInput("export_expression_level_markers", "Plot Markers:"
+                                   , choices = NULL, multiple = T)
+  )
+  , conditionalPanel(condition = "input.export_fig_selection == 'Expression histogram'"
+                     , selectInput("export_expression_hist_stack_factor", "Stack Factor:"
+                                   , choices = NULL)
+                     , numericInput("export_expression_hist_legend_row", "Legend Row:"
+                                   , value = 2)
+                     , selectInput("export_expression_hist_select_markers", "Select Markers:"
+                                   , choices = NULL)
+  )
+  , actionButton('add_report_figure', "Add")
+  , textAreaInput("figure_selected", label = 'Selected Figures', height = "300px")
+)
+report_preview_chanel = fluidPage({
+  uiOutput("report_preview")
 })
+report_gen_page = fluidPage(
+  do.call(box, ez_param(box_paramter, title = "Report generation settings", width = 3
+                 , report_gen_panel))
+  , do.call(box, ez_param(box_paramter, title = "Report Preview", width = 9
+                        , report_preview_chanel))
+)
 
+
+########### main layout ###############
 dbHeader <- dashboardHeader(title = "cytofkit2")
 dbHeader$children[[2]]$children <-  tags$a(href='https://github.com/JinmiaoChenLab',
                                            tags$img(src='https://avatars1.githubusercontent.com/u/8896007?s=400&u=b0029c2e64f405ea0a46d311239b674a430ec77c&v=4'
