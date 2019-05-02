@@ -550,6 +550,8 @@ shinyServer = function(input, output, session)
     markers = NULL
     , selected_markers = NULL
     , export_figure_selected = list()
+    , data = NULL
+    , sampleInfo = NULL
   )
   
   inputs = reactiveValues(
@@ -643,7 +645,6 @@ shinyServer = function(input, output, session)
   ##------------------Reactive Values and Reactive Objects-------------------
   
   #if?
-  v <- reactiveValues(data = NULL, sampleInfo = NULL)
   c <- reactiveValues(clusterCol = list())
   p <- reactiveValues(progressionCluster = NULL)
   
@@ -851,9 +852,47 @@ shinyServer = function(input, output, session)
     paste0("-- ", paste(v$data$dimRedMarkers, collapse =  " | "))
   })
   
-  ## Save and parse cytofkit RData object
-  observeEvent(input$saveButton, {
-    if (!is.null(v$data)){
+  # ## Save and parse cytofkit RData object
+  # observeEvent(input$saveButton, {
+  #   if (!is.null(v$data)){
+  #     withProgress(message='Saving Results ', value=0, {
+  #       ## check results saving path
+  #       if(is.null(v$data$resultDir) || !dir.exists(v$data$resultDir)){
+  #         v$data$resultDir <- path.expand("~")  ## default save to home if not specified
+  #       }
+  #       saveToFCS <- input$saveFCS
+  #       if(is.null(v$data$rawFCSdir)){
+  #         saveToFCS <- FALSE
+  #         warning("Path for original FCS files is not provided, 
+  #                 data cannnot be saved to new copies of FCS files.")
+  #       }else if(!dir.exists(v$data$rawFCSdir)){
+  #         saveToFCS <- FALSE
+  #         warning(paste0("Path for original FCS files doesn't exist, 
+  #                        data cannnot be saved to new copies of FCS files.", 
+  #                        "Please check path: ", v$data$rawFCSdir))
+  #       }
+  #       
+  #       ## NOTE: if samples are regrouped, then new FCS file cannot be saved
+  #       incProgress(1/2, message = paste0("To ", v$data$resultDir))
+  #       v$data$sampleInfo <- v$sampleInfo
+  #       analysis_results <<- v$data
+  #       cytof_writeResults(analysis_results,
+  #                          saveToRData = input$saveRData,
+  #                          saveToFCS = saveToFCS,
+  #                          saveToFiles = input$saveCsv)
+  #       incProgress(1/2)
+  #       ## open the results directory
+  #       opendir(v$data$resultDir)
+  #     })
+  #     }
+  # })
+  
+  output$saveButton = downloadHandler(
+    filename = function() {
+      paste0(input$project_name, '_result.zip')
+    },
+    content = function(file) {
+      # browser()
       withProgress(message='Saving Results ', value=0, {
         ## check results saving path
         if(is.null(v$data$resultDir) || !dir.exists(v$data$resultDir)){
@@ -883,8 +922,12 @@ shinyServer = function(input, output, session)
         ## open the results directory
         opendir(v$data$resultDir)
       })
-      }
-  })
+      
+      cur_dir = './'
+      files = dir(path = cur_dir, pattern = input$project_name)
+      zip(file, files)
+    }
+  )
   
   observeEvent(input$OpenDir, {
     pdfDir <- paste0(getwd(), .Platform$file.sep, "cytofkit_PDF_Plots_", Sys.Date())
