@@ -42,7 +42,8 @@ shiny_one_panel = fluidPage(
                               checkboxInput(inputId = "C_labelRepel", label = "Repel Cluster Labels", value = FALSE),
                               checkboxInput(inputId = "C_facetPlot", label = "Separate Plot by Samples", value = FALSE)
                             ),
-                            actionButton("PDFClusterPlot", "Download Cluster Plot in PDF", icon = icon("download"))
+                            downloadButton("PDFClusterPlot", "Download Cluster Plot in PDF")
+                            # actionButton("PDFClusterPlot", "Download Cluster Plot in PDF", icon = icon("download"))
            ),
            conditionalPanel(" input.main_panel == 'M_panel' && input.M_markerTabs == 'M_tab1' ",
                             h4("Plot Control:"),
@@ -54,17 +55,20 @@ shiny_one_panel = fluidPage(
                                           choices = c("bluered", "greenred", "spectral1", "spectral2"), 
                                           selected = "bluered", width = "100%")
                             ),
-                            actionButton("PDFHeatmap", "Download Marker Heatmap in PDF", icon = icon("download"))
+                            downloadButton("PDFHeatmap", "Download Marker Heatmap in PDF")
+                            # actionButton("PDFHeatmap", "Download Marker Heatmap in PDF", icon = icon("download"))
            ),
            conditionalPanel(" input.main_panel == 'M_panel' && input.M_markerTabs == 'M_tab2' ",
                             h4("Plot Control:"),
                             wellPanel(
-                              actionButton("PDFExpPlot", "Download Exp Plot in PDF", icon = icon("download"))
+                              # actionButton("PDFExpPlot", "Download Exp Plot in PDF", icon = icon("download"))
+                              downloadButton("PDFExpPlot", "Download Exp Plot in PDF")
                             )),
            conditionalPanel(" input.main_panel == 'M_panel' && input.M_markerTabs == 'M_tab3' ",
                             h4("Plot Control:"),
                             wellPanel(
-                              actionButton("PDFHistogram", "Download Histogram in PDF", icon = icon("download"))
+                              # actionButton("PDFHistogram", "Download Histogram in PDF", icon = icon("download"))
+                              downloadButton("PDFHistogram", "Download Histogram in PDF")
                             )),
            conditionalPanel(" input.main_panel == 'S_panel' && input.S_sampleTabs == 'S_tab1' ",
                             h4("Plot Control:"),
@@ -76,11 +80,13 @@ shiny_one_panel = fluidPage(
                                           choices = c("bluered", "greenred", "spectral1", "spectral2"), 
                                           selected = "bluered", width = "100%")
                             ),
-                            actionButton("PDFSamHeat", "Download Sample Heatmap in PDF", icon = icon("download"))
+                            # actionButton("PDFSamHeat", "Download Sample Heatmap in PDF", icon = icon("download"))
+                            downloadButton("PDFSamHeat", "Download Sample Heatmap in PDF")
            ),
            conditionalPanel(" input.main_panel == 'S_panel' && input.S_sampleTabs == 'S_tab2' ",
                             h4("Plot Control:"),
-                            actionButton("PDFrateChange", "Download Rate Change Plot in PDF", icon = icon("download"))
+                            # actionButton("PDFrateChange", "Download Rate Change Plot in PDF", icon = icon("download"))
+                            downloadButton("PDFrateChange", "Download Rate Change Plot in PDF")
            ),
            conditionalPanel(" input.main_panel == 'P_panel' && input.P_progressionTabs == 'P_tab1' ",
                             h4("Plot Control:"),
@@ -89,14 +95,16 @@ shiny_one_panel = fluidPage(
                               checkboxInput(inputId = "P_labelRepel", label = "Repel Cluster Labels", value = FALSE),
                               checkboxInput(inputId = "P_facetPlot", label = "Separate Plot by Samples", value = FALSE)
                             ),
-                            actionButton("PDFScatter", "Download Scatterplot in PDF", icon = icon("download"))
+                            # actionButton("PDFScatter", "Download Scatterplot in PDF", icon = icon("download"))
+                            downloadButton("PDFScatter", "Download Scatterplot in PDF")
            ),
            conditionalPanel(" input.main_panel == 'P_panel' && input.P_progressionTabs == 'P_tab2' ",
                             h4("Plot Control:"),
                             wellPanel(
                               checkboxInput(inputId = "P_addLabel2", label = "Add Cluster Labels", value = TRUE)
                             ),
-                            actionButton("PDFmarkerPlot", "Download Marker Plot in PDF", icon = icon("download"))
+                            # actionButton("PDFmarkerPlot", "Download Marker Plot in PDF", icon = icon("download"))
+                            downloadButton("PDFmarkerPlot", "Download Marker Plot in PDF")
            ),
            br(),
            fluidRow(
@@ -109,7 +117,7 @@ shiny_one_panel = fluidPage(
                                 min=3, max=20, value=8, width=100, ticks=FALSE)
              )),
            
-           actionButton("OpenDir", "Open download folder", icon = icon("folder")),
+           # actionButton("OpenDir", "Open download folder", icon = icon("folder")),
            
            hr(),
            h4("Sample Filter:"),
@@ -135,13 +143,13 @@ shiny_one_panel = fluidPage(
            h4("Save results:"),
            h5("Outputs to save"),
            fluidRow(
-             column(4,
-                    checkboxInput(inputId = "saveFCS", label = "FCS", value = TRUE)
-             ),
-             column(4,
+             # column(4,
+             #        checkboxInput(inputId = "saveFCS", label = "FCS", value = TRUE)
+             # ),
+             column(6,
                     checkboxInput(inputId = "saveRData", label = "RData", value = TRUE)
              ),
-             column(4,
+             column(6,
                     checkboxInput(inputId = "saveCsv", label = "csv", value = FALSE)
              )
            ),

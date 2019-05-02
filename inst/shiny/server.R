@@ -358,49 +358,55 @@ shinyServer = function(input, output, session)
     content = function(file) {
       # browser()
       withProgress(message='Saving Results ', value=0, {
-        ## check results saving path
-        if(is.null(v$data$resultDir) || !dir.exists(v$data$resultDir)){
-          v$data$resultDir <- path.expand("~")  ## default save to home if not specified
+
+        # ## check results saving path
+        # if(is.null(v$data$resultDir) || !dir.exists(v$data$resultDir)){
+        #   v$data$resultDir <- path.expand("~")  ## default save to home if not specified
+        # }
+        # saveToFCS <- input$saveFCS
+        # if(is.null(v$data$rawFCSdir)){
+        #   saveToFCS <- FALSE
+        #   warning("Path for original FCS files is not provided, 
+        #           data cannnot be saved to new copies of FCS files.")
+        # }else if(!dir.exists(v$data$rawFCSdir)){
+        #   saveToFCS <- FALSE
+        #   warning(paste0("Path for original FCS files doesn't exist, 
+        #                  data cannnot be saved to new copies of FCS files.", 
+        #                  "Please check path: ", v$data$rawFCSdir))
+        # }
+
+        # browser()
+        res_folder = paste0(input$project_name, "_results")
+        if(!dir.exists(res_folder)){
+          dir.create(res_folder, recursive = T)
         }
-        saveToFCS <- input$saveFCS
-        if(is.null(v$data$rawFCSdir)){
-          saveToFCS <- FALSE
-          warning("Path for original FCS files is not provided, 
-                  data cannnot be saved to new copies of FCS files.")
-        }else if(!dir.exists(v$data$rawFCSdir)){
-          saveToFCS <- FALSE
-          warning(paste0("Path for original FCS files doesn't exist, 
-                         data cannnot be saved to new copies of FCS files.", 
-                         "Please check path: ", v$data$rawFCSdir))
-        }
-        
         ## NOTE: if samples are regrouped, then new FCS file cannot be saved
-        incProgress(1/2, message = paste0("To ", v$data$resultDir))
+        incProgress(1/2)
         v$data$sampleInfo <- v$sampleInfo
         analysis_results <<- v$data
         cytof_writeResults(analysis_results,
                            saveToRData = input$saveRData,
-                           saveToFCS = saveToFCS,
-                           saveToFiles = input$saveCsv)
+                           saveToFCS = F,
+                           saveToFiles = input$saveCsv
+                           , resultDir = res_folder)
         incProgress(1/2)
-        ## open the results directory
-        opendir(v$data$resultDir)
+        # ## open the results directory
+        # opendir(v$data$resultDir)
+        files = dir(path = res_folder, pattern = ".*", full.names = T)
+        zip(file, files)
       })
       
-      cur_dir = './'
-      files = dir(path = cur_dir, pattern = input$project_name)
-      zip(file, files)
     }
   )
-  
-  observeEvent(input$OpenDir, {
-    pdfDir <- paste0(getwd(), .Platform$file.sep, "cytofkit_PDF_Plots_", Sys.Date())
-    if(dir.exists(pdfDir)){
-      opendir(pdfDir)
-    }else{
-      stop("PDF not created yet!")
-    }
-  })
+  # 
+  # observeEvent(input$OpenDir, {
+  #   pdfDir <- paste0(getwd(), .Platform$file.sep, "cytofkit_PDF_Plots_", Sys.Date())
+  #   if(dir.exists(pdfDir)){
+  #     opendir(pdfDir)
+  #   }else{
+  #     stop("PDF not created yet!")
+  #   }
+  # })
   
   output$logo <- renderImage({
     return(list(
@@ -510,27 +516,36 @@ shinyServer = function(input, output, session)
     C_ScatterPlotInput()
   }, height = 900, width = 950)
   
-  observeEvent(input$PDFClusterPlot, {
-    if(!is.null(v$data)){
-      withProgress(message="Downloading Clusterplot PDF files...", value=0, {
-        print(getwd())
-        dir.create(paste0("cytofkit_PDF_Plots_", Sys.Date()))
-        pdfDir <- paste0(getwd(), .Platform$file.sep, "cytofkit_PDF_Plots_", Sys.Date())
-        filename1 <- paste0(pdfDir, .Platform$file.sep, "cytofkit_shinyAPP_Clusterplot_", Sys.Date(), ".pdf")
-        i = 0
-        while(file.exists(filename1)){
-          filename1 <- paste0(pdfDir, .Platform$file.sep,
-                              "cytofkit_shinyAPP_Clusterplot_",
-                              Sys.Date(), "_", sprintf("%03d", i + 1), ".pdf");
-          i = i + 1;
-        }
-        pdf(filename1, 
-            width=as.integer(input$tab_w), 
-            height=as.integer(input$tab_h))
-        C_ScatterPlotInput()
-        dev.off()
-      })
+  output$PDFClusterPlot = downloadHandler(
+    filename = function() {
+      filename1 <- paste0(input$project_name, "_shinyAPP_Clusterplot_", Sys.Date(), ".pdf")
+      i = 0
+      while(file.exists(filename1)){
+        filename1 <- paste0(input$project_name, "_shinyAPP_Clusterplot_",
+                            Sys.Date(), "_", sprintf("%03d", i + 1), ".pdf");
+        i = i + 1;
+      }
+      filename1
+    },
+    content = function(file) {
+      if(!is.null(v$data)){
+        # browser()
+        withProgress(message="Downloading Clusterplot PDF files...", value=0, {
+          print(getwd())
+
+          pdf(file, 
+              width=as.integer(input$tab_w), 
+              height=as.integer(input$tab_h))
+          C_ScatterPlotInput()
+          dev.off()
+        })
+      }
+      
     }
+  )
+  
+  observeEvent(input$PDFClusterPlot, {
+
   })
   
   
@@ -750,36 +765,50 @@ shinyServer = function(input, output, session)
             cex_row_label= input$M_rowLabelSize, 
             cex_col_label= input$M_colLabelSize, 
             scaleMethod = input$M_scaleMethod)
-    # dev.copy2pdf(file = "cytofkit_shinyAPP_marker_heatmap.pdf",
-    #              width=as.integer(input$tab_w), 
-    #              height=as.integer(input$tab_h))
   })
   
   output$M_heatmapPlot <- renderPlot({
     M_heatmapPlotInput()
   }, height = 900, width = 950)
   
-  observeEvent(input$PDFHeatmap, {
-    if(!is.null(v$data)){
-      withProgress(message="Downloading Marker Heatmap PDF files...", value=0, {
-        print(getwd())
-        dir.create(paste0("cytofkit_PDF_Plots_", Sys.Date()))
-        pdfDir <- paste0(getwd(), .Platform$file.sep, "cytofkit_PDF_Plots_", Sys.Date())
-        filename1 <- paste0(pdfDir, .Platform$file.sep, "cytofkit_shinyAPP_Marker_Heatmap_", Sys.Date(), ".pdf")
-        i = 0
-        while(file.exists(filename1)){
-          filename1 <- paste0(pdfDir, .Platform$file.sep,
-                              "cytofkit_shinyAPP_Marker_Heatmap_",
-                              Sys.Date(), "_", sprintf("%03d", i + 1), ".pdf");
-          i = i + 1;
-        }
-        file.copy("cytofkit_shinyAPP_marker_heatmap.pdf", filename1)
-      })
+  output$PDFHeatmap = downloadHandler(
+    filename = function() {
+      filename1 <- paste0(input$project_name, "_shinyAPP_Marker_Heatmap_", Sys.Date(), ".pdf")
+      i = 0
+      while(file.exists(filename1)){
+        filename1 <- paste0(input$project_name,
+                            "_shinyAPP_Marker_Heatmap_",
+                            Sys.Date(), "_", sprintf("%03d", i + 1), ".pdf");
+        i = i + 1;
+      }
+      filename1
+    },
+    content = function(file) {
+      if(!is.null(v$data)){
+        withProgress(message="Downloading Marker Heatmap PDF files...", value=0, {
+          pdf(file,
+              width=as.integer(input$tab_w),
+              height=as.integer(input$tab_h))
+          heatMap(data = v$data, 
+                  clusterMethod = input$m_plotCluster, 
+                  type = input$M_plotMethod, 
+                  dendrogram = input$M_heatmap_dendrogram,
+                  colPalette = input$M_heatmap_colorPalette,
+                  selectSamples = input$samples,
+                  selectMarkers = input$m_heatmapmarkerSelect,
+                  cex_row_label= input$M_rowLabelSize, 
+                  cex_col_label= input$M_colLabelSize, 
+                  scaleMethod = input$M_scaleMethod)
+          dev.off()
+        })
+      }
     }
-  })
+  )
+  
+
   
   session$onSessionEnded(function(){
-    file.remove("cytofkit_shinyAPP_marker_heatmap.pdf")
+    # file.remove("cytofkit_shinyAPP_marker_heatmap.pdf")
   })
   
   ##-----level plot-----
@@ -856,29 +885,34 @@ shinyServer = function(input, output, session)
     }, height = 900, width = 950)
   })
   
-  observeEvent(input$PDFExpPlot, {
-    if(!is.null(v$data)){
-      withProgress(message="Downloading Marker Expression Plot PDF files...", value=0, {
-        print(getwd())
-        dir.create(paste0("cytofkit_PDF_Plots_", Sys.Date()))
-        pdfDir <- paste0(getwd(), .Platform$file.sep, "cytofkit_PDF_Plots_", Sys.Date())
-        filename1 <- paste0(pdfDir, .Platform$file.sep, "cytofkit_shinyAPP_Marker_Expression_Plot_", Sys.Date(), ".pdf")
-        i = 0
-        while(file.exists(filename1)){
-          filename1 <- paste0(pdfDir, .Platform$file.sep,
-                              "cytofkit_shinyAPP_Marker_Expression_Plot_",
-                              Sys.Date(), "_", sprintf("%03d", i + 1), ".pdf");
-          i = i + 1;
-        }
-        pdf(filename1, 
-            width=as.integer(input$tab_w), 
-            height=as.integer(input$tab_h))
-        M_markerExpressionPlotInput()
-        dev.off()
-      })
-    }
-  })
   
+  output$PDFExpPlot = downloadHandler(
+    filename = function() {
+      paste0(input$project_name, '_expression_plots.zip')
+      filename1 <- paste0(input$project_name, "_shinyAPP_Marker_Expression_Plot_", Sys.Date(), ".pdf")
+      i = 0
+      while(file.exists(filename1)){
+        filename1 <- paste0(input$project_name,
+                            "_shinyAPP_Marker_Expression_Plot_",
+                            Sys.Date(), "_", sprintf("%03d", i + 1), ".pdf");
+        i = i + 1;
+      }
+      filename1
+    },
+    content = function(file) {
+      if(!is.null(v$data)){
+        withProgress(message="Downloading Marker Expression Plot PDF files...", value=0, {
+          print(getwd())
+
+          pdf(file, 
+              width=as.integer(input$tab_w), 
+              height=as.integer(input$tab_h))
+          M_markerExpressionPlotInput()
+          dev.off()
+        })
+      }
+    }
+  )
   
   ##-----histogram plot-----
   output$M_stackFactor <- renderUI({
@@ -968,27 +1002,35 @@ shinyServer = function(input, output, session)
     }, height = 900, width = 950)
   })
   
-  observeEvent(input$PDFHistogram, {
-    if(!is.null(v$data)){
-      withProgress(message="Downloading Stack Density Plot PDF files...", value=0, {
-        print(getwd())
-        dir.create(paste0("cytofkit_PDF_Plots_", Sys.Date()))
-        pdfDir <- paste0(getwd(), .Platform$file.sep, "cytofkit_PDF_Plots_", Sys.Date())
-        filename1 <- paste0(pdfDir, .Platform$file.sep, "cytofkit_shinyAPP_Stack_Density_Plot_", Sys.Date(), ".pdf")
-        i = 0
-        while(file.exists(filename1)){
-          filename1 <- paste0(pdfDir, .Platform$file.sep,
-                              "cytofkit_shinyAPP_Stack_Density_Plot_",
-                              Sys.Date(), "_", sprintf("%03d", i + 1), ".pdf");
-          i = i + 1;
-        }
-        pdf(filename1, 
-            width=as.integer(input$tab_w), 
-            height=as.integer(input$tab_h))
-        M_stackDensityPlotInput()
-        dev.off()
-      })
+  output$PDFHistogram = downloadHandler(
+    filename = function() {
+      # browser()
+      filename1 <- paste0(input$project_name, "_shinyAPP_Stack_Density_Plot_", Sys.Date(), ".pdf")
+      i = 0
+      while(file.exists(filename1)){
+        filename1 <- paste0(input$project_name,
+                            "_shinyAPP_Stack_Density_Plot_",
+                            Sys.Date(), "_", sprintf("%03d", i + 1), ".pdf");
+        i = i + 1;
+      }
+      filename1
+    },
+    content = function(file) {
+      if(!is.null(v$data)){
+        withProgress(message="Downloading Stack Density Plot PDF files...", value=0, {
+          print(getwd())
+          pdf(file, 
+              width=as.integer(input$tab_w), 
+              height=as.integer(input$tab_h))
+          M_stackDensityPlotInput()
+          dev.off()
+        })
+      }
     }
+  )
+  
+  observeEvent(input$PDFHistogram, {
+
   })
   
   
@@ -1057,32 +1099,47 @@ shinyServer = function(input, output, session)
             cex_col_label= input$S_colLabelSize, 
             scaleMethod = input$S_scaleMethod)
     
-    dev.copy2pdf(file = "cytofkit_shinyAPP_cells_heatmap_plot_plot.pdf",
-                 width=as.integer(input$tab_w), 
-                 height=as.integer(input$tab_h))
   })
   
   output$S_heatmapPlot <- renderPlot({
     S_heatmapPlotInput()
   }, height = 900, width = 950)
   
-  observeEvent(input$PDFSamHeat, {
-    if(!is.null(v$data)){
-      withProgress(message="Downloading Sample Heatmap PDF files...", value=0, {
-        print(getwd())
-        dir.create(paste0("cytofkit_PDF_Plots_", Sys.Date()))
-        pdfDir <- paste0(getwd(), .Platform$file.sep, "cytofkit_PDF_Plots_", Sys.Date())
-        filename1 <- paste0(pdfDir, .Platform$file.sep, "cytofkit_shinyAPP_Sample_Heatmap_", Sys.Date(), ".pdf")
-        i = 0
-        while(file.exists(filename1)){
-          filename1 <- paste0(pdfDir, .Platform$file.sep,
-                              "cytofkit_shinyAPP_Sample_Heatmap_",
-                              Sys.Date(), "_", sprintf("%03d", i + 1), ".pdf");
-          i = i + 1;
-        }
-        file.copy("cytofkit_shinyAPP_cells_heatmap_plot_plot.pdf", filename1)
-      })
+  output$PDFSamHeat = downloadHandler(
+    filename = function() {
+      filename1 <- paste0(input$project_name, "_shinyAPP_Sample_Heatmap_", Sys.Date(), ".pdf")
+      i = 0
+      while(file.exists(filename1)){
+        filename1 <- paste0(input$project_name,
+                            "_shinyAPP_Sample_Heatmap_",
+                            Sys.Date(), "_", sprintf("%03d", i + 1), ".pdf");
+        i = i + 1;
+      }
+      filename1
+    },
+    content = function(file) {
+      if(!is.null(v$data)){
+        withProgress(message="Downloading Sample Heatmap PDF files...", value=0, {
+          pdf(file,
+              width=as.integer(input$tab_w),
+              height=as.integer(input$tab_h))
+          heatMap(data = v$data, 
+                  clusterMethod = input$s_plotCluster, 
+                  type = input$S_plotMethod, 
+                  dendrogram = input$S_heatmap_dendrogram,
+                  colPalette = input$S_heatmap_colorPalette,
+                  selectSamples = input$samples,
+                  cex_row_label= input$S_rowLabelSize, 
+                  cex_col_label= input$S_colLabelSize, 
+                  scaleMethod = input$S_scaleMethod)
+          dev.off()
+        })
+      }
     }
+  )
+  
+  observeEvent(input$PDFSamHeat, {
+    
   })
   
   
@@ -1141,27 +1198,33 @@ shinyServer = function(input, output, session)
     S_rateChangePlotInput()
   }, height = 500, width = 950)
   
-  observeEvent(input$PDFrateChange, {
-    if(!is.null(v$data)){
-      withProgress(message="Downloading Rate Change Plot PDF files...", value=0, {
-        print(getwd())
-        dir.create(paste0("cytofkit_PDF_Plots_", Sys.Date()))
-        pdfDir <- paste0(getwd(), .Platform$file.sep, "cytofkit_PDF_Plots_", Sys.Date())
-        filename1 <- paste0(pdfDir, .Platform$file.sep, "cytofkit_shinyAPP_Rate_Change_Plot_", Sys.Date(), ".pdf")
-        i = 0
-        while(file.exists(filename1)){
-          filename1 <- paste0(pdfDir, .Platform$file.sep,
-                              "cytofkit_shinyAPP_Rate_Change_Plot_",
-                              Sys.Date(), "_", sprintf("%03d", i + 1), ".pdf");
-          i = i + 1;
-        }
-        pdf(filename1, 
-            width=as.integer(input$tab_w), 
-            height=as.integer(input$tab_h))
-        S_rateChangePlotInput()
-        dev.off()
-      })
+  output$PDFrateChange = downloadHandler(
+    filename = function() {
+      filename1 <- paste0(input$project_name, "_shinyAPP_Rate_Change_Plot_", Sys.Date(), ".pdf")
+      i = 0
+      while(file.exists(filename1)){
+        filename1 <- paste0(input$project_name,
+                            "_shinyAPP_Rate_Change_Plot_",
+                            Sys.Date(), "_", sprintf("%03d", i + 1), ".pdf");
+        i = i + 1;
+      }
+      filename1
+    },
+    content = function(file) {
+      if(!is.null(v$data)){
+        withProgress(message="Downloading Rate Change Plot PDF files...", value=0, {
+          pdf(file, 
+              width=as.integer(input$tab_w), 
+              height=as.integer(input$tab_h))
+          S_rateChangePlotInput()
+          dev.off()
+        })
+      }
     }
+  )
+  
+  observeEvent(input$PDFrateChange, {
+    
   })
   
   
@@ -1373,28 +1436,32 @@ shinyServer = function(input, output, session)
     P_scatterPlotInput()
   }, height = 900, width = 950)
   
-  observeEvent(input$PDFScatter, {
-    if(!is.null(v$data)){
-      withProgress(message="Downloading Progression Scatterplot PDF files...", value=0, {
-        print(getwd())
-        dir.create(paste0("cytofkit_PDF_Plots_", Sys.Date()))
-        pdfDir <- paste0(getwd(), .Platform$file.sep, "cytofkit_PDF_Plots_", Sys.Date())
-        filename1 <- paste0(pdfDir, .Platform$file.sep, "cytofkit_shinyAPP_Scatterplot_", Sys.Date(), ".pdf")
-        i = 0
-        while(file.exists(filename1)){
-          filename1 <- paste0(pdfDir, .Platform$file.sep,
-                              "cytofkit_shinyAPP_Scatterplot_",
-                              Sys.Date(), "_", sprintf("%03d", i + 1), ".pdf");
-          i = i + 1;
-        }
-        pdf(filename1, 
-            width=as.integer(input$tab_w), 
-            height=as.integer(input$tab_h))
-        P_scatterPlotInput()
-        dev.off()
-      })
+  output$PDFScatter = downloadHandler(
+    filename = function() {
+      filename1 <- paste0(input$project_name, "_shinyAPP_Scatterplot_", Sys.Date(), ".pdf")
+      i = 0
+      while(file.exists(filename1)){
+        filename1 <- paste0(input$project_name,
+                            "_shinyAPP_Scatterplot_",
+                            Sys.Date(), "_", sprintf("%03d", i + 1), ".pdf");
+        i = i + 1;
+      }
+      filename1
+    },
+    content = function(file) {
+      if(!is.null(v$data)){
+        withProgress(message="Downloading Progression Scatterplot PDF files...", value=0, {
+          print(getwd())
+          pdf(file, 
+              width=as.integer(input$tab_w), 
+              height=as.integer(input$tab_h))
+          P_scatterPlotInput()
+          dev.off()
+        })
+      }
     }
-  })
+  )
+  
   
   
   ##-----marker expression profile-----
@@ -1486,28 +1553,32 @@ shinyServer = function(input, output, session)
     }, height = 900, width = 950)  
   })
   
-  observeEvent(input$PDFmarkerPlot, {
-    if(!is.null(v$data)){
-      withProgress(message="Downloading Marker Plot PDF files...", value=0, {
-        print(getwd())
-        dir.create(paste0("cytofkit_PDF_Plots_", Sys.Date()))
-        pdfDir <- paste0(getwd(), .Platform$file.sep, "cytofkit_PDF_Plots_", Sys.Date())
-        filename1 <- paste0(pdfDir, .Platform$file.sep, "cytofkit_shinyAPP_Marker_Plot_", Sys.Date(), ".pdf")
-        i = 0
-        while(file.exists(filename1)){
-          filename1 <- paste0(pdfDir, .Platform$file.sep,
-                              "cytofkit_shinyAPP_Marker_Plot_",
-                              Sys.Date(), "_", sprintf("%03d", i + 1), ".pdf");
-          i = i + 1;
-        }
-        pdf(filename1, 
-            width=as.integer(input$tab_w), 
-            height=as.integer(input$tab_h))
-        P_markerPlotInput()
-        dev.off()
-      })
+  output$PDFmarkerPlot = downloadHandler(
+    filename = function() {
+      filename1 <- paste0(input$project_name, "_shinyAPP_Marker_Plot_", Sys.Date(), ".pdf")
+      i = 0
+      while(file.exists(filename1)){
+        filename1 <- paste0(project_name,
+                            "_shinyAPP_Marker_Plot_",
+                            Sys.Date(), "_", sprintf("%03d", i + 1), ".pdf");
+        i = i + 1;
+      }
+      filename1
+    },
+    content = function(file) {
+      if(!is.null(v$data)){
+        withProgress(message="Downloading Marker Plot PDF files...", value=0, {
+          print(getwd())
+          pdf(file, 
+              width=as.integer(input$tab_w), 
+              height=as.integer(input$tab_h))
+          P_markerPlotInput()
+          dev.off()
+        })
+      }
     }
-  })
+  )
+  
   
   
   ##-----Run Diffusionmap-----
