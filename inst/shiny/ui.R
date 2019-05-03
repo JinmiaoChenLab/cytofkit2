@@ -7,6 +7,7 @@ library(shinydashboard)
 library(shinyalert)
 library(shinyFiles)
 library(shinyWidgets)
+library(ezTools)
 
 box_paramter = list(
   status = "primary",

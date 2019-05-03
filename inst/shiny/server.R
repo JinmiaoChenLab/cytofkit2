@@ -8,7 +8,7 @@ library(flowCore)
 library(shinyalert)
 source('./global.R')
 library(shinyWidgets)
-# library(ezTools)
+library(ezTools)
 # library(monocle)
 # library(jsTree)
 
@@ -2172,13 +2172,15 @@ shinyServer = function(input, output, session)
   })
   
   observeEvent(v$export_figure_selected, {
-    figures = c()
-    for (i in 1:length(v$export_figure_selected)) {
-      figures[i] = v$export_figure_selected[[i]]$figure
-    }
-    figures = paste(figures, collapse = "\n")
-    updateTextAreaInput(session, 'figure_selected', value = figures)
-    max_i <<- length(v$export_figure_selected)
+  	if(length(v$export_figure_selected) > 0){
+  		figures = c()
+  		for (i in 1:length(v$export_figure_selected)) {
+  		  figures[i] = v$export_figure_selected[[i]]$figure
+  		}
+  		figures = paste(figures, collapse = "\n")
+  		updateTextAreaInput(session, 'figure_selected', value = figures)
+  		max_i <<- length(v$export_figure_selected)
+  	}
   })
   
   output$report_preview <- renderUI({
