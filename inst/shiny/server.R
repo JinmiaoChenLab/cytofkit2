@@ -48,9 +48,7 @@ shinyServer = function(input, output, session)
     # browser()
     
     cur_dir = paste0(dirname(input$rawfcs$datapath)[1], "/")
-    old_name = sort(dir(path = cur_dir
-                        , pattern = "*.fcs", full.names = T))
-    file.rename(old_name, paste0(cur_dir, input$rawfcs$name))
+    file.rename(input$rawfcs$datapath, paste0(cur_dir, input$rawfcs$name))
     inputs$fcsFiles = paste0(cur_dir, input$rawfcs$name)
     # input$rawfcs$datapath = paste0(cur_dir, input$rawfcs$name)
     
