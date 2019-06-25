@@ -24,73 +24,75 @@
 #' d<-system.file('extdata',package='cytofkit2')
 #' fcsFiles <- list.files(d,pattern='.fcs$',full=TRUE)
 #' merged <- cytof_exprsMerge(fcsFiles)
+
 cytof_exprsMerge <- function(fcsFiles, 
                              comp = FALSE, 
                              transformMethod = c("autoLgcl", "cytofAsinh", "logicle", "arcsinh", "none"), 
                              scaleTo = NULL, 
-							 markers = NULL,
+                             markers = NULL,
                              mergeMethod = c("ceil", "all", "fixed", "min"), 
                              fixedNum = 10000, 
                              sampleSeed = 123, ...) {
-    # browser()
-    transformMethod <- match.arg(transformMethod)
-    mergeMethod <- match.arg(mergeMethod)
-    
-    exprsL <- mapply(cytof_exprsExtract, fcsFiles, 
-                     MoreArgs = list(comp = comp, 
-                                     transformMethod = transformMethod, 
-                                     scaleTo = scaleTo, ...), 
-                     SIMPLIFY = FALSE)
-	if(!is.null(markers)){
-	  for (i in 1:length(exprsL)) {
-	    temp_name = colnames(exprsL[[i]])
-	    markers_id = gsub("(.*)<.*", "\\1", markers)
-	    temp_id = gsub("(.*)<.*", "\\1", temp_name)
-	    exprsL[[i]] = exprsL[[i]][, temp_id %in% markers_id, drop = F]
-	  }
-	}
-
-    if(is.numeric(sampleSeed))
-        set.seed(sampleSeed)
-    ## test if number of events in any fcs less than fixedNum
-    if(mergeMethod == "fixed"){
-      if(!is.null(fixedNum)){
-        eventCountTest <- suppressWarnings(any(lapply(exprsL, function(x) if (nrow(x) < fixedNum) {1} else {0})))
-        if(eventCountTest == TRUE){
-          warning("One or more FCS files have less events than specified fixedNum; using lowest as fixedNum")
-          fixedNum <- min(rapply(exprsL, nrow))
-        }
+  # browser()
+  transformMethod <- match.arg(transformMethod)
+  mergeMethod <- match.arg(mergeMethod)
+  
+  exprsL <- mapply(cytof_exprsExtract, fcsFiles, 
+                   MoreArgs = list(comp = comp, 
+                                   transformMethod = transformMethod, 
+                                   scaleTo = scaleTo, ...), 
+                   SIMPLIFY = FALSE)
+  common_markers = colnames(exprsL[[1]])
+  if(length(exprsL) > 1){
+    for (i in 2:length(exprsL)) {
+      common_markers = intersect(common_markers, colnames(exprsL[[i]]))
+    }
+  }
+  for (i in 1:length(exprsL)) {
+    exprsL[[i]] = exprsL[[i]][, common_markers, drop = F]
+  }
+  
+  if(is.numeric(sampleSeed))
+    set.seed(sampleSeed)
+  ## test if number of events in any fcs less than fixedNum
+  if(mergeMethod == "fixed"){
+    if(!is.null(fixedNum)){
+      eventCountTest <- suppressWarnings(any(lapply(exprsL, function(x) if (nrow(x) < fixedNum) {1} else {0})))
+      if(eventCountTest == TRUE){
+        warning("One or more FCS files have less events than specified fixedNum; using lowest as fixedNum")
+        fixedNum <- min(rapply(exprsL, nrow))
       }
     }
-    switch(mergeMethod,
-           ceil = {
-               mergeFunc <- function(x) {
-                   if (nrow(x) < fixedNum) {
-                       x
-                   } else {
-                       x[sample(nrow(x), size = fixedNum, replace = FALSE), , drop = FALSE]
-                   }
-               }
-               merged <- do.call(rbind, lapply(exprsL, mergeFunc))
-           },
-           all = {
-               merged <- do.call(rbind, exprsL)
-           },
-           fixed = {
-               mergeFunc <- function(x) {
-                   x[sample(nrow(x), size = fixedNum, replace = ifelse(nrow(x) < fixedNum, TRUE, FALSE)), , drop=FALSE]
-               }
-               merged <- do.call(rbind, lapply(exprsL, mergeFunc))
-           },
-           min = {
-               minSize <- min(sapply(exprsL, nrow))
-               mergeFunc <- function(x) {
-                   x[sample(nrow(x), size = minSize, replace = FALSE), , drop=FALSE]
-               }
-               merged <- do.call(rbind, lapply(exprsL, mergeFunc))
-           })
-    
-    return(merged)
+  }
+  switch(mergeMethod,
+         ceil = {
+           mergeFunc <- function(x) {
+             if (nrow(x) < fixedNum) {
+               x
+             } else {
+               x[sample(nrow(x), size = fixedNum, replace = FALSE), , drop = FALSE]
+             }
+           }
+           merged <- do.call(rbind, lapply(exprsL, mergeFunc))
+         },
+         all = {
+           merged <- do.call(rbind, exprsL)
+         },
+         fixed = {
+           mergeFunc <- function(x) {
+             x[sample(nrow(x), size = fixedNum, replace = ifelse(nrow(x) < fixedNum, TRUE, FALSE)), , drop=FALSE]
+           }
+           merged <- do.call(rbind, lapply(exprsL, mergeFunc))
+         },
+         min = {
+           minSize <- min(sapply(exprsL, nrow))
+           mergeFunc <- function(x) {
+             x[sample(nrow(x), size = minSize, replace = FALSE), , drop=FALSE]
+           }
+           merged <- do.call(rbind, lapply(exprsL, mergeFunc))
+         })
+  
+  return(merged)
 }
 
 

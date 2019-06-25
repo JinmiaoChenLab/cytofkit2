@@ -12,6 +12,7 @@ library(shinyWidgets)
 # library(monocle)
 # library(jsTree)
 
+options(bitmapType='cairo')
 # maximum size 10000MB
 options(shiny.maxRequestSize = 1024*1024*100*100) 
 # plan('multicore')

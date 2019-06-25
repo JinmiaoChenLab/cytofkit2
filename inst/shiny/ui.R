@@ -587,7 +587,7 @@ cluster_panel = fluidPage(
 pseudotime_panel = fluidPage(
   tags$div(title="The method used for cellular progression analysis including \"diffusion map\" and \"isomap\"\n\nIf \"NULL\" was selected, no progression estimation will be performed."
            , selectInput('progressionMethods', 'Cellular Progression'
-                         , choices = c('diffusionmap', 'isomap', 'NULL')))
+                         , choices = c('NULL', 'diffusionmap', 'isomap')))
 )
 data_analysis_panel = fluidPage(fluidRow(
   h2('Data analysis')
