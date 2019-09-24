@@ -540,7 +540,7 @@ load_data_panel = fluidPage(
   )
   , tags$div(title="Data Transformation method, including \"cytofAsinh\"(Customized Asinh transformation for CyTOF data), \"autoLgcl\"(automatic logicle transformation for CyTOF data), \"logicle\"(customize your own parameters for logicle transformation) and \"none\"(if your data is already transformed)."
              , selectInput('transform_method', 'Tranformation Method'
-                           , choices = c('autoLgcl', 'autoAsinh', 'Fixedlogicle', 'NULL'))
+                           , choices = c('autoLgcl', 'cytofAsinh', 'logicle', 'arcsinh', 'none'))
   )
   
   

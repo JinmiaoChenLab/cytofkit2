@@ -673,9 +673,12 @@ shinyServer = function(input, output, session)
       for (i in 1:length(clusters)){
         clusteri <- clusters[i]
         ilabel <- input[[paste0('cluster', i)]]
-        if(ilabel == ""){
-          clusterLabels[clusterLabels==clusteri] <- "Unknown"
-        }else{
+        # if(ilabel == ""){
+        #   clusterLabels[clusterLabels==clusteri] <- "Unknown"
+        # }else{
+        #   clusterLabels[clusterLabels==clusteri] <- ilabel
+        # }
+        if(ilabel != ""){
           clusterLabels[clusterLabels==clusteri] <- ilabel
         }
       }
@@ -1058,14 +1061,18 @@ shinyServer = function(input, output, session)
   ## update cluster labels
   observeEvent(input$C_updateMarkerNames, {
     if(!is.null(v$data)){
-      markerNames <- colnames(v$data$expressionData)
+      sorted_markerNames <- colnames(v$data$expressionData)
+      markerNames <- sorted_markerNames[order(sorted_markerNames)]
       newMarkerNames <- NULL
       for (i in 1:length(markerNames)){
         iName <- input[[paste0('marker_', i, '_name')]]
         newMarkerNames <- c(newMarkerNames, iName)
+        
       }
       ## update new cluster colours
-      colnames(v$data$expressionData) <- newMarkerNames
+      mark_pos = which(colnames(v$data$expressionData) %in% markerNames)
+      v$data$expressionData[, mark_pos] = v$data$expressionData[, markerNames]
+      colnames(v$data$expressionData)[mark_pos] <- newMarkerNames
       ## jump to C_tab1
       updateTabsetPanel(session, "M_markerTabs", selected = "M_tab1")
     }

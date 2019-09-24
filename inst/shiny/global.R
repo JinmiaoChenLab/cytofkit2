@@ -117,7 +117,7 @@ scatterPlot <- function(obj, plotMethod, plotFunction, pointSize=1, alpha = 1,
       gmin <- ifelse(min(local.bounds[1,]) > glimits[1],min(local.bounds[1,]), glimits[1])
       limits <- c(gmin, gmax)
     }
-    if(length(plotFunction > 1)){
+    if(length(plotFunction) > 1){
       gp <- cytof_wrap_colorPlot(data = data, 
                                  xlab = xlab, 
                                  ylab = ylab, 
