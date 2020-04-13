@@ -51,6 +51,7 @@ biocLite("cytofkit")
 Install this development version, use:
 
 ``` r
+install.packages("reticulate")
 if(!require(devtools)){
   install.packages("devtools") # If not already installed
 }
