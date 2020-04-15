@@ -32,8 +32,9 @@ For Mac OS X 10.8 or later, you need to install XQuartz to support the GUI:
 
 * After the installer runs, you'll have to **restart your mac computer**.
 
+#### 2. Install python
 
-#### 2. Install cytofkit2 package
+#### 3. Install cytofkit2 package
 
 The offical and stable version, please refer to 
 
@@ -52,6 +53,18 @@ Install this development version, use:
 
 ``` r
 install.packages("reticulate")
+
+#### check if python is installed
+vv <- system("pyv=\"$(python -V)\" | echo $pyv| grep \"Python\"")
+if(vv){
+ print("Python is installed")
+}
+
+#### install python package umap-learn
+library(reticulate)
+py_install("umap-learn")
+
+#### install cytofkit2 from github
 if(!require(devtools)){
   install.packages("devtools") # If not already installed
 }
