@@ -26,7 +26,7 @@ If you have never used R, please install R and Rstudio following the steps below
 
 For Mac OS X 10.8 or later, you need to install XQuartz to support the GUI:
 
-* Download the disk image (dmg) file for [XQuartz](http://xquartz.macosforge.org).
+* Download the disk image (dmg) file for [XQuartz](https://www.xquartz.org/).
 
 * Open the dmg file by double-clicking on it, you'll find XQuartz.pkg, double-click on it to run the installer, clicking through all the defaults.
 
