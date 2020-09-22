@@ -247,7 +247,7 @@ cytof_writeResults <- function(analysis_results,
 #' cytof_clusterPlot(data, xlab="dim1", ylab="dim2", cluster="cluster", sample = "sample")
 cytof_clusterPlot <- function(data, xlab, ylab, cluster, sample, title = "cluster", 
                               type = 1, point_size = NULL, addLabel=TRUE, 
-                              labelSize=10, sampleLabel=TRUE, 
+                              labelSize=10, sampleLabel=FALSE, 
                               labelRepel = FALSE, fixCoord=TRUE, clusterColor) {
     
     if(!is.data.frame(data))
