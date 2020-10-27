@@ -8,6 +8,7 @@ library(flowCore)
 library(shinyalert)
 source('./global.R')
 library(shinyWidgets)
+
 # library(ezTools)
 # library(monocle)
 # library(jsTree)
@@ -25,6 +26,11 @@ shinyServer = function(input, output, session)
     , selected_markers = NULL
     , data = NULL
     , sampleInfo = NULL
+    , sample_selected_index = NULL
+    , sample_choices = NULL
+    , sample_init = F
+    , sample_ready = F
+    , sample_update = F
   )
   
   inputs = reactiveValues(
@@ -69,28 +75,41 @@ shinyServer = function(input, output, session)
     # browser()
     ### need to check data
     withProgress(
-      cytofkit(fcsFiles = inputs[["fcsFiles"]],
-               markers = input$markers,
-               projectName = input$project_name,
-               mergeMethod = input$merge_method,
-               fixedNum = input$fix_number,
-               transformMethod = input$transform_method,
-               dimReductionMethod = "tsne",
-               clusterMethods = input$cluster_method,
-               visualizationMethods = tolower(input$dr_method),
-               progressionMethod = input$progressionMethods,
-               Rphenograph_k = input$rphenograph_k,
-               FlowSOM_k = input$flowsom_k,
-               seed = input$seed,
-               clusterSampleSize = 500,
-               resultDir = "./",
-               saveResults = TRUE,
-               saveObject = TRUE,
-               l_w = as.numeric(inputs[["l_w"]]), 
-               l_t = as.numeric(inputs[["l_t"]]), 
-               l_m = as.numeric(inputs[["l_m"]]), 
-               l_a = as.numeric(inputs[["l_a"]]))
+      {
+        # browser()
+        cytofkit(fcsFiles = inputs[["fcsFiles"]],
+                 markers = input$markers,
+                 projectName = input$project_name,
+                 mergeMethod = input$merge_method,
+                 fixedNum = input$fix_number,
+                 transformMethod = input$transform_method,
+                 dimReductionMethod = "tsne",
+                 clusterMethods = input$cluster_method,
+                 visualizationMethods = tolower(input$dr_method),
+                 progressionMethod = input$progressionMethods,
+                 Rphenograph_k = input$rphenograph_k,
+                 FlowSOM_k = input$flowsom_k,
+                 seed = input$seed,
+                 clusterSampleSize = 500,
+                 resultDir = "./",
+                 saveResults = TRUE,
+                 saveObject = TRUE,
+                 l_w = as.numeric(inputs[["l_w"]]), 
+                 l_t = as.numeric(inputs[["l_t"]]), 
+                 l_m = as.numeric(inputs[["l_m"]]), 
+                 l_a = as.numeric(inputs[["l_a"]]))
+      }
+      
       , value = 0.5, message = "Analysing")
+    if(!is.null(input$sample_anno)){
+      res_fn = paste0(input$project_name, ".RData")
+      load(res_fn)
+      meta_data = read.table(input$sample_anno$datapath, sep = "\t", header = T, row.names = 1)
+      analysis_results$meta_data = meta_data
+      analysis_results$sampel_name_ori = analysis_results$sampleNames
+      # analysis_results$sampleInfo_ori = analysis_results$sampleInfo
+      save(analysis_results, file = res_fn)
+    }
   })
   
   output$download_analysis_res = downloadHandler(
@@ -179,9 +198,10 @@ shinyServer = function(input, output, session)
     if (is.null(cytofkitObj)){
       v$data <- NULL
     }else{
+      # browser()
       cat(cytofkitObj$datapath)
       load(cytofkitObj$datapath)
-      v$data <- analysis_results
+      v$data <- analysis_results      
       
       if(is.null(v$data$projectName)){
         v$data$projectName <- "cytofkit_shinyAPP_output"
@@ -199,6 +219,10 @@ shinyServer = function(input, output, session)
                                  cellSample = factor(sub("_[0-9]*$", "", row.names(v$data$expressionData))),
                                  stringsAsFactors = FALSE)
       v$data$sampleInfo <- v$sampleInfo
+      v$sample_ready = T
+      v$ori_sampleInfo = v$sampleInfo
+      v$ori_data = v$data
+      updateSelectInput(session, "sample_info_selection", choices = colnames(v$data$meta_data))
     }
   })
   
@@ -249,24 +273,96 @@ shinyServer = function(input, output, session)
       checkboxInput('selectDeselectAll', label = "Select/Deselect All", value = TRUE)
     }   
   })
-  
-  output$sampleSelect <- renderUI({
-    if(is.null(v$data) || is.null(v$sampleInfo)){
-      return(NULL)
-    }else{
-      sampleNames <- unique(as.character(v$sampleInfo$cellSample))
-      checkboxGroupInput('samples', NULL, 
-                         sampleNames, selected = sampleNames)
-    }   
+    
+  #### only initial UI once.
+  observeEvent(v$sample_ready, {
+    output$sampleSelect <- renderUI({
+      if(is.null(isolate(v$data)) || is.null(isolate(v$sampleInfo))){
+        return(NULL)
+      }else{
+        # browser()
+        sampleNames <- isolate(unique(as.character(v$sampleInfo$cellSample)))
+        v$sample_choices = sampleNames
+        v$sample_selected_index = 1:length(sampleNames)
+        v$sample_init = T
+        checkboxGroupInput(inputId = 'samples', label = NULL,
+                           choices = sampleNames, selected = sampleNames)
+      }
+    })
+    if(v$sample_init){
+      # browser()
+      update_samples()
+    }
   })
   
-  observeEvent(input$selectDeselectAll, {
+  
+  observeEvent(unique(as.character(v$sampleInfo$cellSample)), {
+    # browser()
+    if(v$sample_init){
+      # browser()
+      sampleNames = unique(as.character(v$sampleInfo$cellSample))
+      ### get selected item index
+      # selected_index = match(input$samples, v$sample_choices)
+      # v$sample_selected_index = selected_index
+      v$sample_selected_index = 1:length(sampleNames)
+      v$sample_choices = sampleNames
+      updateCheckboxGroupInput(session, 'samples', choices = v$sample_choices)
+      # browser()
+      v$sample_update = !(v$sample_update)
+      # updateCheckboxGroupInput(session, 'samples', selected = v$sample_choices[selected_index])
+    }
+  })
+  
+  observeEvent(v$sample_update, {
+    # browser()
+    if (length(v$sample_selected_index) > length(v$sample_choices)){
+      v$sample_selected_index = 1:length(v$sample_choices)
+    }
+    updateCheckboxGroupInput(session, 'samples', selected = v$sample_choices[v$sample_selected_index])
+  })
+  
+  update_samples = function(){
+    # v$sampleInfo$cellSample = v$data$meta_data[match(v$data$sampleInfo_ori$cellSample, rownames(v$data$meta_data))
+                                               # , input$sample_info_selection]
+    # browser()
     allSamp <- input$selectDeselectAll
-    sampleNames <- unique(as.character(v$sampleInfo$cellSample))
+    sampleNames <- isolate(unique(as.character(v$sampleInfo$cellSample)))
     if(allSamp == TRUE){
       updateCheckboxGroupInput(session, 'samples', selected = sampleNames)
     }else{
       updateCheckboxGroupInput(session, 'samples', selected = character(0))
+    }
+    # browser()
+  }
+  observeEvent(input$selectDeselectAll, {
+    # browser()
+    update_samples()
+  })
+  
+  observeEvent(input$sample_info_selection, {
+
+    if(!is.null(v$data) && !is.null(input$sample_info_selection)){
+      # browser()
+      
+      temp_name1 = sapply(1:length(v$data$sampleNames), function(i){
+        v$data$sampleNames[[i]][1]
+      })
+      temp_name2 = sapply(1:length(v$data$sampleNames), function(i){
+        v$data$sampleNames[[i]][2]
+      })
+      new_sample_names = as.character(v$data$meta_data[temp_name1[order(temp_name2)], input$sample_info_selection])
+      reset_sample()
+      rename_sample(new_sample_names)
+      # v$sample_update = !v$sample_update
+      # browser()
+      # v$data$sampleNames
+      # v$data$sampleNames = v$data$mea_data[unlist(v$data$sampel_name_ori), input$sample_info_selection]
+      # v$data$sampleInfo$cellSample = v$data$meta_data[match(v$data$sampleInfo_ori$cellSample, rownames(v$data$meta_data))
+                                                      # , input$sample_info_selection]
+      # update_samples()
+      # analysis_results = v$data
+      # analysis_results$sampleInfo_ori = analysis_results$sampleInfo
+      # save(analysis_results, file = "test2.Rdata")
     }
   })
   
@@ -397,6 +493,247 @@ shinyServer = function(input, output, session)
       
     }
   )
+  
+  output$reportButton = downloadHandler(
+    filename = function() {
+      paste0(input$project_name, '_report.pdf')
+    },
+    content = function(file) {
+      # browser()
+      withProgress(message='Generating report ', value=0, {
+        
+        # browser()
+        # library(ezTools)
+        # library(cytofkit2)
+        
+        #### suppress warning
+        options(warn=-1)
+        analysis_results = v$data
+        
+        rownames(analysis_results$sampleInfo) = analysis_results$sampleInfo$cellID
+        analysis_results$clusterRes$Rphenograph = as.data.frame(analysis_results$clusterRes$Rphenograph)
+        colnames(analysis_results$clusterRes$Rphenograph) = "Rphenograph Cluster"
+        #### set output markdown file
+        output_file_name = './cytofkit_report.RMD'
+        
+        create_script = function(title = "", script = "", values = NULL, fig_width = NULL, fig_height = NULL
+                                 , chunk_option = NULL){
+          # browser()
+          param_names = as.list(match.call()$script)
+          param_names = param_names[-1]
+          r_option = "```{r, echo = F"
+          if (!is.null(chunk_option)) {
+            r_option = paste0(r_option, ", ", chunk_option)
+          }
+          if (!is.null(fig_width)) {
+            r_option = paste0(r_option, ", fig.width = ", fig_width)
+          }
+          if (!is.null(fig_height)) {
+            r_option = paste0(r_option, ", fig.height = ", fig_height)
+          }
+          r_option = paste0(r_option, "}")
+          res = paste(title, r_option, paste(param_names, collapse = "\n"), "```", sep = "\n")
+          if (!is.null(values)) {
+            for (i in 1:length(values)) {
+              res = gsub(values[i], paste0("\"", eval_string(values[i], envir = parent.frame()), "\""), res, fixed = T)
+            }
+          }
+          res
+        }
+        
+        substitute_script = function(script_file = "", script_id = "", scripts = "", output_file = ""){
+          # browser()
+          all_script = read_string(script_file)
+          script_id = paste0("####* ", script_id, " *####")
+          #### substitue script
+          script = paste(scripts, collapse = "\n")
+          script_res = gsub(script_id, script, all_script, fixed = T)
+          write_string(script_res, output_name = output_file)
+        }
+        
+        create_dr_scripts = function(analysis_results){
+          # browser()
+          dr_names = names(analysis_results$dimReducedRes)
+          scripts = lapply(1:length(dr_names), function(i){
+            if (dr_names[i] == "tsne") {
+              return("")
+              # temp_name = 'tSNE'
+            } else if (dr_names[i] == "umap") {
+              temp_name = 'UMAP'
+            } else {
+              temp_name = dr_names[i]
+            }
+            
+            script1 = create_script(paste0("## ", temp_name, " plot color by sample\n", "Based on the makers: "
+                                        , paste0(analysis_results$dimRedMarkers, collapse = ',')), {
+                                          plot_scatter(analysis_results$dimReducedRes[[dr_names[i]]]
+                                                       , analysis_results$sampleInfo[, "cellSample", drop = F]) + coord_fixed()
+                                        }, values = c("dr_names[i]"))
+            script2 = create_script(paste0("## ", temp_name, " plot color by sample (splitted version)"), {
+              p = plot_split_scatter(analysis_results$dimReducedRes[[dr_names[i]]]
+                                     , analysis_results$sampleInfo[, "cellSample", drop = F], ncol = 2, show_legend = F)
+              p[[1]]
+            }, values = c("dr_names[i]"), fig_width = 8, fig_height = 4)
+            return(c(script1, script2))
+          })
+          unlist(scripts)
+        }
+        
+        create_cluster_scripts = function(analysis_results){
+          # browser()
+          dr_names = names(analysis_results$dimReducedRes)
+          scripts = lapply(1:length(dr_names), function(i){
+            if (dr_names[i] == "tsne") {
+              return("")
+              # temp_name = 'tSNE'
+            } else if (dr_names[i] == "umap") {
+              temp_name = 'UMAP'
+            } else {
+              temp_name = dr_names[i]
+            }
+            script1 = create_script(paste0("## ", temp_name, " plot color by cluster"), {
+              plot_scatter(analysis_results$dimReducedRes[[dr_names[i]]]
+                           , analysis_results$clusterRes$Rphenograph) + coord_fixed()
+            }, values = c("dr_names[i]"))
+            # fig_height = ceiling(length(unique(analysis_results$clusterRes$Rphenograph[, 1]))/4)*2.5
+            # script2 = create_script(paste0("## ", temp_name, " plot color by cluster (splitted version)"), {
+            #   p = plot_split_scatter(analysis_results$dimReducedRes[[dr_names[i]]]
+            #                          , analysis_results$clusterRes$Rphenograph, ncol = 4, show_legend = F) 
+            #   p[[1]]
+            # }, values = c("dr_names[i]"), fig_height = fig_height, fig_width = 9)
+            # return(c(script1, script2))
+            return(c(script1))
+          })
+          script2 = create_script(paste0("## ", " Percentage heatmap"), {
+            
+            temp = as.data.frame(analysis_results$clusterRes$Rphenograph)
+            rownames(analysis_results$sampleInfo) = analysis_results$sampleInfo[, 1]
+            temp = ezcbind(temp, analysis_results$sampleInfo[, "cellSample", drop = F])
+            freq = as.data.frame.matrix(table(temp))
+            freq = freq/rowSums(freq)
+            pheatmap(freq, silent = F)
+            # print(p)
+          })
+          unlist(scripts)
+          c(scripts, script2)
+        }
+        
+        create_markers_script = function(analysis_results){
+          dr_names = names(analysis_results$dimReducedRes)
+          scripts = lapply(1:1, function(i){
+            if (dr_names[i] == "tsne") {
+              return("")
+              # temp_name = 'tSNE'
+            } else if (dr_names[i] == "umap") {
+              temp_name = 'UMAP'
+            } else {
+              temp_name = dr_names[i]
+            }
+            
+            # selected_markers = which(!(grepl("NA", colnames(analysis_results$expressionData))))
+            # fig_height = ceiling(length(unique(selected_markers))/6)*2.5
+            script2 = create_script(paste0("## ", temp_name, " plot color by cluster (splitted version)"), {
+              selected_markers = which(!(grepl("NA", colnames(analysis_results$expressionData))))
+              marker_list = ez_chunk(selected_markers, ceiling(length(selected_markers)/3/7))
+              lapply(1:length(marker_list), function(k){
+                all_plots = lapply(1:length(marker_list[[k]]), function(j){
+                  plot_scatter(analysis_results$dimReducedRes[[dr_names[i]]]
+                               , analysis_results$expressionData[, marker_list[[k]][j], drop = F]
+                               , colors = c("#BEBEBE",brewer.pal(9,"Reds")), color_as_factor = F) +
+                    coord_fixed() 
+                })
+                p = plot_grid(plotlist = all_plots, ncol = 3)
+                p
+              })
+            }, values = c("dr_names[i]"), fig_height = 15, fig_width = 9
+            , chunk_option = "results='hide', fig.keep='all', message=FALSE")
+            return(c(script2))
+          })
+          unlist(scripts)
+        }
+        
+        create_express_heatmap = function(analysis_results){
+          res = create_script(paste0("## Expression heatmap"), {
+            selected_markers = which(!(grepl("NA", colnames(analysis_results$expressionData))))
+            expression = as.data.frame(analysis_results$expressionData[, selected_markers, drop = F])
+            expression$clusters = analysis_results$clusterRes$Rphenograph[, 1]
+            cluster_expression = fast_aggr(expression, ncol(expression))
+            dt = seurat_sacle_data(cluster_expression)
+            pheatmap(dt)
+          }, chunk_option = "results='hide', fig.keep='all', message=FALSE")
+          res
+          
+          
+        }
+        
+        create_expression_histogram = function(analysis_results){
+          script2 = create_script(paste0("## Expression histograms"), {
+            dt = as.data.frame(analysis_results$expressionData)
+            selected_markers = which(!(grepl("NA", colnames(analysis_results$expressionData))))
+            selected_markers = colnames(analysis_results$expressionData)[selected_markers]
+            marker_list = ez_chunk(selected_markers, ceiling(length(selected_markers)/3/6))
+            invisible(lapply(1:length(marker_list), function(j){
+              print(stackDenistyPlot(dt, marker_list[[j]], stackFactor = analysis_results$clusterRes$Rphenograph[, 1]))
+            }))
+          }, fig_width = 9, fig_height = 15, chunk_option = "results='hide', fig.keep='all', message=FALSE")
+          return(c(script2))
+        }
+        
+        create_abstract_scripts = function(analysis_results){
+          paste0("The project \"", analysis_results$projectName, "\" has ")
+          sample_num = length(unique(analysis_results$sampleInfo$cellSample))
+          cell_num = nrow(analysis_results$sampleInfo)
+          cluster_num = length(unique(analysis_results$clusterRes$Rphenograph$`Rphenograph Cluster`))
+          res = paste0("There are ", sample_num, " sample", ifelse(sample_num > 1, "s", "")
+                    , ", ", cluster_num, " cluster", ifelse(cluster_num > 1, "s", "")
+                    , ", ", cell_num, " cell", ifelse(cluster_num > 1, "s", "")
+                    , " in the project \"", analysis_results$projectName, "\".\n\n")
+          res = paste0(res, "  The dimensionality reduction, clustering and markers expression anaylysis were conducted on the project data.")
+          res
+        }
+        
+        
+        dr_scripts = create_dr_scripts(analysis_results)
+        substitute_script('./pdf_report_template.Rmd', script_id = "DR analysis"
+                          , scripts = dr_scripts
+                          , output_file = output_file_name)
+        
+        abstract_scripts = create_abstract_scripts(analysis_results)
+        substitute_script(output_file_name, script_id = "Abstract"
+                          , scripts = abstract_scripts
+                          , output_file = output_file_name)
+        # render(output_file_name)
+
+        cluster_scripts = create_cluster_scripts(analysis_results)
+        substitute_script(output_file_name, script_id = "Cluster analysis"
+                          , scripts = cluster_scripts
+                          , output_file = output_file_name)
+
+        markers_scripts = create_markers_script(analysis_results)
+        substitute_script(output_file_name, script_id = "Expression on DR"
+                          , scripts = markers_scripts
+                          , output_file = output_file_name)
+
+        expression_heatmap_scrip = create_express_heatmap(analysis_results)
+        substitute_script(output_file_name, script_id = "Expression heatmap"
+                          , scripts = expression_heatmap_scrip
+                          , output_file = output_file_name)
+
+        expression_histogram_script = create_expression_histogram(analysis_results)
+        substitute_script(output_file_name, script_id = "Expression histogram"
+                          , scripts = expression_histogram_script
+                          , output_file = output_file_name)
+        
+        render(output_file_name, output_file = file)
+        # output_pdf = basename(output_file_name)
+        # output_pdf = paste0(get_file_name(output_pdf, with_ext = F), ".pdf")
+        # system(paste0("cp ", output_file_name, " ", file))
+        
+      })
+      
+    }
+  )
+  
   # 
   # observeEvent(input$OpenDir, {
   #   pdfDir <- paste0(getwd(), .Platform$file.sep, "cytofkit_PDF_Plots_", Sys.Date())
@@ -475,6 +812,7 @@ shinyServer = function(input, output, session)
              !(input$c_PlotFunction %in% c("Sample", "Density","None"))){
       return(NULL)
     }else{
+    # browser()
       
       withProgress(message="Generating Cluster Scatter Plot", value=0, {
         if(input$c_PlotFunction %in% c("Sample", "Density", "None")){
@@ -490,6 +828,13 @@ shinyServer = function(input, output, session)
             clusterColor <- rainbow(cluster_num)
           }
         }
+        temp_sample_names = lapply(1:length(v$data$sampleNames), function(i){
+          v$data$sampleNames[[i]][length(v$data$sampleNames[[i]])]
+        })
+        if(!all(temp_sample_names %in% input$samples)){
+          return(NULL)
+        }
+        # browser()
         gp <- scatterPlot(obj = v$data,
                           plotMethod = input$c_PlotMethod,
                           plotFunction = input$c_PlotFunction,
@@ -1285,57 +1630,94 @@ shinyServer = function(input, output, session)
     })
   })
   
+  
+  rename_sample = function(new_sample_name){
+    # browser()
+    v$sampleInfo$originalCellSample <- v$sampleInfo$cellSample
+    uniqueSampleNames <- sort(unique(v$sampleInfo$originalCellSample))
+
+    temp_names = sapply(1:length(uniqueSampleNames), function(i){
+      sample_name_length = length(v$data$sampleNames[[i]])
+      v$data$sampleNames[[i]][sample_name_length]
+    })
+    v$data$sampleNames = v$data$sampleNames[order(temp_names)]
+
+    sampleGroupNames <- NULL
+    for(i in 1:length(uniqueSampleNames)){
+      sample_name_length = length(v$data$sampleNames[[i]])
+      if (new_sample_name[i] != "") {
+        sampleGroupNames <- c(sampleGroupNames, new_sample_name[i])
+        v$data$sampleNames[[i]] <- c(v$data$sampleNames[[i]][1], new_sample_name[i])
+      } else {
+        sampleGroupNames <- c(sampleGroupNames, v$data$sampleNames[[i]][sample_name_length])
+        # v$data$sampleNames[[i]] <- c(v$data$sampleNames[[i]][sample_name_length], v$data$sampleNames[[i]][sample_name_length])
+      }
+    }
+
+    groupNameLevels <- strsplit(input$sampleGroupLevels, ";", fixed = TRUE)[[1]]
+
+    if(groupNameLevels != "" && all(sampleGroupNames != "")
+       && length(groupNameLevels) == length(unique(sampleGroupNames))
+       && all(as.character(groupNameLevels) %in% sampleGroupNames)){
+      sampleMatchID <- match(v$sampleInfo$originalCellSample, uniqueSampleNames)
+      v$sampleInfo$cellSample <- factor(sampleGroupNames[sampleMatchID],
+                                        levels = groupNameLevels)
+    }else{
+      sampleGroupNames[sampleGroupNames == ""] <- uniqueSampleNames[sampleGroupNames == ""]
+      sampleMatchID <- match(v$sampleInfo$originalCellSample, uniqueSampleNames)
+      v$sampleInfo$cellSample <- factor(sampleGroupNames[sampleMatchID])
+    }
+
+    cellID_number <- do.call(base::c, regmatches(v$sampleInfo$cellID,
+                                                 gregexpr("_[0-9]*$", v$sampleInfo$cellID, perl=TRUE)))
+
+    ## update reactive object v$sampleInfo
+    ## newCellID = "sampleGroup" + "_cellID" + "globalID" to avoid duplicates
+    v$sampleInfo$newCellID <- paste0(as.character(v$sampleInfo$cellSample),
+                                     "_",
+                                     1:length(cellID_number))
+
+
+    ## update reactive object v$data
+    expressionData <- v$data$expressionData
+    row.names(expressionData) <- v$sampleInfo$newCellID
+    v$data$expressionData <- expressionData
+
+    ## update the project name
+    v$data$projectName <- paste0(v$data$projectName, "_grouped_samples")
+
+    ## update v$data$progressionRes
+    if(!is.null(v$data$progressionRes)){
+      sampleExpressData <- v$data$progressionRes$sampleData
+      row.names(sampleExpressData) <- v$sampleInfo$newCellID[match(row.names(sampleExpressData),
+                                                                   v$sampleInfo$cellID)]
+      v$data$progressionRes$sampleData <- sampleExpressData
+    }
+
+    ## jump to S_tab1
+    # updateTabsetPanel(session, "S_sampleTabs", selected = "S_tab1")
+  }
+
+  
+  reset_sample = function(){
+    # browser()
+    v$sampleInfo <- v$ori_sampleInfo
+    v$data = v$ori_data
+    v$sample_selected_index = 1:length(unique(as.character(v$sampleInfo$cellSample)))
+    
+  }
+  
   ## update sample groups
   observeEvent(input$updateSampleGroups, {
     if(!is.null(v$data) && !is.null(v$sampleInfo)){
+      # browser()
       v$sampleInfo$originalCellSample <- v$sampleInfo$cellSample
       uniqueSampleNames <- sort(unique(v$sampleInfo$originalCellSample))
-      
-      sampleGroupNames <- NULL
+      new_sample_names <- NULL
       for(i in 1:length(uniqueSampleNames)){
-        sampleGroupNames <- c(sampleGroupNames, input[[paste0("Sample", i)]])
-        v$data$sampleNames[[i]] <- c(v$data$sampleNames[[i]], input[[paste0("Sample", i)]])
+        new_sample_names <- c(new_sample_names, input[[paste0("Sample", i)]])
       }
-      
-      groupNameLevels <- strsplit(input$sampleGroupLevels, ";", fixed = TRUE)[[1]]
-      
-      if(groupNameLevels != "" && all(sampleGroupNames != "") 
-         && length(groupNameLevels) == length(unique(sampleGroupNames))
-         && all(as.character(groupNameLevels) %in% sampleGroupNames)){
-        sampleMatchID <- match(v$sampleInfo$originalCellSample, uniqueSampleNames)
-        v$sampleInfo$cellSample <- factor(sampleGroupNames[sampleMatchID],
-                                          levels = groupNameLevels)
-      }else{
-        sampleGroupNames[sampleGroupNames == ""] <- uniqueSampleNames[sampleGroupNames == ""]
-        sampleMatchID <- match(v$sampleInfo$originalCellSample, uniqueSampleNames)
-        v$sampleInfo$cellSample <- factor(sampleGroupNames[sampleMatchID])
-      }
-      
-      cellID_number <- do.call(base::c, regmatches(v$sampleInfo$cellID,
-                                                   gregexpr("_[0-9]*$", v$sampleInfo$cellID, perl=TRUE)))
-      
-      ## update reactive object v$sampleInfo
-      ## newCellID = "sampleGroup" + "_cellID" + "globalID" to avoid duplicates
-      v$sampleInfo$newCellID <- paste0(as.character(v$sampleInfo$cellSample), 
-                                       "_",
-                                       1:length(cellID_number))
-      
-      
-      ## update reactive object v$data
-      expressionData <- v$data$expressionData
-      row.names(expressionData) <- v$sampleInfo$newCellID
-      v$data$expressionData <- expressionData
-      
-      ## update the project name
-      v$data$projectName <- paste0(v$data$projectName, "_grouped_samples")
-      
-      ## update v$data$progressionRes
-      if(!is.null(v$data$progressionRes)){
-        sampleExpressData <- v$data$progressionRes$sampleData
-        row.names(sampleExpressData) <- v$sampleInfo$newCellID[match(row.names(sampleExpressData),
-                                                                     v$sampleInfo$cellID)]
-        v$data$progressionRes$sampleData <- sampleExpressData
-      }
+      rename_sample(new_sample_names)
       
       ## jump to S_tab1
       updateTabsetPanel(session, "S_sampleTabs", selected = "S_tab1")

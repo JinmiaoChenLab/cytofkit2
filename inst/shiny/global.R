@@ -6,6 +6,10 @@ require(plyr)
 require(VGAM)
 require(colourpicker)
 require(gplots)
+require(rmarkdown)
+require(RColorBrewer)
+require(cowplot)
+require(pheatmap)
 
 
 ## Main function for scatter plot
@@ -14,7 +18,7 @@ scatterPlot <- function(obj, plotMethod, plotFunction, pointSize=1, alpha = 1,
                         FlowSOM_k = 40, selectCluster=NULL, selectSamples, 
                         facetPlot = FALSE, colorPalette = "bluered", labelRepel = FALSE, 
                         removeOutlier = TRUE, clusterColor, globalScale = TRUE, centerScale = FALSE){
-  
+  # browser()
   data <- data.frame(obj$expressionData, 
                      obj$dimReducedRes[[plotMethod]], 
                      do.call(cbind, obj$clusterRes), 
@@ -520,31 +524,526 @@ opendir <- function(dir = getwd()){
   }
 }
 
+read_string = function (file_name) 
+{
+  content = readChar(file_name, file.info(file_name)$size)
+  return(content)
+}
+
+write_string = function (content, output_name) 
+{
+  f <- file(output_name, "wb")
+  tryCatch({
+    writeBin(charToRaw(content), f)
+  }, finally = {
+    close(f)
+  })
+}
+
+ezcbind = function (..., type = c("sync", "keep_all", "all", "outer", "keep_left", 
+                                  "left", "keep_right", "right", "keep_common", "common", "inner", 
+                                  "cross")) 
+{
+  type = tolower(type[1])
+  if (type == "sync") {
+    res = sync_cbind(...)
+  }
+  else {
+    if (type %in% c("keep_common", "common", "inner")) {
+      argl = list(...)
+      if (length(argl) == 1 && class(argl[[1]]) == "list") {
+        argl = argl[[1]]
+      }
+      if (all(is.null(argl))) {
+        return(NULL)
+      }
+      res = NULL
+      argl = argl[!sapply(argl, is.null)]
+      if (length(argl) > 0) {
+        common_genes = rownames(argl[[1]])
+        if (length(argl) > 1) {
+          for (i in 2:length(argl)) {
+            common_genes = intersect(common_genes, rownames(argl[[i]]))
+          }
+          res = argl[[1]][common_genes, , drop = F]
+          for (i in 2:length(argl)) {
+            res = cbind(res, argl[[i]][common_genes, 
+                                       , drop = F])
+          }
+        }
+      }
+    }
+  }
+  return(res)
+  argl = list(...)
+  if (length(argl) == 1 && class(argl[[1]]) == "list") {
+    argl = argl[[1]]
+  }
+  if (all(is.null(argl))) {
+    return(NULL)
+  }
+  argl = argl[!sapply(argl, is.null)]
+  if (length(argl) == 1) {
+    return(as.data.frame(argl[[1]]))
+  }
+  else {
+    res = argl[[1]]
+    if (class(res) != "data.frame") {
+      res = as.data.frame(res)
+    }
+    res$row_name = rownames(res)
+    res = setkey(as.data.table(res), "row_name")
+    for (i in 2:length(argl)) {
+      print(i)
+      temp1 = res
+      temp2 = argl[[i]]
+      if (class(temp2) != "data.frame") {
+        temp2 = as.data.frame(temp2)
+      }
+      temp2$row_name = rownames(temp2)
+      temp2 = setkey(as.data.table(temp2), "row_name")
+      if (type == "keep_all" || type == "all" || type == 
+          "outer") {
+        res = merge(temp1, temp2, by = "row_name", all = T, 
+                    allow.cartesian = T)
+      }
+      else if (type == "keep_left" || type == "left") {
+        res = temp2[temp1, allow.cartesian = T]
+      }
+      else if (type == "keep_right" || type == "right") {
+        res = temp1[temp2, allow.cartesian = T]
+      }
+      else if (type == "keep_common" || type == "common" || 
+               type == "inner") {
+        res = temp1[temp2, nomatch = 0L, allow.cartesian = T]
+      }
+      else if (type == "cross") {
+        res = merge(res, argl[[i]], by = NULL)
+      }
+      res = as.data.frame(res)
+      rownames(res) = res[, 1]
+      res = res[, -1, drop = F]
+    }
+    return(res)
+  }
+}
+
+sync_cbind = function (...) 
+{
+  argl = list(...)
+  if (length(argl) == 1 && class(argl[[1]]) == "list") {
+    argl = argl[[1]]
+  }
+  if (all(is.null(argl))) {
+    return(NULL)
+  }
+  argl = argl[!sapply(argl, is.null)]
+  if (length(argl) == 1) {
+    return(as.data.frame(argl[[1]]))
+  }
+  else {
+    res = argl[[1]]
+    if (class(res) != "data.frame") {
+      res = as.data.frame(res)
+    }
+    for (i in 2:length(argl)) {
+      temp2 = argl[[i]]
+      if (class(temp2) != "data.frame") {
+        temp2 = as.data.frame(temp2)
+      }
+      temp2 = sync_variable(res, temp2)
+      res = cbind(res, temp2)
+      res = as.data.frame(res)
+    }
+    return(res)
+  }
+}
+
+sync_variable = function (base_order, to_be_sorted, base_dim = 1, to_be_sorted_dim = 1) 
+{
+  name1 = if (base_dim == 1) 
+    rownames(base_order)
+  else colnames(base_order)
+  name2 = if (to_be_sorted_dim == 1) 
+    rownames(to_be_sorted)
+  else colnames(to_be_sorted)
+  if (all(name1 %in% name2) || all(name2 %in% name1)) {
+    name_i = intersect(name1, name2)
+    sorted = if (to_be_sorted_dim == 1) 
+      to_be_sorted[name_i, , drop = F]
+    else to_be_sorted[, name_i, drop = F]
+  }
+  else {
+    stop("Can not synchronize two variables!")
+  }
+}
+
+fast_aggr = function (mat, col_id, func = sum) 
+{
+  dt = data.table(mat)
+  col_name = colnames(mat)[col_id]
+  sum_index = 1:dim(mat)[2]
+  sum_index = setdiff(sum_index, col_id)
+  sum_item = colnames(dt)[sum_index]
+  b = dt[, lapply(.SD, func), by = col_name, .SDcols = sum_item]
+  b = as.data.frame(b)
+  b = remove_all_NA(b)
+  rownames(b) = b[, 1]
+  b = b[, -1, drop = F]
+  return(b)
+}
+
+remove_all_NA = function (raw_data) 
+{
+  raw_data = raw_data[complete.cases(raw_data), , drop = F]
+}
+
+seurat_sacle_data = function (data.use, genes.use = NULL, do.scale = TRUE, do.center = TRUE, 
+                              scale.max = 10) 
+{
+  genes.use <- rownames(data.use)
+  scale.data <- matrix(data = NA, nrow = length(x = genes.use), 
+                       ncol = ncol(x = data.use))
+  dimnames(x = scale.data) <- dimnames(x = data.use)
+  if (do.scale | do.center) {
+    bin.size <- 1000
+    max.bin <- floor(length(genes.use)/bin.size) + 1
+    message("Scaling data matrix")
+    pb <- txtProgressBar(min = 0, max = max.bin, style = 3, 
+                         file = stderr())
+    for (i in 1:max.bin) {
+      my.inds <- ((bin.size * (i - 1)):(bin.size * i - 
+                                          1)) + 1
+      my.inds <- my.inds[my.inds <= length(x = genes.use)]
+      new.data <- t(x = scale(x = t(x = as.matrix(x = data.use[genes.use[my.inds], 
+                                                               ])), center = do.center, scale = do.scale))
+      new.data[new.data > scale.max] <- scale.max
+      scale.data[genes.use[my.inds], ] <- new.data
+      setTxtProgressBar(pb, i)
+    }
+    close(pb)
+  }
+  scale.data[is.na(scale.data)] <- 0
+  return(scale.data)
+}
+
+eval_string = function (string, envir = parent.frame(), ...) 
+{
+  eval(parse(text = string), envir = envir, ...)
+}
+
+ggsettings = new.env()
+ggsettings$pointsize = 1.5
+ggsettings$alpha = 0.7
+ggsettings$title_size = 10
+ggsettings$axis_title_size = 9
+ggsettings$axis_label_size = 8
+ggsettings$legend_title_size = 9
+ggsettings$legend_label_size = 8
+ggsettings$page_width = 4
+ggsettings$page_height = 3
+ggsettings$stroke = 0.2
+ggsettings$dpi = 300
+plot_scatter = function (pos, color = NULL, colors = NULL, colors_lims = NULL, 
+                         shape = NULL, global_point_size = get_ggplot_settings("pointsize"), 
+                         size = NULL, size_breaks = NULL, size_labels = NULL, color_as_factor = "auto", 
+                         title = NULL, return_type = "ggplot") 
+{
+  if (is.null(color)) {
+    color = "Undefined"
+  }
+  pos = as.data.frame(pos)
+  if (is.character(color)) {
+    color = create_group(list(rownames(pos)), c(color))
+  }
+  color = as.data.frame(color)
+  color = color[ez_order(color[, 1]), , drop = F]
+  pos = sync_variable(color, pos)
+  color = sync_variable(pos, color)
+  if (color_as_factor == "auto") {
+    color_as_factor = ifelse((nrow(color)/length(unique(color[, 
+                                                              1]))) > 4, yes = T, no = F)
+  }
+  if (color_as_factor) {
+    color[, 1] = factor(color[, 1], levels = ez_sort(unique(color[, 
+                                                                  1])))
+  }
+  aes_param = list(x = pos[, 1], y = pos[, 2], color = color[, 
+                                                             1], shape = shape[, 1], text = rownames(pos), key = rownames(pos))
+  main_param = list(data = pos, alpha = ggsettings$alpha, pch = 19, 
+                    stroke = ggsettings$stroke)
+  if (!is.null(size)) {
+    size = sync_variable(color, size)
+    aes_param = ez_param(aes_param, size = size[, 1])
+  }
+  else {
+    size = global_point_size
+    main_param = ez_param(main_param, size = size)
+  }
+  main_param = ez_param(main_param, mapping = do.call(aes, 
+                                                      aes_param))
+  p = ggplot() + do.call(geom_point, main_param) + theme_classic() + 
+    labs(color = colnames(color)[1], x = colnames(pos)[1], 
+         y = colnames(pos)[2]) + theme(title = element_text(size = ggsettings$title_size), 
+                                       plot.title = element_text(hjust = 0.5), axis.text = element_text(size = ggsettings$axis_title_size), 
+                                       axis.title = element_text(size = ggsettings$axis_label_size), 
+                                       legend.title = element_text(size = ggsettings$legend_label_size), 
+                                       legend.text = element_text(size = ggsettings$legend_label_size)) + 
+    labs(title = title)
+  if (!is.null(size)) {
+    p = p + labs(size = colnames(size)[1])
+  }
+  size_param = list()
+  if (!is.null(size_breaks) && is.numeric(size[, 1])) {
+    size_param[["breaks"]] = size_breaks
+  }
+  if (!is.null(size_labels)) {
+    size_param[["labels"]] = size_labels
+  }
+  if (length(size_param) > 0) {
+    p = p + do.call(scale_size_continuous, args = ez_param(size_param))
+  }
+  if (is.numeric(color[, 1])) {
+    if (is.null(colors)) {
+      colors = "red"
+    }
+    colors = tolower(colors)
+    if (colors == "red") {
+      colours = brewer.pal(10, "Reds")
+    }
+    else if (colors == "blue") {
+      colours = rev(brewer.pal(11, "RdYlBu"))
+    }
+    else if (colors == "rainbow") {
+      colours = rev(rainbow(10, end = 0.7))
+    }
+    else {
+      colours = colors
+    }
+    p = p + scale_color_gradientn(colours = colours, limits = colors_lims)
+  }
+  else if (is.factor(color[, 1]) | is.character(color[, 1])) {
+    if (!is.null(colors)) {
+      p = p + scale_color_manual(values = colors)
+    }
+  }
+  if (return_type == "ggplot") {
+    return(p)
+  }
+  else if (return_type == "plotly") {
+    return(ggplotly(p))
+  }
+}
 
 
+ez_order = function (dt, order_nchar_first = T) 
+{
+  if (is.character(dt) && order_nchar_first) {
+    res = order(nchar(dt), dt)
+  }
+  else {
+    res = order(dt)
+  }
+  res
+}
 
+ez_sort = function (dt, sort_nchar_first = T) 
+{
+  res = dt[ez_order(dt, sort_nchar_first)]
+  res
+}
 
+get_ggplot_settings = function (name) 
+{
+  get(name, envir = ggsettings)
+}
 
+ez_param = function (...) 
+{
+  params = list(...)
+  params = params[!sapply(params, is.null)]
+  params = ez_flattern_list(params)
+  res = list()
+  for (i in seq_along(params)) {
+    res[[names(params)[i]]] = params[[i]]
+  }
+  return(res)
+}
 
+ez_flattern_list = function (x, recursive = T, use.name = T) 
+{
+  temp = x
+  res = list()
+  num = 1
+  finished = F
+  for (i in seq_along(temp)) {
+    if (class(temp[[i]])[1] == "list") {
+      for (j in seq_along(temp[[i]])) {
+        if (is.null(temp[[i]][[j]])) {
+          res[num] = list(NULL)
+        }
+        else {
+          res[[num]] = temp[[i]][[j]]
+        }
+        if (use.name) {
+          names(res)[num] = names(temp[[i]])[j]
+        }
+        num = num + 1
+      }
+    }
+    else {
+      res[[num]] = temp[[i]]
+      if (use.name) {
+        if (!is.null(names(temp)) && !is.null(names(temp)[i])) {
+          names(res)[num] = names(temp)[i]
+        }
+      }
+      num = num + 1
+    }
+  }
+  if (recursive) {
+    while (!finished) {
+      finished = T
+      temp = res
+      res = list()
+      num = 1
+      for (i in seq_along(temp)) {
+        if (class(temp[[i]])[1] == "list") {
+          for (j in seq_along(temp[[i]])) {
+            if (is.null(temp[[i]][[j]])) {
+              res[num] = list(NULL)
+            }
+            else {
+              res[[num]] = temp[[i]][[j]]
+            }
+            if (use.name) {
+              names(res)[num] = names(temp[[i]])[j]
+            }
+            num = num + 1
+          }
+          finished = F
+        }
+        else {
+          if (is.null(temp[[i]])) {
+            res[num] = list(NULL)
+          }
+          else {
+            res[[num]] = temp[[i]]
+          }
+          if (use.name) {
+            names(res)[num] = names(temp)[i]
+          }
+          num = num + 1
+        }
+      }
+    }
+  }
+  return(res)
+}
 
+plot_split_scatter = function (pos, color = NULL, colors = NULL, shape = NULL, size = NULL, 
+                               color_as_factor = F, order = NULL, sort_color = T, title = NULL, 
+                               return_type = "ggplot", ncol = NULL, show_legend = T, coor_fix = T, 
+                               ...) 
+{
+  if (is.null(order)) {
+    if (is.factor(color[, 1])) {
+      sub_type = levels(color[, 1])
+    }
+    else {
+      sub_type = unique(color[, 1])
+    }
+    if (sort_color) {
+      sub_type = ez_sort(sub_type)
+    }
+  }
+  else {
+    sub_type = order
+  }
+  if (is.null(colors)) {
+    colors = gg_color_hue(length(sub_type))
+  }
+  pos = sync_variable(color, pos)
+  color = sync_variable(pos, color)
+  res = lapply(1:length(sub_type), function(i) {
+    sub_cells = get_selected_clusters_cell_name(color, sub_type[i])
+    p = plot_underline_points(pos, sub_cells, colors = colors[i], 
+                              selected_points_name = sub_type[i], title = sub_type[i])
+    if (!show_legend) {
+      p = p + gg_remove_all_legend()
+    }
+    if (coor_fix) {
+      p = p + coord_fixed()
+    }
+    p
+  })
+  names(res) = sub_type
+  p_all_type = plot_scatter(pos = pos, color = color, colors = colors, 
+                            shape = shape, color_as_factor = color_as_factor, title = title, 
+                            return_type = return_type, ...)
+  if (is.null(ncol)) {
+    ncol = ceiling(sqrt(length(res)))
+  }
+  p = plot_grid(plotlist = res, ncol = ncol)
+  final_res = list(one_figure = p, all_figures = res, all_type = p_all_type)
+  return(final_res)
+}
 
+ez_chunk = function (x, n) 
+{
+  split(x, cut(seq_along(x), n, labels = FALSE))
+}
 
+gg_color_hue = function (n) 
+{
+  hues = seq(15, 375, length = n + 1)
+  hcl(h = hues, l = 65, c = 100)[1:n]
+}
 
+get_selected_clusters_cell_name = function (cell_type, selected_clusters) 
+{
+  selected_cell_name = rownames(cell_type)[cell_type[, 1] %in% 
+                                             selected_clusters]
+  return(selected_cell_name)
+}
 
+plot_underline_points = function (pos, selected_points, color = NULL, colors = "red", 
+                                  background_color = "gray", global_point_size = get_ggplot_settings("pointsize"), 
+                                  selected_points_name = "selected", background_name = "Others", 
+                                  ...) 
+{
+  cell_type = pos[, 1, drop = F]
+  colnames(cell_type) = ""
+  cell_type[, 1] = background_name
+  cell_type[selected_points, 1] = selected_points_name
+  cell_type = as.data.frame(cell_type)
+  cell_type = dataframe_reorder(cell_type, n_col = 1, order = c(background_name, 
+                                                                selected_points_name))
+  if (!is.null(color)) {
+    common_cells = intersect(selected_points, rownames(color))
+  }
+  plot_scatter(pos, color = cell_type, colors = c(background_color, 
+                                                  colors), global_point_size = global_point_size, ...) + 
+    labs(color = "")
+}
 
+dataframe_reorder = function (ori_data, n_col = 1, order = NULL, order_item = T) 
+{
+  if (is.null(order)) {
+    print(paste0("c(\"", paste(unique(ori_data[, n_col]), 
+                               collapse = "\", \""), "\")"), quote = F)
+    return()
+  }
+  else {
+    ori_data[, n_col] = factor(ori_data[, n_col], levels = order)
+  }
+  if (order_item) {
+    ori_data = ori_data[order(ori_data[, n_col]), , drop = F]
+  }
+  ori_data
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+gg_remove_all_legend = function () 
+{
+  theme(legend.position = "none")
+}

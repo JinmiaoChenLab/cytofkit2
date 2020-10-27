@@ -40,7 +40,16 @@ shiny_one_panel = fluidPage(
                             wellPanel(
                               checkboxInput(inputId = "C_addLabel", label = "Add Cluster Labels", value = TRUE),
                               checkboxInput(inputId = "C_labelRepel", label = "Repel Cluster Labels", value = FALSE),
-                              checkboxInput(inputId = "C_facetPlot", label = "Separate Plot by Samples", value = FALSE)
+                              checkboxInput(inputId = "C_facetPlot", label = "Separate Plot by:", value = FALSE),
+                              # fluidRow(column(5, checkboxInput(inputId = "C_facetPlot", label = "Separate Plot by:", value = FALSE))
+                              #          ,
+                              #          column(7, selectInput("sample_info_selection", label = NULL, choices = NULL,
+                              #                                selected = NULL)))
+                              selectInput("sample_info_selection", label = NULL, choices = NULL,
+                                                             selected = NULL)
+                              
+                              
+                              
                             ),
                             downloadButton("PDFClusterPlot", "Download Cluster Plot in PDF")
                             # actionButton("PDFClusterPlot", "Download Cluster Plot in PDF", icon = icon("download"))
@@ -155,6 +164,7 @@ shiny_one_panel = fluidPage(
            ),
            # actionButton("saveButton", "Save Data", icon = icon("download")),
            downloadButton("saveButton", "Save Data"),
+           downloadButton("reportButton", "Generate Report"),
            
            hr(),
            h4(tags$a(href="mailto:jinmiao@gmail.com,a0124008@u.nus.edu?subject=[cytofkit-question]", 
@@ -514,6 +524,7 @@ load_data_panel = fluidPage(
   tags$div(title='The fcs files to be analyzed. One or multiple fcs files are allowed. When multiple fcs files are selected, cells from each fcs file are combined for analysis.'
              , fileInput("rawfcs", "Raw FCS files", multiple = T
                          , accept = c("FCSfile/fcs", '.fcs'))
+           , fileInput("sample_anno", "Meta data", multiple = F, accept = c("Txtfile/txt", '.txt'))
   )
   , tags$div(title="Select the list of makers to be used for analysis."
              , selectInput('markers', 'Markers', choices = NULL, selected = NULL
