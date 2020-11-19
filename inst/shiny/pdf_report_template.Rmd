@@ -1,5 +1,5 @@
 ---
-title: "Cytofkit2 Reprot"
+title: "Cytofkit2 Report"
 author:
 - name: CJMLab
   affiliation: Immunology Network (SIgN), A*STAR
