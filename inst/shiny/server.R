@@ -1,5 +1,4 @@
 library(shiny)
-
 # library(shinyFiles)
 # source("plot_functions.R")
 # library(Seurat)
@@ -575,7 +574,17 @@ shinyServer = function(input, output, session)
                                      , analysis_results$sampleInfo[, "cellSample", drop = F], ncol = 2, show_legend = F)
               p[[1]]
             }, values = c("dr_names[i]"), fig_width = 8, fig_height = 4)
-            return(c(script1, script2))
+            forplot3 <<- as.data.frame(cbind(analysis_results$dimReducedRes[[dr_names[i]]], analysis_results$expressionData[,analysis_results$dimRedMarkers, drop = F]))
+            script3 = create_script(paste0("## ", temp_name, " plot color by marker expression"), {
+              for (x in 1:length(analysis_results$dimRedMarkers)){
+                print(ggplot(forplot3, aes(x = umap_1, y = umap_2)) + geom_point(aes(color = get(colnames(forplot3)[x+2]))) + 
+                  scale_color_gradientn(colors = c("#00AFBB", "#E7B800", "#FC4E07")) +
+                  theme(legend.position = "right") +
+                  coord_fixed() +
+                  labs(colour = colnames(forplot3)[x+2]))
+              }                               
+            }, values = c("dr_names[i]"))
+            return(c(script1, script2, script3))
           })
           unlist(scripts)
         }
