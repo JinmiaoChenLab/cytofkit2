@@ -11,6 +11,7 @@ require(RColorBrewer)
 require(cowplot)
 require(pheatmap)
 
+forplot3 = NULL
 
 ## Main function for scatter plot
 scatterPlot <- function(obj, plotMethod, plotFunction, pointSize=1, alpha = 1,
