@@ -3,7 +3,7 @@ title: "Cytofkit2 Report"
 author:
 - name: CJMLab
   affiliation: Immunology Network (SIgN), A*STAR
-  email: Chen\_Jinmiao@immunol.a-star.edu.sg
+  email: Chen_Jinmiao@immunol.a-star.edu.sg
 output:
   BiocStyle::pdf_document
 abstract: |
