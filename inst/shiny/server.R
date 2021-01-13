@@ -564,7 +564,7 @@ shinyServer = function(input, output, session)
               temp_name = dr_names[i]
             }
             
-            script1 = create_script(paste0("## ", temp_name, " plot color by sample\n", "Based on the makers: "
+            script1 = create_script(paste0("## ", temp_name, " plot color by sample\n", "Based on the markers: "
                                         , paste0(analysis_results$dimRedMarkers, collapse = ', ')), {
                                           plot_scatter(analysis_results$dimReducedRes[[dr_names[i]]]
                                                        , analysis_results$sampleInfo[, "cellSample", drop = F]) + coord_fixed()
