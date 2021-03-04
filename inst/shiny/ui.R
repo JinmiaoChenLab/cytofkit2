@@ -7,6 +7,7 @@ library(shinydashboard)
 library(shinyalert)
 library(shinyFiles)
 library(shinyWidgets)
+library(cytofkit)
 
 shiny_one_panel = fluidPage(
   titlePanel("Interactive Exploration of cytofkit Analysis Results"),
