@@ -1,7 +1,7 @@
 Package: cytofkit2
 Type: Package
 Title: cytofkit: an integrated mass cytometry data analysis pipeline
-Version: 0.99.5
+Version: 1.99.1
 Date: 2018-01-19
 Author: Jinmiao Chen, Hao Chen, Matthew Myint
 Description: An integrated mass cytometry data analysis pipeline that enables
