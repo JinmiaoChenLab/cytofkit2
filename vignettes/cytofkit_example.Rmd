@@ -106,7 +106,7 @@ You can make use of the functions exported from cytofkit2 to make your analysis 
 
 ```{r}
 ## Loading the FCS data:  
-dir <- system.file('extdata',package='cytofkit')
+dir <- system.file('extdata',package='cytofkit2')
 file <- list.files(dir ,pattern='.fcs$', full=TRUE)
 paraFile <- list.files(dir, pattern='.txt$', full=TRUE)
 parameters <- as.character(read.table(paraFile, header = TRUE)[,1])
