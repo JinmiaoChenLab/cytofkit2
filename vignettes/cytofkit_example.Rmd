@@ -1,5 +1,5 @@
 ---
-title: "cytofkit: Quick Start"
+title: "cytofkit2: Quick Start"
 output:
   BiocStyle::html_document:
     toc: true
@@ -16,8 +16,9 @@ output:
 To install **cytofkit** package, start R and run the following codes on R console:
 
 ```{r, eval=FALSE}
-source("https://bioconductor.org/biocLite.R")
-biocLite("cytofkit")
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install("JinmiaoChenLab/cytofkit2")
 ```
 
 `Notes`: **cytofkit** GUI is dependent on XQuartz windowing system (X Windows) on Mac (OS X > 10.7). Install XQuartz from http://xquartz.macosforge.org.
@@ -29,7 +30,7 @@ biocLite("cytofkit")
 Load the Package:
 
 ```{r, message=FALSE}
-library("cytofkit") 
+library("cytofkit2") 
 ```
 
 Read the package description:
@@ -41,14 +42,14 @@ Read the package description:
 
 # Options for Using **cytofkit** Package
 
-**cytofkit** provides three ways to employ the workforce of this package:
+**cytofkit2** provides three ways to employ the workforce of this package:
 
 ## Run with GUI 
 
-The easiest way to use **cytofkit** package is through the GUI. The GUI provides all main options of **cytofkit** on a visual interface. To launch the GUI, load the package and type the following command:
+The easiest way to use **cytofkit2** package is through the ShinyApp. The GUI provides all main options of **cytofkit** on a visual interface. To launch the GUI, load the package and type the following command:
 
 ```{r, eval=FALSE}
-cytofkit_GUI()  
+cytofkit_shiny_dashboard() 
 ```
 
 The interface will appear like below, you can click the information button **!** to check the explanation for each entry and customize your own analysis.
@@ -75,7 +76,7 @@ Depends on the size of your data, it will take some time to run the analysis. On
 
 ```{r, eval=FALSE}
 set.seed(100)
-dir <- system.file('extdata',package='cytofkit')
+dir <- system.file('extdata',package='cytofkit2')
 file <- list.files(dir ,pattern='.fcs$', full=TRUE)
 parameters <- list.files(dir, pattern='.txt$', full=TRUE)
 res <- cytofkit(fcsFiles = file, 
@@ -94,12 +95,12 @@ res <- cytofkit(fcsFiles = file,
                 saveObject = TRUE)
 ```
 
-You can customize the parameters for your own need, run `?cytofkit` to get information of all the parameters for `cytofkit`. As running with GUI, once the analysis is done, the results will be saved under `resultDir` automatically.
+You can customize the parameters for your own need, run `?cytofkit2` to get information of all the parameters for `cytofkit2`. As running with GUI, once the analysis is done, the results will be saved under `resultDir` automatically.
       
 
 ## Run with Commands (Step-by-Step) 
 
-You can make use of the functions exported from cytofkit to make your analysis more flexible and fit your own need. Here we use a sample data for demo:
+You can make use of the functions exported from cytofkit2 to make your analysis more flexible and fit your own need. Here we use a sample data for demo:
 
 ### Pre-processing
 
