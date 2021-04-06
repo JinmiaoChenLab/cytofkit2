@@ -1,0 +1,59 @@
+Package: cytofkit2
+Type: Package
+Title: cytofkit: an integrated mass cytometry data analysis pipeline
+Version: 0.99.5
+Date: 2018-01-19
+Description: An integrated mass cytometry data analysis pipeline that enables
+    simultaneous illustration of cellular diversity and progression.
+License: Artistic-2.0
+Authors@R: c(person(given = "Jinmiao",
+             family = "Chen",
+             role = c("aut", "cre"),
+             email = "Chen_Jinmiao@immunol.a-star.edu.sg"))
+URL: https://github.com/JinmiaoChenLab/cytofkit
+BugReports: https://github.com/JinmiaoChenLab/cytofkit/issues
+biocViews: FlowCytometry, GUI, CellBiology, Clustering,
+    DimensionReduction, BiomedicalInformatics
+Depends:
+    R (>= 3.4.0), ggplot2, plyr, reticulate
+VignetteBuilder: knitr
+Suggests:
+    knitr,
+    RUnit,
+    testthat,
+    BiocGenerics
+Imports:
+    grDevices,
+	plotly,
+	shinyjs,
+	DT,
+	shinydashboard,
+	shinyalert,
+	shinyWidgets,
+	data.table,
+    graphics,
+    utils,
+    stats,
+    Rtsne,
+    e1071,
+    flowCore,
+    gplots,
+    colourpicker,
+    VGAM,
+    reshape2,
+    ggrepel,
+    shiny,
+    shinyFiles,
+    vegan,
+    Biobase,
+    doParallel,
+    parallel,
+    pdist,
+    methods,
+    destiny,
+    FlowSOM(>= 1.4.0),
+    igraph(>= 1.1.2),
+    RANN(>= 2.5),
+    Rcpp (>= 0.12.0)
+LinkingTo: Rcpp
+RoxygenNote: 7.1.1
