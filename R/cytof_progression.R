@@ -74,7 +74,7 @@ cytof_progression <- function(data, cluster,
                sampleCellID <- do.call(base::c, lapply(cellClusterList, mergeFunc))
            },
            min = {
-               minSize <- min(sapply(cellClusterList, length))
+               minSize <- min(vapply(cellClusterList, length))
                mergeFunc <- function(x) {
                    sample(x, size = minSize, replace = FALSE)
                }
