@@ -85,7 +85,7 @@ cytof_exprsMerge <- function(fcsFiles,
            merged <- do.call(rbind, lapply(exprsL, mergeFunc))
          },
          min = {
-           minSize <- min(sapply(exprsL, nrow))
+           minSize <- min(vapply(exprsL, nrow))
            mergeFunc <- function(x) {
              x[sample(nrow(x), size = minSize, replace = FALSE), , drop=FALSE]
            }
