@@ -35,6 +35,7 @@ Imports:
     utils,
     stats,
     Rtsne,
+    umap,
     e1071,
     flowCore,
     gplots,
