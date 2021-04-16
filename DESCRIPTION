@@ -1,7 +1,7 @@
 Package: cytofkit2
 Type: Package
 Title: cytofkit: an integrated mass cytometry data analysis pipeline
-Version: 0.99.7
+Version: 0.99.8
 Date: 2018-01-19
 Description: An integrated mass cytometry data analysis pipeline that enables
     simultaneous illustration of cellular diversity and progression.
@@ -19,6 +19,7 @@ Depends:
 VignetteBuilder: knitr
 Suggests:
     knitr,
+    rmarkdown,
     RUnit,
     testthat,
     BiocGenerics
