@@ -19,7 +19,7 @@ Depends:
 VignetteBuilder: knitr
 Suggests:
     knitr,
-    rmarkdown
+    rmarkdown,
     RUnit,
     testthat,
     BiocGenerics
