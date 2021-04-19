@@ -366,7 +366,7 @@ stackDenistyPlot <- function(data, densityCols, stackFactor,
     geom_segment(data = alignSegments,
                  aes(x = x, y = y, xend = tickXend, yend = tickYend),
                  color = "grey20", size=0.3) +
-    geom_text(data = alignSegments, aes(x = x, y = textY, label = tickText),
+    geom_text_repel(data = alignSegments, aes(x = x, y = textY, label = tickText),
               hjust = 0.3, vjust = 1.1, size = x_text_size) +
     geom_polygon(aes(fill=stackName, color=stackName), alpha = 0.15) + 
     scale_colour_manual(values = stackFactorColours) + 
