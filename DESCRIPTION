@@ -1,7 +1,7 @@
 Package: cytofkit2
 Type: Package
 Title: cytofkit: an integrated mass cytometry data analysis pipeline
-Version: 0.99.9
+Version: 0.99.10
 Date: 2018-01-19
 Description: An integrated mass cytometry data analysis pipeline that enables
     simultaneous illustration of cellular diversity and progression.
@@ -36,6 +36,7 @@ Imports:
     utils,
     stats,
     Rtsne,
+    uwot,
     e1071,
     flowCore,
     gplots,
