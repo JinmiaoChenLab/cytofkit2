@@ -72,7 +72,7 @@ cytof_dimReduction <- function(data,
     switch(method,
            umap = {
              if (!py_module_available(module = "umap")) {
-               umap <- reticulate::import("umap")
+               py_install("umap-learn")
              }
              cat("  Running UMAP...with seed", tsneSeed)
              umap_import <- import(module = "umap", delay_load = TRUE)
