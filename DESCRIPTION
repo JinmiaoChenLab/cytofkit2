@@ -38,7 +38,6 @@ Imports:
     stats,
     Rtsne,
     openssl,
-    umap,
     e1071,
     flowCore,
     gplots,
