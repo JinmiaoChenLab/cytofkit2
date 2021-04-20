@@ -13,7 +13,7 @@
 #' d<-system.file('extdata',package='cytofkit2')
 #' fcsFile <- list.files(d,pattern='.fcs$',full=TRUE)
 #' xdata <- cytof_exprsMerge(fcsFile, mergeMethod = 'fixed', fixedNum = 100)
-#' ydata <- cytof_dimReduction(xdata)
+#' ydata <- cytof_dimReduction(xdata, method = "tsne")
 #' #clusters <- DensVM(ydata, xdata)
 DensVM <- function(ydata, xdata) {
     
