@@ -8,15 +8,7 @@
 #' @export
 #' 
 #' @author Chen Jinmiao
-#' 
-#' @examples
-#' ## Not run:
-#' d<-system.file('extdata',package='cytofkit2')
-#' fcsFile <- list.files(d,pattern='.fcs$',full=TRUE)
-#' xdata <- cytof_exprsMerge(fcsFile, mergeMethod = 'fixed', fixedNum = 100)
-#' ydata <- cytof_dimReduction(xdata)
-#' #clusters <- DensVM(ydata, xdata)
-#' ## End(Not run)
+
 
 DensVM <- function(ydata, xdata) {
     
