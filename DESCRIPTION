@@ -1,7 +1,7 @@
 Package: cytofkit2
 Type: Package
 Title: cytofkit: an integrated mass cytometry data analysis pipeline
-Version: 0.99.7
+Version: 0.99.14
 Date: 2018-01-19
 Description: An integrated mass cytometry data analysis pipeline that enables
     simultaneous illustration of cellular diversity and progression.
@@ -43,6 +43,7 @@ Imports:
     VGAM,
     reshape2,
     ggrepel,
+    umap,
     shiny,
     shinyFiles,
     vegan,
