@@ -9,7 +9,6 @@
 #' 
 #' @author Chen Jinmiao
 
-ydata <- umap(xdata)
 DensVM <- function(ydata, xdata) {
     
     y_range_x <- max(ydata[, 1]) - min(ydata[, 1])
