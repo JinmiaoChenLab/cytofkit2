@@ -580,7 +580,7 @@ shinyServer = function(input, output, session)
             forplot3 <<- as.data.frame(cbind(analysis_results$dimReducedRes[[dr_names[i]]], analysis_results$expressionData[,analysis_results$dimRedMarkers, drop = F]))
             script3 = create_script(paste0("## ", temp_name, " plot color by marker expression"), {
               for (x in 1:length(analysis_results$dimRedMarkers)){
-                print(ggplot(forplot3, aes_string(x = umap_1, y = umap_2)) + geom_point(aes_string(color = get(colnames(forplot3)[x+2]))) + 
+                print(ggplot(forplot3, aes(x = umap_1, y = umap_2)) + geom_point(aes(color = get(colnames(forplot3)[x+2]))) + 
                   scale_color_gradientn(colors = c("#00AFBB", "#E7B800", "#FC4E07")) +
                   theme(legend.position = "right") +
                   coord_fixed() +
