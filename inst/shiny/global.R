@@ -359,16 +359,16 @@ stackDenistyPlot <- function(data, densityCols, stackFactor,
                                   panel.border = element_blank(),
                                   strip.background=element_rect(fill = "grey90", colour = NA))
   
-  gp <- ggplot(densData, aes_string(x=stack_x, y=stack_y)) +
+  gp <- ggplot(densData, aes(x=stack_x, y=stack_y)) +
     geom_segment(data = alignSegments,
-                 aes_string(x = x, y = y, xend = xend, yend = yend),
+                 aes(x = x, y = y, xend = xend, yend = yend),
                  color = "grey80", size=0.3) +
     geom_segment(data = alignSegments,
-                 aes_string(x = x, y = y, xend = tickXend, yend = tickYend),
+                 aes(x = x, y = y, xend = tickXend, yend = tickYend),
                  color = "grey20", size=0.3) +
-    geom_text_repel(data = alignSegments, aes_string(x = x, y = textY, label = tickText),
+    geom_text_repel(data = alignSegments, aes(x = x, y = textY, label = tickText),
               hjust = 0.3, vjust = 1.1, size = x_text_size) +
-    geom_polygon(aes_string(fill=stackName, color=stackName), alpha = 0.15) + 
+    geom_polygon(aes(fill=stackName, color=stackName), alpha = 0.15) + 
     scale_colour_manual(values = stackFactorColours) + 
     scale_fill_manual(values = stackFactorColours) +
     facet_wrap(~densityName, scale = "free") +
