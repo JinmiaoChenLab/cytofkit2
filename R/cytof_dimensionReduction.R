@@ -17,6 +17,7 @@
 #' 
 #' @importFrom vegan vegdist spantree isomap
 #' @importFrom Rtsne Rtsne
+#' @import umap
 #' @importFrom destiny DiffusionMap
 #' @importFrom utils compareVersion packageVersion
 #' @import stats reticulate
@@ -75,9 +76,9 @@ cytof_dimReduction <- function(data,
                stop("Cannot find UMAP, please install through pip (e.g. pip install umap-learn).")
              }
              cat("  Running UMAP...with seed", tsneSeed)
-             umap_import <- import(module = "umap", delay_load = TRUE)
+             #umap_import <- import(module = "umap", delay_load = TRUE)
 
-             umap <- umap_import$UMAP(n_neighbors = as.integer(x = umap_neighbor)
+             umap <- umap::umap()$UMAP(n_neighbors = as.integer(x = umap_neighbor)
                                       , n_components = as.integer(x = out_dim)
                                       , metric = distMethod 
                                       , min_dist = umap_min_dist)
