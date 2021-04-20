@@ -12,9 +12,9 @@
 #' @param rawFCSdir The directory that contains fcs files to be analysed.
 #' @param inverseLgclTrans If \verb{TRUE}, inverse logicle transform the cluster cor1 and cor2 channels.
 #' @return Save all results in the \code{resultDir}
-#' @importFrom ggplot2 ggplot ggsave aes_string facet_wrap geom_point geom_rug theme_bw theme xlab ylab ggtitle coord_fixed guides guide_legend scale_shape_manual scale_colour_manual
+#' @importFrom ggplot2 ggplot ggsave aes aes_string facet_wrap geom_point geom_rug theme_bw theme xlab ylab ggtitle coord_fixed guides guide_legend scale_shape_manual scale_colour_manual
 #' @importFrom reshape2 dcast
-#' @importFrom ggplot2 ggplot ggsave aes_string geom_line geom_point xlab ylab ggtitle theme_bw
+#' @importFrom ggplot2 ggplot ggsave aes aes_string geom_line geom_point xlab ylab ggtitle theme_bw
 #' @importFrom flowCore write.FCS flowFrame inverseLogicleTransform
 #' @importFrom grDevices dev.off pdf rainbow
 #' @importFrom graphics par
