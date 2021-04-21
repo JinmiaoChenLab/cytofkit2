@@ -78,7 +78,7 @@ cytof_dimReduction <- function(data,
              cat("  Running UMAP...with seed", tsneSeed)
              #umap_import <- import(module = "umap", delay_load = TRUE)
 
-             umap <- umap::umap()(marker_filtered_data, n_neighbors = as.integer(x = umap_neighbor)
+             umap <- umap::umap(marker_filtered_data, n_neighbors = as.integer(x = umap_neighbor)
                                       , n_components = as.integer(x = out_dim)
                                       , metric = distMethod 
                                       , min_dist = umap_min_dist)
