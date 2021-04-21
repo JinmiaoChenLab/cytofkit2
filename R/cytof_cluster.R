@@ -15,13 +15,7 @@
 #' @return a vector of the clusters assigned for each row of the ydata
 #' @export
 #' @examples
-#' d<-system.file('extdata', package='cytofkit2')
-#' fcsFile <- list.files(d, pattern='.fcs$', full=TRUE)
-#' parameters <- list.files(d, pattern='.txt$', full=TRUE)
-#' markers <- as.character(read.table(parameters, header = FALSE)[, 1])
-#' xdata <- cytof_exprsMerge(fcsFile, mergeMethod = 'fixed', fixedNum = 100)
-#' ydata <- cytof_dimReduction(xdata, markers = markers, method = "tsne")
-#' clusters <- cytof_cluster(ydata, xdata, method = "ClusterX")
+
 cytof_cluster <- function(ydata = NULL, 
                           xdata = NULL, 
                           method = c("Rphenograph", "ClusterX", "DensVM", "FlowSOM", "NULL"),
