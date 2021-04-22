@@ -350,7 +350,7 @@ cytof_clusterPlot <- function(data, xlab, ylab, cluster, sample, title = "cluste
                                            segment.size = 0.5,
                                            arrow = arrow(length = unit(0.02, 'npc')))
             }else{
-                cp <- cp + geom_text_repel(data=center, aes_string(x = "x", y = "y", label = "z"), 
+                cp <- cp + geom_text(data=center, aes_string(x = "x", y = "y", label = "z"), 
                                      size = labelSize, colour = "black") 
             }
         }
