@@ -1,7 +1,7 @@
 Package: cytofkit2
 Type: Package
 Title: cytofkit: an integrated mass cytometry data analysis pipeline
-Version: 0.99.26
+Version: 0.99.27
 Date: 2018-01-19
 Description: An integrated mass cytometry data analysis pipeline that enables
     simultaneous illustration of cellular diversity and progression.
@@ -15,7 +15,7 @@ BugReports: https://github.com/JinmiaoChenLab/cytofkit/issues
 biocViews: FlowCytometry, GUI, CellBiology, Clustering,
     DimensionReduction, BiomedicalInformatics
 Depends:
-    R (>= 3.4.0), ggplot2, plyr, reticulate
+    R (>= 3.4.0), ggplot2, plyr, reticulate, VGAM
 VignetteBuilder: knitr
 Suggests:
     knitr,
@@ -40,7 +40,6 @@ Imports:
     flowCore,
     gplots,
     colourpicker,
-    VGAM,
     reshape2,
     ggrepel,
     umap,
