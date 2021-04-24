@@ -205,52 +205,52 @@ cytof_heatmap(FlowSOM_cluster_median[, 2:37], baseName = "FlowSOM Cluster Median
 
 ```{r, message=FALSE}
 ## Inference of PhenoGraph cluster relatedness
-#PhenoGraph_progression <- cytof_progression(data = data_transformed_1k, 
-#                                            cluster = cluster_PhenoGraph, 
-#                                            method="isomap", clusterSampleSize = 50, 
-#                                            sampleSeed = 5)
-#p_d <- data.frame(PhenoGraph_progression$sampleData, 
-#                  PhenoGraph_progression$progressionData, 
-#                  cluster = PhenoGraph_progression$sampleCluster, 
-#                  check.names = FALSE)
+PhenoGraph_progression <- cytof_progression(data = data_transformed_1k, 
+                                            cluster = cluster_PhenoGraph, 
+                                            method="isomap", clusterSampleSize = 50, 
+                                            sampleSeed = 5)
+p_d <- data.frame(PhenoGraph_progression$sampleData, 
+                  PhenoGraph_progression$progressionData, 
+                  cluster = PhenoGraph_progression$sampleCluster, 
+                  check.names = FALSE)
 
 ## cluster relatedness plot
-#cytof_clusterPlot(data=p_d, xlab="isomap_1", ylab="isomap_2", 
-#                  cluster="cluster", sampleLabel = FALSE)
+cytof_clusterPlot(data=p_d, xlab="isomap_1", ylab="isomap_2", 
+                  cluster="cluster", sampleLabel = FALSE)
 
 ## marker expression profile
-#markers <- c("(Sm150)Di<GranzymeB>", "(Yb173)Di<Perforin>")
+markers <- c("(Sm150)Di<GranzymeB>", "(Pt195)Di<Cisplatin>")
 
-#cytof_colorPlot(data=p_d, xlab="isomap_1", ylab="isomap_2", zlab = markers[1], limits = range(p_d[,1:52]))
-#cytof_colorPlot(data=p_d, xlab="isomap_1", ylab="isomap_2", zlab = markers[2], limits = range(p_d[,1:52]))
+cytof_colorPlot(data=p_d, xlab="isomap_1", ylab="isomap_2", zlab = markers[1], limits = range(p_d[,1:52]))
+cytof_colorPlot(data=p_d, xlab="isomap_1", ylab="isomap_2", zlab = markers[2], limits = range(p_d[,1:52]))
 
-#cytof_progressionPlot(data=p_d, markers=markers, orderCol="isomap_1", clusterCol = "cluster")
+cytof_progressionPlot(data=p_d, markers=markers, orderCol="isomap_1", clusterCol = "cluster")
 ```
 
 
 ```{r, message=FALSE}
 ## Inference of ClusterX cluster relatedness
-#ClusterX_progression <- cytof_progression(data = data_transformed_1k, 
-#                                          cluster = cluster_ClusterX, 
-#                                          method="isomap", 
-#                                          clusterSampleSize = 30, 
-#                                          sampleSeed = 3)
-#c_d <- data.frame(ClusterX_progression$sampleData, 
-#                  ClusterX_progression$progressionData,
-#                  cluster=ClusterX_progression$sampleCluster, 
-#                  check.names = FALSE)
+ClusterX_progression <- cytof_progression(data = data_transformed_1k, 
+                                          cluster = cluster_ClusterX, 
+                                          method="isomap", 
+                                          clusterSampleSize = 30, 
+                                          sampleSeed = 3)
+c_d <- data.frame(ClusterX_progression$sampleData, 
+                  ClusterX_progression$progressionData,
+                  cluster=ClusterX_progression$sampleCluster, 
+                  check.names = FALSE)
 
 ## cluster relatedness plot
-#cytof_clusterPlot(data=c_d, xlab="isomap_1", ylab="isomap_2", 
-#                  cluster="cluster", sampleLabel = FALSE)
+cytof_clusterPlot(data=c_d, xlab="isomap_1", ylab="isomap_2", 
+                  cluster="cluster", sampleLabel = FALSE)
 
 ## marker expression profile
-#markers <- c("(Sm150)Di<GranzymeB>", "(Yb173)Di<Perforin>")
+markers <- c("(Sm150)Di<GranzymeB>", "(Pt195)Di<Cisplatin>")
 
-#cytof_colorPlot(data=c_d, xlab="isomap_1", ylab="isomap_2", zlab = markers[1], limits = range(c_d[,1:52]))
-#cytof_colorPlot(data=c_d, xlab="isomap_1", ylab="isomap_2", zlab = markers[2], limits = range(c_d[,1:52]))
+cytof_colorPlot(data=c_d, xlab="isomap_1", ylab="isomap_2", zlab = markers[1], limits = range(c_d[,1:52]))
+cytof_colorPlot(data=c_d, xlab="isomap_1", ylab="isomap_2", zlab = markers[2], limits = range(c_d[,1:52]))
 
-#cytof_progressionPlot(data=c_d, markers, orderCol="isomap_1", clusterCol = "cluster")
+cytof_progressionPlot(data=c_d, markers, orderCol="isomap_1", clusterCol = "cluster")
 ```
 
 
