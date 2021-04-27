@@ -5,7 +5,6 @@
 #'
 #' @return
 #' @export
-#'
 
 cytofkit_shiny_dashboard = function(onServer = F, port = NULL){
   if(isTRUE(onServer)){
