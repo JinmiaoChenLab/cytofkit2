@@ -386,7 +386,7 @@ cytof_clusterPlot <- function(data, xlab, ylab, cluster, sample, title = "cluste
 #' 
 #' @export
 #' @examples
-#' m1 <- c(rnorm(300, 10, 2), rnorm(400, 4, 2), rnorm(300, 7))
+#' \dontrun{m1 <- c(rnorm(300, 10, 2), rnorm(400, 4, 2), rnorm(300, 7))
 #' m2 <- c(rnorm(300, 4), rnorm(400, 16), rnorm(300, 10, 3))
 #' m3 <- c(rnorm(300, 16), rnorm(400, 40, 3), rnorm(300, 10))
 #' m4 <- c(rnorm(300, 7, 3), rnorm(400, 30, 2), rnorm(300, 10))
@@ -398,7 +398,7 @@ cytof_clusterPlot <- function(data, xlab, ylab, cluster, sample, title = "cluste
 #' row.names(exprs_cluster) <- sample(rnames, 1000)
 #' cluster_mean <- aggregate(. ~ cluster, data = exprs_cluster, mean)
 #' rownames(cluster_mean) <- paste("cluster_", cluster_mean$cluster, sep = "")
-#' cytof_heatmap(cluster_mean[, -which(colnames(cluster_mean) == "cluster")])
+#' p = cytof_heatmap(cluster_mean[, -which(colnames(cluster_mean) == "cluster")])}
 cytof_heatmap <- function(data, baseName = "Cluster", scaleMethod = "none",
                           dendrogram = c("both","row","column","none"),
                           colPalette = c("bluered", "greenred", "spectral1", "spectral2"),
