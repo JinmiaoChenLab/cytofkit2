@@ -49,7 +49,7 @@ Read the package description:
 The easiest way to use **cytofkit2** package is through the ShinyApp. The GUI provides all main options of **cytofkit** on a visual interface. To launch the GUI, load the package and type the following command:
 
 ```{r, eval=FALSE}
-cytofkit_shiny_dashboard() 
+#cytofkit_shiny_dashboard() 
 ```
 
 The interface will appear like below, you can click the information button **!** to check the explanation for each entry and customize your own analysis.
