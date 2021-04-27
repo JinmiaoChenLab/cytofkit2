@@ -26,8 +26,8 @@
 #' d <- system.file('extdata',package='cytofkit2')
 #' f <- list.files(d, pattern='.fcs$', full=TRUE)
 #' p <- list.files(d, pattern='.txt$', full=TRUE)
-#' #tr <- cytofkit(fcsFile=f,markers=p,projectName='t',saveResults=FALSE)
-#' #cytof_write_results(tr,projectName = 'test',resultDir=d,rawFCSdir =d)
+#' tr <- cytofkit(fcsFile=f,markers=p,projectName='t',saveResults=FALSE)
+#' cytof_write_results(tr,projectName = 'test',resultDir=d,rawFCSdir =d)
 cytof_writeResults <- function(analysis_results, 
                                projectName, 
                                saveToRData = TRUE,
