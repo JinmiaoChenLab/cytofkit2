@@ -237,14 +237,14 @@ cytof_writeResults <- function(analysis_results,
 #' @export
 #' @importFrom ggplot2 element_text element_rect element_blank element_line element_text annotate
 #' @examples
-#' x <- c(rnorm(100, mean = 1), rnorm(100, mean = 3), rnorm(100, mean = 9))
+#' \dontrun{x <- c(rnorm(100, mean = 1), rnorm(100, mean = 3), rnorm(100, mean = 9))
 #' y <- c(rnorm(100, mean = 2), rnorm(100, mean = 8), rnorm(100, mean = 5))
 #' c <- c(rep(1,100), rep(2,100), rep(3,100))
 #' rnames <- paste(paste('sample_', c('A','B','C'), sep = ''), rep(1:100,each = 3), sep='_') 
 #' data <- data.frame(dim1 = x, dim2 = y, cluster = c)
 #' rownames(data) <- rnames
 #' data$sample <- "data"
-#' cytof_clusterPlot(data, xlab="dim1", ylab="dim2", cluster="cluster", sample = "sample")
+#' p = cytof_clusterPlot(data, xlab="dim1", ylab="dim2", cluster="cluster", sample = "sample")}
 cytof_clusterPlot <- function(data, xlab, ylab, cluster, sample, title = "cluster", 
                               type = 1, point_size = NULL, addLabel=TRUE, 
                               labelSize=10, sampleLabel=TRUE, 
