@@ -9,7 +9,7 @@ License: Artistic-2.0
 Authors@R: c(person(given = "Jinmiao",
              family = "Chen",
              role = c("aut", "cre"),
-             email = "Chen_Jinmiao@immunol.a-star.edu.sg"))
+             email = "chen_jinmiao@immunol.a-star.edu.sg"))
 URL: https://github.com/JinmiaoChenLab/cytofkit
 BugReports: https://github.com/JinmiaoChenLab/cytofkit/issues
 biocViews: FlowCytometry, GUI, CellBiology, Clustering,
