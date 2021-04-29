@@ -14,8 +14,8 @@
 #' @author Hao Chen
 #' @export
 #' @examples 
-#' d <- system.file('extdata', package = 'cytofkit2')
-#' Rdata <- list.files(d, pattern = '.RData$', full.names = TRUE)
+#' \dontrun{d <- system.file('extdata', package = 'cytofkit2')
+#' Rdata <- list.files(d, pattern = '.RData$', full.names = TRUE)}
 #' #only for interactive sessions, remove hash to run
 #' #cytofkitShinyAPP(Rdata)
 cytofkitShinyAPP <- function(RData = NULL, onServer = FALSE) {
