@@ -52,14 +52,14 @@
 #' #cytofkit_GUI()  # remove the hash symbol to launch the GUI
 #' 
 #' ## Run on command
-#' dir <- system.file('extdata',package='cytofkit2')
+#' \dontrun{dir <- system.file('extdata',package='cytofkit2')
 #' file <- list.files(dir, pattern='.fcs$', full=TRUE)
 #' parameters <- list.files(dir, pattern='.txt$', full=TRUE)
 #' ## remove the hash symbol to run the following command
 #' #results <- cytofkit(fcsFile = file, markers = parameters)   
 #' 
 #' ## Checking the vignettes for more details 
-#' if(interactive()) browseVignettes(package = 'cytofkit2')
+#' if(interactive()) browseVignettes(package = 'cytofkit2')}
 #' 
 #' @seealso \code{\link{cytofkit}}, \code{\link{cytofkit_GUI}}
 #' @references \url{https://github.com/JinmiaoChenLab/cytofkit}
@@ -121,9 +121,9 @@ NULL
 #' @useDynLib cytofkit2
 #' @export
 #' @examples
-#' dir <- system.file('extdata',package='cytofkit2')
+#' \dontrun{dir <- system.file('extdata',package='cytofkit2')
 #' file <- list.files(dir, pattern='.fcs$', full=TRUE)
-#' parameters <- list.files(dir, pattern='.txt$', full=TRUE)
+#' parameters <- list.files(dir, pattern='.txt$', full=TRUE)}
 #' ## remove the hash symbol to run the following command
 #' #cytofkit(fcsFile = file, markers = parameters) 
 cytofkit <- function(fcsFiles = getwd(), 
