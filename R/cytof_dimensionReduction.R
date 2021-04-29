@@ -23,7 +23,7 @@
 #' @import stats reticulate
 #' @export
 #' @examples
-#' data(iris)
+#' \dontrun{data(iris)
 #' in_data <- iris[, 1:4]
 #' markers <- colnames(in_data[, 1:4])
 #' out_data <- cytof_dimReduction(in_data, markers = markers, method = "tsne")
