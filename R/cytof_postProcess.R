@@ -23,11 +23,11 @@
 #' @export
 #' @seealso \code{\link{cytofkit}}
 #' @examples
-#' d <- system.file('extdata',package='cytofkit2')
+#' \dontrun{d <- system.file('extdata',package='cytofkit2')
 #' f <- list.files(d, pattern='.fcs$', full=TRUE)
 #' p <- list.files(d, pattern='.txt$', full=TRUE)
 #' #tr <- cytofkit(fcsFile=f,markers=p,projectName='t',saveResults=FALSE)
-#' #cytof_write_results(tr,projectName = 'test',resultDir=d,rawFCSdir =d)
+#' #cytof_write_results(tr,projectName = 'test',resultDir=d,rawFCSdir =d)}
 cytof_writeResults <- function(analysis_results, 
                                projectName, 
                                saveToRData = TRUE,
@@ -457,7 +457,7 @@ cytof_heatmap <- function(data, baseName = "Cluster", scaleMethod = "none",
 #' @export
 #'
 #' @examples
-#' spectral1(2)
+#' \dontrun{spectral1(2)}
 spectral1 <- function(n){
     spectralPalette <- colorRampPalette(c("#5E4FA2", "#3288BD", "#66C2A5", "#ABDDA4",
                                           "#E6F598", "#FFFFBF", "#FEE08B", "#FDAE61",
@@ -473,7 +473,7 @@ spectral1 <- function(n){
 #' @export
 #'
 #' @examples
-#' spectral2(2)
+#' \dontrun{spectral2(2)}
 spectral2 <- function(n){
     spectralPalette <- colorRampPalette(rev(c("#7F0000","red","#FF7F00","yellow","white", 
                                               "cyan", "#007FFF", "blue","#00007F")))
@@ -499,11 +499,11 @@ spectral2 <- function(n){
 #' 
 #' @export
 #' @examples
-#' x <- c(rnorm(100, mean = 1), rnorm(100, mean = 3), rnorm(100, mean = 9))
+#' \dontrun{x <- c(rnorm(100, mean = 1), rnorm(100, mean = 3), rnorm(100, mean = 9))
 #' y <- c(rnorm(100, mean = 2), rnorm(100, mean = 8), rnorm(100, mean = 5))
 #' c <- rnorm(300, 10, 5)
 #' data <- data.frame(dim1 = x, dim2 = y, marker = c)
-#' cytof_colorPlot(data = data, xlab = "dim1", ylab = "dim2", zlab = "marker")
+#' cytof_colorPlot(data = data, xlab = "dim1", ylab = "dim2", zlab = "marker")}
 cytof_colorPlot <- function(data, xlab, ylab, zlab, 
                             colorPalette = c("bluered", "spectral1", "spectral2", "heat"),
                             limits = c(quantile(data[,zlab], .02), quantile(data[,zlab], .98)),
@@ -576,7 +576,7 @@ cytof_colorPlot <- function(data, xlab, ylab, zlab,
 #' @importFrom reshape2 dcast
 #' @export
 #' @examples 
-#' m1 <- c(rnorm(300, 10, 2), rnorm(400, 4, 2), rnorm(300, 7))
+#' \dontrun{m1 <- c(rnorm(300, 10, 2), rnorm(400, 4, 2), rnorm(300, 7))
 #' m2 <- c(rnorm(300, 4), rnorm(400, 16), rnorm(300, 10, 3))
 #' m3 <- c(rnorm(300, 16), rnorm(400, 40, 3), rnorm(300, 10))
 #' m4 <- c(rnorm(300, 7, 3), rnorm(400, 30, 2), rnorm(300, 10))
@@ -586,7 +586,7 @@ cytof_colorPlot <- function(data, xlab, ylab, zlab,
 #' rep(1:250,each = 4), sep='_') 
 #' exprs_cluster <- data.frame(cluster = c, m1 = m1, m2 = m2, m3 = m3, m4 = m4, m5 = m5)
 #' row.names(exprs_cluster) <- rnames
-#' cytof_clusterStat(data = exprs_cluster, cluster = "cluster", statMethod = "mean")
+#' cytof_clusterStat(data = exprs_cluster, cluster = "cluster", statMethod = "mean")}
 cytof_clusterStat <- function(data, markers, cluster = "cluster", sample, 
                               statMethod = c("mean", "median", "percentage", "NULL")){
     
@@ -642,10 +642,10 @@ cytof_clusterStat <- function(data, markers, cluster = "cluster", sample,
 #' @export
 #' 
 #' @examples  
-#' dir <- system.file('extdata',package='cytofkit2')
+#' \dontrun{dir <- system.file('extdata',package='cytofkit2')
 #' file <- list.files(dir ,pattern='.RData$', full=TRUE)
 #' load(file)
-#' cluster2_table <- cytof_clusterMtrx(analysis_results, "Rphenograph", 2)
+#' cluster2_table <- cytof_clusterMtrx(analysis_results, "Rphenograph", 2)}
 cytof_clusterMtrx <- function(analysis_results, clusterMethod = NULL, cluster){
   exprs <- analysis_results$expressionData
   clusterRes <- analysis_results$clusterRes
