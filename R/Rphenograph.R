@@ -34,9 +34,9 @@
 #' @author Chen Hao
 #' @references Jacob H. Levine and et.al. Data-Driven Phenotypic Dissection of AML Reveals Progenitor-like Cells that Correlate with Prognosis. Cell, 2015.                
 #' @examples
-#' \dontrun{iris_unique <- unique(iris) # Remove duplicates
+#' iris_unique <- unique(iris) # Remove duplicates
 #' data <- as.matrix(iris_unique[,1:4])
-#' Rphenograph_out <- Rphenograph(data, k = 45)}
+#' Rphenograph_out <- Rphenograph(data, k = 45)
 Rphenograph <- function(data, k=30){
     if(is.data.frame(data))
         data <- as.matrix(data)
