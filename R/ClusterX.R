@@ -32,9 +32,9 @@
 #' @author Chen Hao
 #'
 #' @examples
-#' \dontrun{iris_unique <- unique(iris) # Remove duplicates
+#' iris_unique <- unique(iris) # Remove duplicates
 #' data <- as.matrix(iris_unique[,1:4])
-#' ClusterXRes <- ClusterX(data)}
+#' ClusterXRes <- ClusterX(data)
 ClusterX <- function(data,
                      dimReduction = NULL,
                      outDim=2,
