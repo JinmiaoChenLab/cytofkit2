@@ -499,11 +499,11 @@ spectral2 <- function(n){
 #' 
 #' @export
 #' @examples
-#' x <- c(rnorm(100, mean = 1), rnorm(100, mean = 3), rnorm(100, mean = 9))
+#' \dontrun {x <- c(rnorm(100, mean = 1), rnorm(100, mean = 3), rnorm(100, mean = 9))
 #' y <- c(rnorm(100, mean = 2), rnorm(100, mean = 8), rnorm(100, mean = 5))
 #' c <- rnorm(300, 10, 5)
 #' data <- data.frame(dim1 = x, dim2 = y, marker = c)
-#' cytof_colorPlot(data = data, xlab = "dim1", ylab = "dim2", zlab = "marker")
+#' cytof_colorPlot(data = data, xlab = "dim1", ylab = "dim2", zlab = "marker")}
 cytof_colorPlot <- function(data, xlab, ylab, zlab, 
                             colorPalette = c("bluered", "spectral1", "spectral2", "heat"),
                             limits = c(quantile(data[,zlab], .02), quantile(data[,zlab], .98)),
