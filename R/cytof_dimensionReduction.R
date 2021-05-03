@@ -23,13 +23,13 @@
 #' @import stats reticulate
 #' @export
 #' @examples
-#' \dontrun{data(iris)
+#' data(iris)
 #' in_data <- iris[, 1:4]
 #' markers <- colnames(in_data[, 1:4])
 #' out_data <- cytof_dimReduction(in_data, markers = markers, method = "tsne")
 #' @note Currently, \code{diffusionmap} will not work with R 3.4.0, due to an issue with the latest CRAN release of its dependency \code{\link{igraph}} 
 #' If this is the case, consider manually updating \code{\link{igraph}} using;
-#' \code{install.packages("https://github.com/igraph/rigraph/releases/download/v1.1.0/igraph_1.1.0.zip", repos=NULL, method="libcurl")}
+#' \code{install.packages("https://github.com/igraph/rigraph/releases/download/v1.1.0/igraph_1.1.0.zip", repos=NULL, method="libcurl")
 cytof_dimReduction <- function(data,
                                markers = NULL,
                                method = c("umap", "tsne", "pca", "isomap", "diffusionmap", "NULL"), 
