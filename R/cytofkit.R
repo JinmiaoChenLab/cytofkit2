@@ -46,7 +46,7 @@
 #' All the above post processing can be automatically implemented and saved using one function \code{\link{cytof_writeResults}}.
 #' 
 #' @author Hao Chen, Jinmiao Chen
-#' @examples
+#' 
 #' 
 #' ## Run on GUI
 #' #cytofkit_GUI()  # remove the hash symbol to launch the GUI
