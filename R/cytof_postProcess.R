@@ -385,20 +385,7 @@ cytof_clusterPlot <- function(data, xlab, ylab, cluster, sample, title = "cluste
 #' @importFrom gplots heatmap.2 bluered   
 #' 
 #' @export
-#' @examples
-#' m1 <- c(rnorm(300, 10, 2), rnorm(400, 4, 2), rnorm(300, 7))
-#' m2 <- c(rnorm(300, 4), rnorm(400, 16), rnorm(300, 10, 3))
-#' m3 <- c(rnorm(300, 16), rnorm(400, 40, 3), rnorm(300, 10))
-#' m4 <- c(rnorm(300, 7, 3), rnorm(400, 30, 2), rnorm(300, 10))
-#' m5 <- c(rnorm(300, 27), rnorm(400, 40, 1),rnorm(300, 10))
-#' c <- c(rep(1,300), rep(2,400), rep(3,300))
-#' rnames <- paste(paste('sample_', c('A','B','C','D'), sep = ''), 
-#' rep(1:250,each = 4), sep='_') 
-#' exprs_cluster <- data.frame(cluster = c, m1 = m1, m2 = m2, m3 = m3, m4 = m4, m5 = m5)
-#' row.names(exprs_cluster) <- sample(rnames, 1000)
-#' cluster_mean <- aggregate(. ~ cluster, data = exprs_cluster, mean)
-#' rownames(cluster_mean) <- paste("cluster_", cluster_mean$cluster, sep = "")
-#' p = cytof_heatmap(cluster_mean[, -which(colnames(cluster_mean) == "cluster")])
+
 cytof_heatmap <- function(data, baseName = "Cluster", scaleMethod = "none",
                           dendrogram = c("both","row","column","none"),
                           colPalette = c("bluered", "greenred", "spectral1", "spectral2"),
@@ -498,12 +485,7 @@ spectral2 <- function(n){
 #' @importFrom grDevices colorRampPalette topo.colors heat.colors terrain.colors cm.colors
 #' 
 #' @export
-#' @examples
-#' x <- c(rnorm(100, mean = 1), rnorm(100, mean = 3), rnorm(100, mean = 9))
-#' y <- c(rnorm(100, mean = 2), rnorm(100, mean = 8), rnorm(100, mean = 5))
-#' c <- rnorm(300, 10, 5)
-#' data <- data.frame(dim1 = x, dim2 = y, marker = c)
-#' cytof_colorPlot(data = data, xlab = "dim1", ylab = "dim2", zlab = "marker")
+
 cytof_colorPlot <- function(data, xlab, ylab, zlab, 
                             colorPalette = c("bluered", "spectral1", "spectral2", "heat"),
                             limits = c(quantile(data[,zlab], .02), quantile(data[,zlab], .98)),
@@ -693,18 +675,7 @@ cytof_clusterMtrx <- function(analysis_results, clusterMethod = NULL, cluster){
 #' 
 #' @export
 #' 
-#' @examples
-#' m1 <- c(rnorm(300, 10, 2), rnorm(400, 4, 2), rnorm(300, 7))
-#' m2 <- c(rnorm(300, 4), rnorm(400, 16), rnorm(300, 10, 3))
-#' m3 <- c(rnorm(300, 16), rnorm(400, 40, 3), rnorm(300, 10))
-#' m4 <- c(rnorm(300, 7, 3), rnorm(400, 30, 2), rnorm(300, 10))
-#' m5 <- c(rnorm(300, 27), rnorm(400, 40, 1),rnorm(300, 10))
-#' c <- c(rep(1,300), rep(2,400), rep(3,300))
-#' rnames <- paste(paste('sample_', c('A','B','C','D'), sep = ''), 
-#' rep(1:250,each = 4), sep='_') 
-#' exprs_cluster <- data.frame(cluster = c, m1 = m1, m2 = m2, m3 = m3, m4 = m4, isomap_1 = m5)
-#' row.names(exprs_cluster) <- sample(rnames, 1000)
-#' cytof_progressionPlot(exprs_cluster, markers = c("m1","m2","m3","m4"))
+
 cytof_progressionPlot <- function(data, markers, clusters, 
                                   orderCol="isomap_1", 
                                   clusterCol = "cluster", 
