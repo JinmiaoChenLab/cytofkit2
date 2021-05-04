@@ -386,7 +386,7 @@ cytof_clusterPlot <- function(data, xlab, ylab, cluster, sample, title = "cluste
 #' 
 #' @export
 #' @examples
-#' \dontrun {m1 <- c(rnorm(300, 10, 2), rnorm(400, 4, 2), rnorm(300, 7))
+#' m1 <- c(rnorm(300, 10, 2), rnorm(400, 4, 2), rnorm(300, 7))
 #' m2 <- c(rnorm(300, 4), rnorm(400, 16), rnorm(300, 10, 3))
 #' m3 <- c(rnorm(300, 16), rnorm(400, 40, 3), rnorm(300, 10))
 #' m4 <- c(rnorm(300, 7, 3), rnorm(400, 30, 2), rnorm(300, 10))
@@ -398,7 +398,7 @@ cytof_clusterPlot <- function(data, xlab, ylab, cluster, sample, title = "cluste
 #' row.names(exprs_cluster) <- sample(rnames, 1000)
 #' cluster_mean <- aggregate(. ~ cluster, data = exprs_cluster, mean)
 #' rownames(cluster_mean) <- paste("cluster_", cluster_mean$cluster, sep = "")
-#' p = cytof_heatmap(cluster_mean[, -which(colnames(cluster_mean) == "cluster")])}
+#' p = cytof_heatmap(cluster_mean[, -which(colnames(cluster_mean) == "cluster")])
 cytof_heatmap <- function(data, baseName = "Cluster", scaleMethod = "none",
                           dendrogram = c("both","row","column","none"),
                           colPalette = c("bluered", "greenred", "spectral1", "spectral2"),
@@ -499,11 +499,11 @@ spectral2 <- function(n){
 #' 
 #' @export
 #' @examples
-#' \dontrun {x <- c(rnorm(100, mean = 1), rnorm(100, mean = 3), rnorm(100, mean = 9))
+#' x <- c(rnorm(100, mean = 1), rnorm(100, mean = 3), rnorm(100, mean = 9))
 #' y <- c(rnorm(100, mean = 2), rnorm(100, mean = 8), rnorm(100, mean = 5))
 #' c <- rnorm(300, 10, 5)
 #' data <- data.frame(dim1 = x, dim2 = y, marker = c)
-#' cytof_colorPlot(data = data, xlab = "dim1", ylab = "dim2", zlab = "marker")}
+#' cytof_colorPlot(data = data, xlab = "dim1", ylab = "dim2", zlab = "marker")
 cytof_colorPlot <- function(data, xlab, ylab, zlab, 
                             colorPalette = c("bluered", "spectral1", "spectral2", "heat"),
                             limits = c(quantile(data[,zlab], .02), quantile(data[,zlab], .98)),
