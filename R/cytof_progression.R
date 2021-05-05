@@ -19,7 +19,16 @@
 #' @return a list. Includes: sampleData, sampleCluster and progressionData.
 #' 
 #' @export
-
+#' d<-system.file('extdata', package='cytofkit2')
+#' fcsFile <- list.files(d, pattern='.fcs$', full=TRUE)
+#' parameters <- list.files(d, pattern='.txt$', full=TRUE)
+#' markers <- as.character(read.table(parameters, header = TRUE)[, 1])
+#' xdata <- cytof_exprsMerge(fcsFile, mergeMethod = 'fixed', fixedNum = 2000)
+#' clusters <- cytof_cluster(xdata = xdata, method = "Rphenograph")
+#' prog <- cytof_progression(data = xdata, cluster = clusters, clusterSampleSize = 100)
+#' d <- as.data.frame(cbind(prog$progressionData, cluster = factor(prog$sampleCluster)))
+#' cytof_clusterPlot(data =d, xlab = "diffusionmap_1", ylab="diffusionmap_2",
+#'                   cluster = "cluster", sampleLabel = FALSE)
 cytof_progression <- function(data, cluster, 
                               method=c("diffusionmap", "isomap", "NULL"), 
                               distMethod = "euclidean",
