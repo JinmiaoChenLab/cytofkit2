@@ -7,7 +7,7 @@
 #' This package integrates merging methods of multiple FCS files, dimension reduction methods (PCA, t-SNE and ISOMAP) 
 #' and clustering methods (DensVM, ClusterX, and Rphenograph) for rapid subset detection. Analysis results can be visualized 
 #' and explored interactively using a specially designed shiny web APP, see \code{\link{cytofkitShinyAPP}}. Moreover, the method isomap is provided to map the cellular progression. 
-#' This workflow can be easily executed with the main function \code{\link{cytofkit}} or through the GUI client \code{\link{cytofkit_GUI}}.
+#' This workflow can be easily executed with the main function \code{\link{cytofkit}}.
 #' 
 #' Pre-processing
 #' 
@@ -61,7 +61,7 @@
 #' ## Checking the vignettes for more details 
 #' if(interactive()) browseVignettes(package = 'cytofkit2')
 #' 
-#' @seealso \code{\link{cytofkit}}, \code{\link{cytofkit_GUI}}
+#' @seealso \code{\link{cytofkit}}
 #' @references \url{https://github.com/JinmiaoChenLab/cytofkit}
 #' @docType package
 #' @name cytofkit-package
@@ -117,7 +117,7 @@ NULL
 #' @return a list containing \code{expressionData}, \code{dimReductionMethod}, \code{visualizationMethods}, \code{dimReducedRes}, \code{clusterRes}, \code{progressionRes}, \code{projectName}, \code{rawFCSdir} and \code{resultDir}. If choose 'saveResults = TRUE', results will be saved into files under \code{resultDir}.
 #' @author Hao Chen, Jinmiao Chen
 #' @references \url{https://github.com/JinmiaoChenLab/cytofkit}
-#' @seealso \code{\link{cytofkit}}, \code{\link{cytofkit_GUI}}, \code{\link{cytofkitShinyAPP}}
+#' @seealso \code{\link{cytofkit}}, \code{\link{cytofkitShinyAPP}}
 #' @useDynLib cytofkit2
 #' @export
 #' @examples
