@@ -10,8 +10,8 @@ Authors@R: c(person(given = "Jinmiao",
              family = "Chen",
              role = c("aut", "cre"),
              email = "chen_jinmiao@immunol.a-star.edu.sg"))
-URL: https://github.com/JinmiaoChenLab/cytofkit
-BugReports: https://github.com/JinmiaoChenLab/cytofkit/issues
+URL: https://github.com/JinmiaoChenLab/cytofkit2
+BugReports: https://github.com/JinmiaoChenLab/cytofkit2/issues
 biocViews: FlowCytometry, GUI, CellBiology, Clustering,
     DimensionReduction, BiomedicalInformatics
 Depends:
