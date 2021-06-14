@@ -21,7 +21,7 @@ if (!requireNamespace("BiocManager", quietly = TRUE))
 BiocManager::install("JinmiaoChenLab/cytofkit2")
 ```
 
-`Notes`: **cytofkit** GUI is dependent on XQuartz windowing system (X Windows) on Mac (OS X > 10.7). Install XQuartz from http://xquartz.macosforge.org.
+`Notes`: **cytofkit2** GUI is dependent on XQuartz windowing system (X Windows) on Mac (OS X > 10.7). Install XQuartz from http://xquartz.macosforge.org.
 
 * Download the disk image (dmg) file for [XQuartz](https://dl.bintray.com/xquartz/downloads/XQuartz-2.7.9.dmg).
 * Double-clicking on the file to start the installation, you can do it safely by clicking through all the defaults.
@@ -36,7 +36,7 @@ library("cytofkit2")
 Read the package description:
 
 ```{r, eval=FALSE}
-?"cytofkit-package"
+?"cytofkit2-package"
 ```
 
 
@@ -54,7 +54,7 @@ The easiest way to use **cytofkit2** package is through the ShinyApp. The GUI pr
 
 The interface will appear like below, you can click the information button **!** to check the explanation for each entry and customize your own analysis.
 
-![cytofkit GUI](cytofkit_GUI.png)
+![cytofkit2 GUI](cytofkit2_GUI.png)
 
 Start your analysis as simply as following:   
 
@@ -72,7 +72,7 @@ Depends on the size of your data, it will take some time to run the analysis. On
 
 ## Run with the Core Function 
 
-**Cytofkit** provides a core function `cytofkit()` to drive the analysis pipeline of mass cytometry data. Users only need to define several key parameters to start their analysis automatically. One simple example of running cytofkit using the core function is like this:
+**Cytofkit2** provides a core function `cytofkit()` to drive the analysis pipeline of mass cytometry data. Users only need to define several key parameters to start their analysis automatically. One simple example of running cytofkit using the core function is like this:
 
 ```{r, eval=FALSE}
 set.seed(100)
