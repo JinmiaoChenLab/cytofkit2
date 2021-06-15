@@ -86,8 +86,8 @@ FlowSOM_integrate2cytofkit <- function(xdata, k, flowSeed = NULL, ...){
         metaClusters <- suppressMessages(metaClustering_consensus(map$codes, k = k, seed = flowSeed))
         cluster <- metaClusters[map$mapping[,1]]
     }, error=function(cond) {
-        message("Run FlowSOM failed")
-        message("Here's the error message:")
+        message("Run FlowSOM failed \n")
+        message("Here's the error message:\n")
         message(cond)
         return(NULL)
     }) 
