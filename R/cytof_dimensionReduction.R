@@ -7,7 +7,8 @@
 #' @param markers Selected markers for dimension reduction, either marker names/descriptions or marker IDs.
 #' @param method Method chosen for dimensition reduction, must be one of \code{isomap}, \code{pca} , \code{diffusionmap} or \code{tsne}. 
 #' @param out_dim The dimensionality of the output.
-#' @umap_neighbor
+#' @param umap_neighbor This parameter controls how UMAP balances local versus global structure in the data.
+#' @param umap_min_dist Controls how tightly UMAP is allowed to pack points together.
 #' @param tsneSeed Set a seed if you want reproducible t-SNE results.
 #' @param distMethod Method for distance calcualtion, default is "euclidean", other choices like "manhattan", "cosine", "rankcor"....
 #' @param isomap_k Number of shortest dissimilarities retained for a point, parameter for \code{isomap} method.
