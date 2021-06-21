@@ -1,6 +1,6 @@
 #' Title
 #'
-#' @param onSever Whether the app is running on a server.
+#' @param onServer Whether the app is running on a server.
 #' @param port Manually set a port, default is randomly allocated.
 #'
 #' @return
