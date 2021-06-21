@@ -101,6 +101,8 @@ NULL
 #' fixedNum) from each fcs file and combined for analysis.
 #' @param fixedNum The fixed number of cells to be extracted from each FCS file.
 #' @param dimReductionMethod The method used for dimensionality reduction, including \code{tsne}, \code{pca} and \code{isomap}.
+#' @param umap_neighbor This parameter controls how UMAP balances local versus global structure in the data.
+#' @param umap_min_dist Controls how tightly UMAP is allowed to pack points together.
 #' @param clusterMethods The clustering method(s) used for subpopulation detection, including \code{DensVM}, \code{ClusterX}, \code{Rphenograph} and \code{FlowSOM}. Multiple selections are accepted.
 #' @param visualizationMethods The method(s) used for visualize the cluster data, including \code{tsne}, \code{pca} and \code{isomap}. Multiple selections are accepted.
 #' @param progressionMethod Use the first ordination score of \code{isomap} to estimated the progression order of cells, choose \code{NULL} to ignore.
