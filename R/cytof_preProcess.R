@@ -5,6 +5,7 @@
 #' \code{all}, \code{min}, \code{fixed} or \code{ceil}
 #' 
 #' @param fcsFiles A vector of FCS file names.
+#' @param markers It can be either a text file that containing markers to be used for analysis or a vector of the marker names.
 #' @param comp If \verb{TRUE}, does compensation  by compensation matrix contained in FCS. Agrument also accepts a compensation matrix to be applied. Otherwise \verb{FALSE}.
 #' @param transformMethod Data Transformation method, including \code{autoLgcl}, \code{cytofAsinh}, \code{logicle} and \code{arcsinh}, or \code{none} to avoid transformation.
 #' @param scaleTo Scale the expression to a specified range c(a, b), default is NULL.
