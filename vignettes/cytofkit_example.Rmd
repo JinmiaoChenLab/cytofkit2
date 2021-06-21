@@ -13,7 +13,7 @@ output:
 # Install and Load the Package
 
 
-To install **cytofkit** package, start R and run the following codes on R console:
+To install **cytofkit2** package, start R and run the following codes on R console:
 
 ```{r, eval=FALSE}
 if (!requireNamespace("BiocManager", quietly = TRUE))
