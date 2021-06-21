@@ -4,6 +4,7 @@
 #' 
 #' @param ydata a matrix of the dimension reduced(transformed) data
 #' @param xdata a matrix of the expression data
+#' @param markers It can be either a text file that containing markers to be used for analysis or a vector of the marker names.
 #' @return a list contains a matrix \code{peakdata} of the peak numbers with different kernel bandwidth, and a matrix \code{clusters} of the cluster results 
 #' @export
 #' 
