@@ -52,7 +52,7 @@ The easiest way to use **cytofkit2** package is through the ShinyApp. The GUI pr
 
 The interface will appear like below, you can click the information button **!** to check the explanation for each entry and customize your own analysis.
 
-![cytofkit2 GUI](cytofkit2_GUI.png)
+![cytofkit2 GUI](cytofkit_GUI.png)
 
 Start your analysis as simply as following:   
 
