@@ -7,7 +7,7 @@
 #' @export
 #' @examples 
   #cytofkit_shiny_dashboard()  
-cytofkit_shiny_dashboard = function(onServer = F, port = NULL){
+cytofkit_shiny_dashboard = function(onServer = FALSE, port = NULL){
   if(isTRUE(onServer)){
     host <- "0.0.0.0"
   }else{
