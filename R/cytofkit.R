@@ -1,4 +1,4 @@
-#' cytofkit: an integrated mass cytometry data analysis pipeline
+#' cytofkit2: an integrated mass cytometry data analysis pipeline
 #' 
 #' This package is designed to facilitate the analysis workflow of mass cytometry data with 
 #' automatic subset identification and mapping of cellular progression. Both command line and 
