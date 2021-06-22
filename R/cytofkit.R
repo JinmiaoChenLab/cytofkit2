@@ -7,7 +7,7 @@
 #' This package integrates merging methods of multiple FCS files, dimension reduction methods (PCA, t-SNE and ISOMAP) 
 #' and clustering methods (DensVM, ClusterX, and Rphenograph) for rapid subset detection. Analysis results can be visualized 
 #' and explored interactively using a specially designed shiny web APP, see \code{\link{cytofkitShinyAPP}}. Moreover, the method isomap is provided to map the cellular progression. 
-#' This workflow can be easily executed with the main function \code{\link{cytofkit}}.
+#' This workflow can be easily executed with the main function \code{\link{cytofkit2}}.
 #' 
 #' Pre-processing
 #' 
