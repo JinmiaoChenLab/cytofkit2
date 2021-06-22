@@ -1,24 +1,22 @@
 ---
 title: "cytofkit: Usage of Shiny APP"
-output:
-  BiocStyle::html_document:
-    toc: true
----
-<!--
-%% \VignetteEngine{knitr::rmarkdown}
-%\VignetteIndexEntry{ShinyAPP tutorial}
--->
-
+author: "Jinmiao Chen"
+output: BiocStyle::html_document: toc: true
+vignette: >
+    %\VignetteIndexEntry{cytofkit2}
+    %\VignetteEngine{knitr::rmarkdown}
+    %\VignetteEncoding{UTF-8}
+    %\VignetteIndexEntry{ShinyAPP tutorial}
 
 # Launch the Shiny APP
 
-- cytofkit Shiny APP is integrated into the cytofkit pacakge, and can be deployed locally using the following command:
+- cytofkit2 Shiny APP is integrated into the cytofkit2 pacakge, and can be deployed locally using the following command:
     ```{r, eval=FALSE}
     require(cytofkit)
     cytofkitShinyAPP()
     ```
 
-- cytofkit Shiny APP is also hosted by shinyapps.io, and can be used through the public link: [cytofkitShinyAPP](https://cytofkit.shinyapps.io/shiny/) 
+- cytofkit2 Shiny APP is also hosted by shinyapps.io, and can be used through the public link: [cytofkitShinyAPP](https://cytofkit.shinyapps.io/shiny/) 
 
 # Loading .RData to Shiny APP     
 
