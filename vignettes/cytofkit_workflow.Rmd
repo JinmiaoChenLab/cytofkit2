@@ -1,14 +1,12 @@
 ---
 title: "cytofkit: Analysis Pipeline"
-output:
-  BiocStyle::html_document:
-    toc: true
----
-<!--
-%% \VignetteEngine{knitr::rmarkdown}
-%\VignetteIndexEntry{Analysis Pipeline}
--->
-
+author: "Jinmiao Chen"
+output: BiocStyle::html_document: toc: true
+vignette: >
+    %\VignetteIndexEntry{cytofkit2}
+    %\VignetteEngine{knitr::rmarkdown}
+    %\VignetteEncoding{UTF-8}
+    %\VignetteIndexEntry{Analysis Pipeline}
 
 # Introduction
 
@@ -16,7 +14,7 @@ The **cytofkit** package is designed to facilitate the analysis of mass cytometr
 addition to providing the research community with an one-stop analysis platform, **cytofkit** is shipped together with an intuitively designed GUI and an interactive web app to facilitate the easy analysis and interpretation of the mass cytometry data. 
 
            
-# **cytofkit** Analysis Pipline
+# **cytofkit2** Analysis Pipline
 
 A schematic overview of the **cytofkit** pipeline is as below, it contains four major components: 
 
