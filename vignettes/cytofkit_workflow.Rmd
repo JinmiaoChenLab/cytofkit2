@@ -97,7 +97,13 @@ The cluster results can be visualized with dimension transformed data from *t-SN
 ```
 
 Among the saved results, an R data object will be saved with suffix of *.RData*, this is specially for loading to the shiny web APP for interactive visualization and exploration of the analysis results. The shiny APP can be launched with command `cytofkitShinyAPP()` or through this link https://cytofkit.shinyapps.io/shiny/.
-             
+
+# Session Information
+
+```{r}
+sessionInfo()
+```
+
 # References
 
 [1] Becher B, Schlitzer A, Chen J, Mair F, Sumatoh HR, Wei K, et al. High-dimensional analysis of the murine myeloid cell system. Nat Immunol. 2014;15.doi:10.1038/ni.3006.nature
