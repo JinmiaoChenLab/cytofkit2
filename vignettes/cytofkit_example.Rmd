@@ -265,7 +265,7 @@ cytof_addToFCS(data_1k_all, rawFCSdir=dir, analyzedFCSdir="analysed_FCS",
 
 In addition, expression values for cells in a specified cluster can be extracted using `cytof_clusterMtrx()`
 ```{r}
-## See documentation, this function uses the output of main cytofkit cuntion as its input
+## See documentation, this function uses the output of main cytofkit2 function as its input
 ?cytof_clusterMtrx
 ```
 
