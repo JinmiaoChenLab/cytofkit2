@@ -79,4 +79,8 @@ Progression Panel helps estimate the relationship among subsets, it's targeted t
 
 3. **Run Diffusion Map**: combine the diffusion map with the clustering results to infer inter-subset relatedness. Firstly, down-sampled the number of cells in each cluster to an equal size, thus reducing the cell subsets density heterogeneities and removing the dominance effect of large populations in the data. Then run diffusion map on the down-sampled dataset. 
 
+# Session Information
 
+```{r}
+sessionInfo()
+```
