@@ -7,7 +7,6 @@ library(shinydashboard)
 library(shinyalert)
 library(shinyFiles)
 library(shinyWidgets)
-#library(cytofkit)
 
 shiny_one_panel = fluidPage(
   titlePanel("Interactive Exploration of cytofkit Analysis Results"),
@@ -523,20 +522,20 @@ shiny_one_panel = fluidPage(
 
 load_data_panel = fluidPage(
   tags$div(title='The fcs files to be analyzed. One or multiple fcs files are allowed. When multiple fcs files are selected, cells from each fcs file are combined for analysis.'
-             , fileInput("rawfcs", "Raw FCS files", multiple = T
+             , fileInput("rawfcs", "Raw FCS files", multiple = TRUE
                          , accept = c("FCSfile/fcs", '.fcs'))
-           , fileInput("sample_anno", "Meta data", multiple = F, accept = c("Txtfile/txt", '.txt'))
+           , fileInput("sample_anno", "Meta data", multiple = FALSE, accept = c("Txtfile/txt", '.txt'))
   )
   , tags$div(title="Select the list of makers to be used for analysis."
              , selectInput('markers', 'Markers', choices = NULL, selected = NULL
-                           , selectize = T
-                           , multiple = T)
+                           , selectize = TRUE
+                           , multiple = TRUE)
              # , pickerInput('pickermarker', label = "Picker Markers", choices = NULL, multiple = T
              #               ,   options = list(
              #                 `actions-box` = TRUE
-             #                 , `live-search` = T
+             #                 , `live-search` = TRUE
              #                 , `live-search-style` = 'contains'
-             #                 , `show-tick` = T
+             #                 , `show-tick` = TRUE
              #               )
              #               )
   )
@@ -571,7 +570,7 @@ dr_panel = fluidPage(
   tags$div(title="The method(s) used for visualizing the clustering results, multiple selections are allowed. Including \"pca\", \"isomap\", \"tsne\". \n\nWARNING: \"tsne\" is the default selection, \"isomap\" may take long time."
                       , selectInput('dr_method', 'Dimensionality reduction methods'
                                     , choices = c('PCA', 'isoMAP', 'tSNE', 'UMAP')
-                                    , multiple = T
+                                    , multiple = TRUE
                                     , selected = 'tSNE')
            )
            , tags$div(title=''
@@ -587,7 +586,7 @@ cluster_panel = fluidPage(
   tags$div(title="The method(s) for clustering, including \"DensVM\", \"ClusterX\", \"Rphenograph\", and \"FlowSOM\". "
            , selectInput('cluster_method', 'Cluster Method(s)'
                          , choices = c('Rphenograph', 'ClusterX', 'DensVM', 'FlowSOM')
-                         , multiple = T
+                         , multiple = TRUE
                          , selected = c('Rphenograph'))
   )
   , tags$div(title="Number of nearest neighbours to pass to Rphenograph."
@@ -608,7 +607,7 @@ data_analysis_panel = fluidPage(fluidRow(
     status = "primary",
     width = 3,
     # background = "orange",
-    solidHeader = T,
+    solidHeader = TRUE,
     collapsible = FALSE,
     collapsed = FALSE
     , load_data_panel
@@ -619,7 +618,7 @@ data_analysis_panel = fluidPage(fluidRow(
     width = 3,
     height = 630,
     # background = "orange",
-    solidHeader = T,
+    solidHeader = TRUE,
     collapsible = FALSE,
     collapsed = FALSE
     , dr_panel
@@ -630,7 +629,7 @@ data_analysis_panel = fluidPage(fluidRow(
     width = 3,
     height = 630,
     # background = "orange",
-    solidHeader = T,
+    solidHeader = TRUE,
     collapsible = FALSE,
     collapsed = FALSE
     , cluster_panel
@@ -641,7 +640,7 @@ data_analysis_panel = fluidPage(fluidRow(
     width = 3,
     height = 630,
     # background = "orange",
-    solidHeader = T,
+    solidHeader = TRUE,
     collapsible = FALSE,
     collapsed = FALSE
     , pseudotime_panel
