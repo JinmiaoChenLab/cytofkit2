@@ -38,7 +38,7 @@ For Mac OS X 10.8 or later, you need to install XQuartz to support the GUI:
 
 The offical and stable version, please refer to 
 
-- [Bioconductor](https://www.bioconductor.org/packages/cytofkit/)
+- [Bioconductor](https://www.bioconductor.org/packages/cytofkit2/)
 - [GitHub](https://github.com/JinmiaoChenLab/cytofkit2)
 
 Install the stable version from Bioconductor, use:
