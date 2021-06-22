@@ -50,7 +50,7 @@ cytof_exprsMerge <- function(fcsFiles,
     }
   }
   for (i in 1:length(exprsL)) {
-    exprsL[[i]] = exprsL[[i]][, common_markers, drop = F]
+    exprsL[[i]] = exprsL[[i]][, common_markers, drop = FALSE]
   }
   
   if(is.numeric(sampleSeed))
