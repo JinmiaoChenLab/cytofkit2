@@ -118,8 +118,8 @@ NULL
 #' 
 #' @return a list containing \code{expressionData}, \code{dimReductionMethod}, \code{visualizationMethods}, \code{dimReducedRes}, \code{clusterRes}, \code{progressionRes}, \code{projectName}, \code{rawFCSdir} and \code{resultDir}. If choose 'saveResults = TRUE', results will be saved into files under \code{resultDir}.
 #' @author Hao Chen, Jinmiao Chen
-#' @references \url{https://github.com/JinmiaoChenLab/cytofkit}
-#' @seealso \code{\link{cytofkit}}, \code{\link{cytofkitShinyAPP}}
+#' @references \url{https://github.com/JinmiaoChenLab/cytofkit2}
+#' @seealso \code{\link{cytofkit2}}, \code{\link{cytofkitShinyAPP}}
 #' @useDynLib cytofkit2
 #' @export
 #' @examples
