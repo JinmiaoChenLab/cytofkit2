@@ -78,7 +78,7 @@ devtools::install_github("JinmiaoChenLab/cytofkit2")
 
 ### Usage
 
-After successfully installing the cytofkit2 package, run the following codes to open the cytofkit GUI:
+After successfully installing the cytofkit2 package, run the following codes to open the cytofkit2 shiny_dashboard:
 
 ``` r
 library("cytofkit2")
