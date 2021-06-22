@@ -28,7 +28,7 @@ Click the top-left `Choose File` button to choose **RData file**, then click the
 
 For use on servers, the `Server File Select` button can be used to load data directly from server without storing it locally.
 
-As shown in the figure above, there are one **side panel** and one **main panel** for the cytofkit shiny APP. 
+As shown in the figure above, there are one **side panel** and one **main panel** for the cytofkit2 shiny APP. 
 
 - On the side panel, there are some global control widgets like loading the data, plot control, sample filter, a summary of the data and a button for saving the results.   
 - On the main panel, functions are categorized into four subpanels: **Cluster Panel**, **Marker Panel**, **Sample Panel** and **Progression Panel**, which are explained below:
