@@ -40,13 +40,13 @@ Read the package description:
 ```
 
 
-# Options for Using **cytofkit** Package
+# Options for Using **cytofkit2** Package
 
 **cytofkit2** provides three ways to employ the workforce of this package:
 
 ## Run with GUI 
 
-The easiest way to use **cytofkit2** package is through the ShinyApp. The GUI provides all main options of **cytofkit** on a visual interface. To launch the GUI, load the package and type the following command:
+The easiest way to use **cytofkit2** package is through the ShinyApp. The GUI provides all main options of **cytofkit2** on a visual interface. To launch the GUI, load the package and type the following command:
 
 ```{r, eval=FALSE}
 #cytofkit_shiny_dashboard() 
