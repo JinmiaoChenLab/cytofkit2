@@ -1,5 +1,5 @@
 ---
-title: "cytofkit: Usage of Shiny APP"
+title: "cytofkit2: Usage of Shiny APP"
 author: "Jinmiao Chen"
 output: BiocStyle::html_document: toc: true
 vignette: >
