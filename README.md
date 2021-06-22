@@ -87,9 +87,9 @@ cytofkit_shiny_dashboard()
 
 <u>Check the following vignettes for more details:</u>
 
-- [cytofkit: Analysis Pipeline](https://www.bioconductor.org/packages/release/bioc/vignettes/cytofkit/inst/doc/cytofkit_workflow.html)    
-- [cytofkit: Quick Start](https://www.bioconductor.org/packages/release/bioc/vignettes/cytofkit/inst/doc/cytofkit_example.html)   
-- [cytofkit: ShinyAPP Tutorial](https://www.bioconductor.org/packages/release/bioc/vignettes/cytofkit/inst/doc/cytofkit_shinyAPP.html)    
+- [cytofkit2: Analysis Pipeline](https://www.bioconductor.org/packages/release/bioc/vignettes/cytofkit2/inst/doc/cytofkit2_workflow.html)    
+- [cytofkit2: Quick Start](https://www.bioconductor.org/packages/release/bioc/vignettes/cytofkit2/inst/doc/cytofkit2_example.html)   
+- [cytofkit2: ShinyAPP Tutorial](https://www.bioconductor.org/packages/release/bioc/vignettes/cytofkit2/inst/doc/cytofkit2_shinyAPP.html)    
 
 
 
