@@ -1,5 +1,5 @@
 ---
-title: "cytofkit: Analysis Pipeline"
+title: "cytofkit2: Analysis Pipeline"
 author: "Jinmiao Chen"
 output: BiocStyle::html_document: toc: true
 vignette: >
