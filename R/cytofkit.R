@@ -72,7 +72,7 @@ NULL
 
 #' cytofkit: an integrated mass cytometry data analysis pipeline
 #' 
-#' The main function to drive the cytofkit workflow.
+#' The main function to drive the cytofkit2 workflow.
 #' 
 #' \code{cytofkit} works as the main funciton to perform the analysis of one or multiple FCS files. 
 #' The workflow contains data merging from multiple FCS file, expression data transformation, 
