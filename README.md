@@ -54,7 +54,10 @@ BiocManager::install("cytofkit2")
 Install this development version, use:
 
 ``` r
-install.packages("reticulate")
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install("reticulate")
 
 #### check if python is installed
 vv <- system("pyv=\"$(python -V)\" | echo $pyv| grep \"Python\"")
