@@ -122,7 +122,7 @@ shinyServer = function(input, output, session)
       cur_dir = './'
       files = dir(path = cur_dir, pattern = input$project_name)
       zip::zip(file, files)
-      stopApp(returnValue = invisible())
+      #stopApp(returnValue = invisible())
     }
   )
   
@@ -491,7 +491,7 @@ shinyServer = function(input, output, session)
         # opendir(v$data$resultDir)
         files = dir(path = res_folder, pattern = ".*", full.names = T)
         zip::zip(file, files)
-        stopApp(returnValue = invisible())
+        #stopApp(returnValue = invisible())
       })
       
     }
