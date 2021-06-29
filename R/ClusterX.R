@@ -52,53 +52,53 @@ ClusterX <- function(data,
     
     if(parallel){
         if(nCore > detectCores()) nCore <- detectCores()
-        cat("    Register the parallel backend using", nCore, "cores...")
+        message("    Register the parallel backend using", nCore, "cores...")
         cl <- makeCluster(nCore)
         registerDoParallel(cl)
-        cat("DONE!\n")
+        message("DONE!\n")
     }
     
     if(missing(dc)){
-        cat('    Calculate cutoff distance...')
+        message('    Calculate cutoff distance...')
         dc <- estimateDc(data, sampleSize = 10000)
     }
-    cat( round(dc, 2), ' \n')
-    cat('    Calculate local Density...')
+    message( round(dc, 2), ' \n')
+    message('    Calculate local Density...')
     rho <- localDensity(data, dc, gaussian=gaussian, ifParallel = parallel)
-    cat("DONE!\n")
-    cat('    Detect nearest neighbour with higher density...')
+    message("DONE!\n")
+    message('    Detect nearest neighbour with higher density...')
     deltaWid <- minDistToHigher(data, rho, ifParallel = parallel)
     delta <- deltaWid[[1]]
     higherID <- deltaWid[[2]]
-    cat("DONE!\n")
-    cat("    Peak detection...")
+    message("DONE!\n")
+    message("    Peak detection...")
     peakID <- peakDetect(rho, delta, alpha)
-    cat("DONE!\n")
-    cat("    Cluster assigning...")
+    message("DONE!\n")
+    message("    Cluster assigning...")
     cluster <- clusterAssign(peakID, higherID, rho)
-    cat("DONE!\n")
+    message("DONE!\n")
     
     clusTable <- as.vector(table(cluster))
     if(sum(clusTable < length(rho)*0.0005) > 0){
-        cat("    Noise cluster removed\n")
+        message("    Noise cluster removed\n")
         peakID <- peakID[clusTable >= length(rho)*alpha]
         cluster <- clusterAssign(peakID, higherID, rho)
     }
     
     if(detectHalos){
-        cat("    Differentiate halos from cores ...")
+        message("    Differentiate halos from cores ...")
         halo <- haloDetect(data, rho, cluster, peakID, dc)
-        cat("DONE!\n")
+        message("DONE!\n")
         if(SVMhalos & sum(halo) > 10 & !is.null(dimReduction)){
-            cat("    Build SVM models for cores ...")
+            message("    Build SVM models for cores ...")
             train_data <- odata[!halo, ]
             train_class <- cluster[!halo]
             test_data <- odata[halo, ]
             svm.obj <- svm(train_data, train_class, type = "C-classification")
-            cat("DONE!\n    Assign halos using trained SVM model ...")
+            message("DONE!\n    Assign halos using trained SVM model ...")
             test_class <- predict(svm.obj, test_data)
             cluster[halo] <- test_class
-            cat("DONE!\n")
+            message("DONE!\n")
         }
     }else{
         halo <- NULL
