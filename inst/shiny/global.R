@@ -345,7 +345,7 @@ stackDenistyPlot <- function(data, densityCols, stackFactor,
   alignSegments$tickText <- format(alignSegments$x,scientific=TRUE, digits=3)
   alignSegments$textY <- alignSegments$y - densityHeights$y[match(alignSegments$densityName, densityHeights$densityName)] * 0.03
   
-  cat(" Plotting ...\n")
+  message(" Plotting ...\n")
   stackDensityPlot_theme <- theme(legend.position = "top",
                                   legend.title = element_text(size = rel(1)),
                                   legend.text = element_text(size = rel(legend_text_size)),
@@ -385,7 +385,7 @@ stackDenistyPlot <- function(data, densityCols, stackFactor,
 #'
 #' Output data frame with columns: stackName, x , y , densityName
 .densityCal <- function(data, kernel, bw, adjust, reomoveOutliers = FALSE){
-  cat("  Calculating Density for each stack column...\n")
+  message("  Calculating Density for each stack column...\n")
   print(table(data$stackFactor))
   dataBystackFactor <- split(subset(data, select = -stackFactor), data$stackFactor)
   densityWrap <- function(d, ...){
@@ -393,7 +393,7 @@ stackDenistyPlot <- function(data, densityCols, stackFactor,
     for(i in colnames(d)){
       x <- d[,i]
       if(reomoveOutliers){
-        cat("  Remove outliers...\n")
+        message("  Remove outliers...\n")
         x_IQR <- IQR(x)
         x_lowLimit <- quantile(x, 0.25) - 1.5*x_IQR
         x_highLimit <- quantile(x, 0.75) + 1.5*x_IQR
