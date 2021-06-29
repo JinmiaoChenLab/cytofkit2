@@ -148,17 +148,17 @@ cytof_exprsExtract <- function(fcsFile,
     ## compensation
     if(is.matrix(comp) || is.data.frame(comp)){
         fcs <- applyComp(fcs, comp)
-        cat("    Compensation is applied on", fcsFile, "\n")
+        message("    Compensation is applied on", fcsFile, "\n")
     }else if(isTRUE(comp)) {
         if(!is.null(fcs@description$SPILL)) {
             fcs <- applyComp(fcs, fcs@description[["SPILL"]])
-            cat("    Compensation is applied on ", fcsFile, "\n")
+            message("    Compensation is applied on ", fcsFile, "\n")
         }else if(!is.null(fcs@description$SPILLOVER)) {
             fcs <- applyComp(fcs, fcs@description[["SPILLOVER"]])
-            cat("    Compensation is applied on ", fcsFile, "\n")
+            message("    Compensation is applied on ", fcsFile, "\n")
         }else if(!is.null(fcs@description$COMP)) {
             fcs <- applyComp(fcs, fcs@description[["COMP"]])
-            cat("    Compensation is applied on ", fcsFile, "\n")
+            message("    Compensation is applied on ", fcsFile, "\n")
         }else{
             warning("Cannot find compensation matrix in the FCS files!
                     Please CHECK the keyword of 'SPILL', 'SPILLOVER', or 'COMP'
