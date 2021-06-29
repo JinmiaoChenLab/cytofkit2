@@ -1,7 +1,7 @@
 Package: cytofkit2
 Type: Package
 Title: cytofkit2: an integrated mass cytometry data analysis pipeline. Cytofkit provides functions for data pre-processing, fast clustering, data visualization through linear or non-linear dimensionality reduction, automatic identification of cell subsets, and inference of the relatedness between cell subsets
-Version: 0.99.47
+Version: 0.99.48
 Date: 2018-01-19
 Description: An integrated mass cytometry data analysis pipeline that enables
     simultaneous illustration of cellular diversity and progression.
@@ -15,7 +15,7 @@ BugReports: https://github.com/JinmiaoChenLab/cytofkit2/issues
 biocViews: FlowCytometry, GUI, CellBiology, Clustering,
     DimensionReduction, BiomedicalInformatics
 Depends:
-    R (>= 4.2), ggplot2, plyr, reticulate, VGAM
+    R (>= 4.0.0), ggplot2, plyr, reticulate, VGAM
 VignetteBuilder: knitr
 Suggests:
     knitr,
