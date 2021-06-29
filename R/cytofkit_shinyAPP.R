@@ -626,7 +626,7 @@ cytofkitShinyAPP <- function(RData = NULL, onServer = FALSE) {
             if (is.null(cytofkitObj)){
               v$data <- NULL
             }else{
-              cat(cytofkitObj$datapath)
+              message(cytofkitObj$datapath)
               load(cytofkitObj$datapath)
               v$data <- analysis_results
               
