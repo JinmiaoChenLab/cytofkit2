@@ -54,12 +54,12 @@ Rphenograph <- function(data, k=30){
         "  -Input data of ", nrow(data)," rows and ", ncol(data), " columns","\n",
         "  -k is set to ", k)
     
-    cat("  Finding nearest neighbors...")
+    message("  Finding nearest neighbors...")
     t1 <- system.time(neighborMatrix <- find_neighbors(data, k=k+1)[,-1])
-    cat("DONE ~",t1[3],"s\n", " Compute jaccard coefficient between nearest-neighbor sets...")
+    message("DONE ~",t1[3],"s\n", " Compute jaccard coefficient between nearest-neighbor sets...")
     t2 <- system.time(links <- jaccard_coeff(neighborMatrix))
 
-    cat("DONE ~",t2[3],"s\n", " Build undirected graph from the weighted links...")
+    message("DONE ~",t2[3],"s\n", " Build undirected graph from the weighted links...")
     links <- links[links[,1]>0, ]
     relations <- as.data.frame(links)
     colnames(relations)<- c("from","to","weight")
@@ -69,13 +69,13 @@ Rphenograph <- function(data, k=30){
     #    cluster_walktrap, cluster_spinglass, 
     #    cluster_leading_eigen, cluster_edge_betweenness, 
     #    cluster_fast_greedy, cluster_label_prop  
-    cat("DONE ~",t3[3],"s\n", " Run louvain clustering on the graph ...")
+    message("DONE ~",t3[3],"s\n", " Run louvain clustering on the graph ...")
     t4 <- system.time(community <- cluster_louvain(g))
-    cat("DONE ~",t4[3],"s\n")
+    message("DONE ~",t4[3],"s\n")
     
     message("Run Rphenograph DONE, took a total of ", sum(c(t1[3],t2[3],t3[3],t4[3])), "s.")
-    cat("  Return a community class\n  -Modularity value:", modularity(community),"\n")
-    cat("  -Number of clusters:", length(unique(membership(community))))
+    message("  Return a community class\n  -Modularity value:", modularity(community),"\n")
+    message("  -Number of clusters:", length(unique(membership(community))))
     
     return(community)
 }
