@@ -88,7 +88,7 @@ res <- cytofkit(fcsFiles = file,
                 visualizationMethods = c("tsne", "pca"),          ## accept multiple methods
                 progressionMethod = "isomap",
                 clusterSampleSize = 500,
-                resultDir = getwd(),
+                resultDir = tempdir(),
                 saveResults = TRUE, 
                 saveObject = TRUE)
 ```
