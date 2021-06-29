@@ -29,10 +29,10 @@ DensVM <- function(ydata, xdata) {
     kernel_max <- y_range/10
     sig_tol_range <- seq(kernel_min, kernel_max, length.out = num_band)
     
-    cat("Testing kernel bandwidth for ", num_band, "points in the range min=", 
+    message("Testing kernel bandwidth for ", num_band, "points in the range min=", 
         kernel_min, " to max=", kernel_max, "\n")
     
-    cat("This will take a while...\n")
+    message("This will take a while...\n")
     peak_list <- mapply(peakFind, sig_tol = sig_tol_range, MoreArgs = list(ydata = ydata), 
                         SIMPLIFY = FALSE)
     
@@ -58,8 +58,8 @@ DensVM <- function(ydata, xdata) {
     
     ## determine the optimal gamma
     if (flag == 0) {
-        cat("Could not locate plateau in the Npeaks vs. sigma graph!\n")
-        cat("Consider changing the search space. Increase 'num_band' or change 'kernel_min'/'kernel_max' \n")
+        message("Could not locate plateau in the Npeaks vs. sigma graph!\n")
+        message("Consider changing the search space. Increase 'num_band' or change 'kernel_min'/'kernel_max' \n")
         input <- readline("Select one (y) - If you would like to proceed with a user-specified bandwidth,\n (n) - Exit and change bandwidth search parameters : ")
         if (input == "y") {
             sig_opt <- readline("Please specify the desired kernel bandwidth (Warning : This will directly determine # of subpopulations):")
@@ -125,7 +125,7 @@ assign_pop <- function(opt_densityIMG, ydata, xdata) {
 }
 
 peakFind <- function(ydata, sig_tol) {
-    cat("Computing number of peaks for kernel bandwidth = ", sig_tol, 
+    message("Computing number of peaks for kernel bandwidth = ", sig_tol, 
         "\n")
     img <- densityIMG(ydata, sig_tol)
     
