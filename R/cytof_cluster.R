@@ -36,19 +36,19 @@ cytof_cluster <- function(ydata = NULL,
     }
     switch(method, 
            Rphenograph = {
-               cat("  Running PhenoGraph...")
+               message("  Running PhenoGraph...")
                clusters <- as.numeric(membership(Rphenograph(xdata, k=Rphenograph_k)))
            },
            ClusterX = {
-               cat("  Running ClusterX...")
+               message("  Running ClusterX...")
                clusters <- ClusterX(ydata, gaussian=TRUE, alpha = 0.001, detectHalos = FALSE)$cluster
            },
            DensVM = {
-               cat("  Running DensVM...")
+               message("  Running DensVM...")
                clusters <- DensVM(ydata, xdata)$cluster$cluster
            },
            FlowSOM = {
-               cat("  Running FlowSOM...")
+               message("  Running FlowSOM...")
                set.seed(flowSeed)
                clusters <- FlowSOM_integrate2cytofkit(xdata, FlowSOM_k, flowSeed = flowSeed)
            })
@@ -62,7 +62,7 @@ cytof_cluster <- function(ydata = NULL,
         }else if(!is.null(ydata) && !is.null(row.names(ydata))){
             names(clusters) <- row.names(ydata)
         }
-        cat(" DONE!\n")
+        message(" DONE!\n")
         return(clusters)
     }
 }
@@ -78,12 +78,12 @@ cytof_cluster <- function(ydata = NULL,
 #' @noRd
 #' @importFrom FlowSOM SOM metaClustering_consensus
 FlowSOM_integrate2cytofkit <- function(xdata, k, flowSeed = NULL, ...){
-    cat("    Building SOM...\n")
+    message("    Building SOM...\n")
     xdata <- as.matrix(xdata)
     
     ord <- tryCatch({
         map <- SOM(xdata, silent = TRUE, ...)
-        cat("    Meta clustering to", k, "clusters...\n")
+        message("    Meta clustering to", k, "clusters...\n")
         metaClusters <- suppressMessages(metaClustering_consensus(map$codes, k = k, seed = flowSeed))
         cluster <- metaClusters[map$mapping[,1]]
     }, error=function(cond) {
