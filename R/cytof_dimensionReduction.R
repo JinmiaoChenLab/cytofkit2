@@ -77,7 +77,7 @@ cytof_dimReduction <- function(data,
              #if (!py_module_available(module = "umap")) {
              #  stop("Cannot find UMAP, please install through pip (e.g. pip install umap-learn).")
              #}
-             cat("  Running UMAP...with seed", tsneSeed)
+             message("  Running UMAP...with seed", tsneSeed)
              #umap_import <- import(module = "umap", delay_load = TRUE)
 
              umap <- umap::umap(marker_filtered_data, n_neighbors = as.integer(x = umap_neighbor)
@@ -88,7 +88,7 @@ cytof_dimReduction <- function(data,
              mapped <- umap$Y
            }
            ,tsne={
-               cat("  Running t-SNE...with seed", tsneSeed)
+               message("  Running t-SNE...with seed", tsneSeed)
                if(is.numeric(tsneSeed))
                    set.seed(tsneSeed) # Set a seed if you want reproducible results
                tsne_out <- Rtsne(marker_filtered_data, initial_dims = ncol(marker_filtered_data), 
@@ -98,11 +98,11 @@ cytof_dimReduction <- function(data,
                mapped <- tsne_out$Y
            },
            pca={
-               cat("  Running PCA...")
+               message("  Running PCA...")
                mapped <- prcomp(marker_filtered_data, scale = TRUE)$x
            },
            diffusionmap={
-               cat("  Running Diffusion Map...\n")
+               message("  Running Diffusion Map...\n")
                versiontest <- compareVersion(as.character(packageVersion("igraph")), "1.1.0")
                if(versiontest == 0 || versiontest == 1){
                  message("igraph up to date!")
@@ -134,7 +134,7 @@ cytof_dimReduction <- function(data,
                }
            },
            isomap={
-               cat("  Running ISOMAP...")
+               message("  Running ISOMAP...")
                if (is.null(isomap_ndim))
                    isomap_ndim <- ncol(marker_filtered_data)
                
@@ -169,6 +169,6 @@ cytof_dimReduction <- function(data,
         colnames(mapped) <- paste(method, c(1:out_dim), sep = "_")
         rownames(mapped) <- rnames
     }
-    cat("  DONE\n")
+    message("  DONE\n")
     return(mapped)
 } 
