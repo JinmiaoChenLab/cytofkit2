@@ -82,7 +82,7 @@ cytof_writeResults <- function(analysis_results,
     if(saveToRData){
         objFile <- paste0(projectName, ".RData")
         save(analysis_results, file = objFile)
-        cat("R object is saved in ", objFile, "\n")
+        message("R object is saved in ", objFile, "\n")
         message("  **THIS R OBJECT IS THE INPUT OF SHINY APP!**  ")
     }
     
@@ -918,7 +918,7 @@ cytof_addToFCS <- function(data,
     	    message(paste("Cannot find raw FCS file:", fn))
     	    return(NULL)
     	}
-        cat("Save to file:", fn, "\n")
+        message("Save to file:", fn, "\n")
         fcs <- read.FCS(fn, transformation = FALSE)
         pattern <- paste(sample[i], "_", sep = "")
         to_add_i <- as.data.frame(to_add[grep(pattern, row.names(to_add), fixed = TRUE), ])
