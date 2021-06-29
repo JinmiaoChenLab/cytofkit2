@@ -201,7 +201,7 @@ shinyServer = function(input, output, session)
       v$data <- NULL
     }else{
       # browser()
-      cat(cytofkitObj$datapath)
+      message(cytofkitObj$datapath)
       load(cytofkitObj$datapath)
       v$data <- analysis_results      
       
