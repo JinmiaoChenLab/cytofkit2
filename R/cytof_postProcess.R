@@ -50,7 +50,7 @@ cytof_writeResults <- function(analysis_results,
         if(!is.null(analysis_results$resultDir)){
             resultDir <- analysis_results$resultDir
         }else{
-            resultDir <- getwd()
+            resultDir <- tempdir()
         }
     }
     if(!dir.exists(resultDir)){
