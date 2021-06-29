@@ -189,24 +189,24 @@ cytofkit <- function(fcsFiles = getwd(),
     
     ## print arguments for user info
     message("Input arguments:")
-    cat("* Project Name: ")
-    cat(projectName, "\n")
-    cat("* Input FCS files for analysis:\n ")
-    cat(paste0("  -", basename(fcsFiles), "\n"))
-    cat("* Markers:\n ")
-    cat(paste0("  -", markers, "\n"))
-    cat("* Data merging method: ")
-    cat(mergeMethod, "\n")
-    cat("* Data transformation method: ")
-    cat(transformMethod, "\n")
-    cat("* Dimensionality reduction method: ")
-    cat(dimReductionMethod, "\n")
-    cat("* Data clustering method(s): ")
-    cat(clusterMethods, "\n")
-    cat("* Data visualization method(s): ")
-    cat(visualizationMethods, "\n")
-    cat("* Subset progression analysis method: ")
-    cat(progressionMethod, "\n\n")
+    message("* Project Name: ")
+    message(projectName, "\n")
+    message("* Input FCS files for analysis:\n ")
+    message(paste0("  -", basename(fcsFiles), "\n"))
+    message("* Markers:\n ")
+    message(paste0("  -", markers, "\n"))
+    message("* Data merging method: ")
+    message(mergeMethod, "\n")
+    message("* Data transformation method: ")
+    message(transformMethod, "\n")
+    message("* Dimensionality reduction method: ")
+    message(dimReductionMethod, "\n")
+    message("* Data clustering method(s): ")
+    message(clusterMethods, "\n")
+    message("* Data visualization method(s): ")
+    message(visualizationMethods, "\n")
+    message("* Subset progression analysis method: ")
+    message(progressionMethod, "\n\n")
     
     set.seed(seed)
     ## get transformed, combined exprs data
@@ -215,7 +215,7 @@ cytofkit <- function(fcsFiles = getwd(),
                                    transformMethod = transformMethod, 
                                    markers = markers, 
                                    mergeMethod = mergeMethod, fixedNum = fixedNum, ...)
-    cat("  ", nrow(exprs_data), " x ", ncol(exprs_data), " data was extracted!\n")
+    message("  ", nrow(exprs_data), " x ", ncol(exprs_data), " data was extracted!\n")
     
     
     ## dimension reduced data, a list
