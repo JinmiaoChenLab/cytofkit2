@@ -1,7 +1,7 @@
 Package: cytofkit2
 Type: Package
 Title: cytofkit2: an integrated mass cytometry data analysis pipeline. Cytofkit provides functions for data pre-processing, fast clustering, data visualization through linear or non-linear dimensionality reduction, automatic identification of cell subsets, and inference of the relatedness between cell subsets
-Version: 0.99.51
+Version: 0.99.52
 Date: 2018-01-19
 Description: An integrated mass cytometry data analysis pipeline that enables
     simultaneous illustration of cellular diversity and progression.
