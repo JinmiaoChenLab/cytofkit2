@@ -20,6 +20,8 @@
 #' @return a list. Includes: sampleData, sampleCluster and progressionData.
 #' 
 #' @export
+#' 
+#' @examples
 #' d<-system.file('extdata', package='cytofkit2')
 #' fcsFile <- list.files(d, pattern='.fcs$', full=TRUE)
 #' parameters <- list.files(d, pattern='.txt$', full=TRUE)
