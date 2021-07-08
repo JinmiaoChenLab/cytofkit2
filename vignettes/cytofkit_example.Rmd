@@ -40,7 +40,7 @@ Read the package description:
 ```
 
 
-# Options for Using **cytofkit** Package
+# Options for Using **cytofkit2** Package
 
 **cytofkit2** provides three ways to employ the workforce of this package:
 
