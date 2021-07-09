@@ -84,7 +84,7 @@ cytof_dimReduction <- function(data,
                                       , metric = distMethod 
                                       , min_dist = umap_min_dist)
              #mapped <- umap$fit_transform(as.matrix(x = marker_filtered_data))
-             mapped <- umap$Y
+             mapped <- umap$layout
            }
            ,tsne={
                message("  Running t-SNE...with seed", tsneSeed)
