@@ -7,7 +7,6 @@
 #' 
 #' @param ydata A matrix of the dimension reduced data.
 #' @param xdata A matrix of the expression data.
-#' @param markers It can be either a text file that containing markers to be used for analysis or a vector of the marker names.
 #' @param method Cluster method including \code{DensVM}, \code{densityClustX}, \code{Rphenograph} and \code{FlowSOM}.
 #' @param Rphenograph_k Integer number of nearest neighbours to pass to Rphenograph.
 #' @param FlowSOM_k Number of clusters for meta clustering in FlowSOM.
