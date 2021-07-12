@@ -1,11 +1,11 @@
 #' Dimension reduction for high dimension data 
 #' 
 #' Apply dimension reduction on the cytof expression data, 
-#' with method \code{pca}, \code{tsne}, \code{diffusionmap} or \code{isomap}. 
+#' with method \code{pca}, \code{tsne} or \code{isomap}. 
 #' 
 #' @param data Input expression data matrix.
 #' @param markers Selected markers for dimension reduction, either marker names/descriptions or marker IDs.
-#' @param method Method chosen for dimensition reduction, must be one of \code{isomap}, \code{pca} , \code{diffusionmap} or \code{tsne}. 
+#' @param method Method chosen for dimensition reduction, must be one of \code{isomap}, \code{pca} or \code{tsne}. 
 #' @param out_dim The dimensionality of the output.
 #' @param umap_neighbor This parameter controls how UMAP balances local versus global structure in the data.
 #' @param umap_min_dist Controls how tightly UMAP is allowed to pack points together.
@@ -14,7 +14,7 @@
 #' @param isomap_k Number of shortest dissimilarities retained for a point, parameter for \code{isomap} method.
 #' @param isomap_ndim Number of axes in metric scaling, parameter for \code{isomap} method.
 #' @param isomapFragmentOK What to do if dissimilarity matrix is fragmented, parameter for \code{isomap} method.
-#' @param ... Other parameters passed to the method, check \code{\link{Rtsne}}, \code{\link{DiffusionMap}}, \code{\link{isomap}}.
+#' @param ... Other parameters passed to the method, check \code{\link{Rtsne}}, \code{\link{isomap}}.
 #' @return A matrix of the dimension reduced data, with colnames method_ID, and rownames same as the input data.
 #' 
 #' @importFrom vegan vegdist spantree isomap
@@ -28,7 +28,6 @@
 #' in_data <- iris[, 1:4]
 #' markers <- colnames(in_data[, 1:4])
 #' out_data <- cytof_dimReduction(in_data, markers = markers, method = "tsne")
-#' @note Currently, \code{diffusionmap} will not work with R 3.4.0, due to an issue with the latest CRAN release of its dependency \code{\link{igraph}} 
 #' If this is the case, consider manually updating \code{\link{igraph}} using;
 #' \code{install.packages("https://github.com/igraph/rigraph/releases/download/v1.1.0/igraph_1.1.0.zip", repos=NULL, method="libcurl")
 cytof_dimReduction <- function(data,
