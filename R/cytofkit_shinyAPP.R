@@ -9,13 +9,6 @@
 #' @return Opens shinyApp session for data visualisation
 #' @import shiny
 #' @import shinyFiles
-#' @import DT
-#' @import data.table
-#' @import plotly
-#' @import shinyWidgets
-#' @import shinyalert
-#' @import shinydashboard
-#' @import shinyjs
 #' @importFrom grDevices dev.copy2pdf
 #' @importFrom graphics plot
 #' @author Hao Chen
