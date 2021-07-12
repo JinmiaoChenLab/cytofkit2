@@ -1,13 +1,11 @@
 ---
 title: "cytofkit2: Quick Start"
-output:
-  BiocStyle::html_document:
+output: BiocStyle::html_document:
     toc: true
----
-<!--
+vignette: >
 %% \VignetteEngine{knitr::rmarkdown}
 %\VignetteIndexEntry{Quick Start}
--->
+---
 
 
 # Install and Load the Package
