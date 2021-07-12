@@ -5,7 +5,6 @@
 #' 
 #' @param data Expression data matrix.
 #' @param cluster A vector of cluster results for the data.
-#' @param markers It can be either a text file that containing markers to be used for analysis or a vector of the marker names.
 #' @param method Method for estimation of cell progression, isomap.
 #' @param distMethod Method for distance calculation, default is "euclidean", other choices like "manhattan", "cosine", "rankcor".
 #' @param out_dim Number of transformed dimensions choosen for output.
