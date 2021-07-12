@@ -29,7 +29,7 @@ cytofkitShinyAPP <- function(RData = NULL, onServer = FALSE) {
     roots <- c(wd=getwd())
     
     if(!missing(RData)){
-        if(class(RData) == "character"){
+        if(is(RData) == "character"){
             if(file.exists(RData)){
               if(tools::file_ext(RData) == "RData"){
                 load(RData)
