@@ -3,7 +3,7 @@
 #' @param onServer Whether the app is running on a server.
 #' @param port Manually set a port, default is randomly allocated.
 #'
-#' @return
+#' @return cytofkit2
 #' @export
 #' @examples 
   #cytofkit_shiny_dashboard()  
