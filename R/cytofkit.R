@@ -3,7 +3,7 @@
 #' This package is designed to facilitate the analysis workflow of mass cytometry data with automatic subset identification and mapping of cellular progression. Both command line and a GUI client are provided for executing the workflow easily.
 #' 
 #' This package integrates merging methods of multiple FCS files, dimension reduction methods (PCA, t-SNE and ISOMAP) and clustering methods (DensVM, ClusterX, and Rphenograph) for rapid subset detection. Analysis results can be visualized and explored interactively using a specially designed shiny web APP, see \code{\link{cytofkitShinyAPP}}. Moreover, the method isomap is provided to map the cellular progression. 
-#' This workflow can be easily executed with the main function \code{\link{cytofkit2}}.
+#' This workflow can be easily executed with the main function.
 #' 
 #' Pre-processing
 #' 
@@ -45,7 +45,6 @@
 #' ## Checking the vignettes for more details 
 #' if(interactive()) browseVignettes(package = 'cytofkit2')
 #' 
-#' @seealso \code{\link{cytofkit2}}
 #' @references \url{https://github.com/JinmiaoChenLab/cytofkit2}
 #' @docType package
 #' @name cytofkit2-package
@@ -58,7 +57,7 @@ NULL
 #' 
 #' The main function to drive the cytofkit2 workflow.
 #' 
-#' \code{cytofkit2} works as the main funciton to perform the analysis of one or multiple FCS files. 
+#' cytofkit2 works as the main funciton to perform the analysis of one or multiple FCS files. 
 #' The workflow contains data merging from multiple FCS file, expression data transformation, 
 #' dimensionality reduction with \code{PCA}, \code{isomap} or \code{tsne} (default), clustering 
 #' analysis with methods includes \code{DensVM}, \code{ClusterX}, \code{Rphenograph)} and \code{FlowSOM} for 
@@ -103,7 +102,6 @@ NULL
 #' @return a list containing \code{expressionData}, \code{dimReductionMethod}, \code{visualizationMethods}, \code{dimReducedRes}, \code{clusterRes}, \code{progressionRes}, \code{projectName}, \code{rawFCSdir} and \code{resultDir}. If choose 'saveResults = TRUE', results will be saved into files under \code{resultDir}.
 #' @author Hao Chen, Jinmiao Chen
 #' @references \url{https://github.com/JinmiaoChenLab/cytofkit2}
-#' @seealso \code{\link{cytofkit2}}, \code{\link{cytofkitShinyAPP}}
 #' @useDynLib cytofkit2
 #' @export
 #' @examples
