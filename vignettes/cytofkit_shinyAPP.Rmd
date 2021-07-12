@@ -1,13 +1,11 @@
 ---
 title: "cytofkit2: Usage of Shiny APP"
-output:
-  BiocStyle::html_document:
+output: BiocStyle::html_document:
     toc: true
----
-<!--
+vignette: >
 %% \VignetteEngine{knitr::rmarkdown}
 %\VignetteIndexEntry{ShinyAPP tutorial}
--->
+---
 
 
 # Launch the Shiny APP
