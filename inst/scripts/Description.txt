@@ -1,4 +1,0 @@
-Details of the fcs file provided:
-
-File name: S4_PBMC.fcs
-Description: Human PBMC Data from Healthy Donor
