@@ -958,7 +958,7 @@ cytof_addToFCS <- function(data,
             
             ## update the description remove '\' in the keywords
             keyval <- lapply(keyval, function(x) {
-                if (is(x) == "character") {
+                if (is(x, "character") {
                   gsub("\\", "", x, fixed = TRUE)
                 } else {
                   x
