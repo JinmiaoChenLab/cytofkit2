@@ -9,13 +9,6 @@
 #' @return Opens shinyApp session for data visualisation
 #' @import shiny
 #' @import shinyFiles
-#' @importFrom plotly filter
-#' @importFrom shinyjs colourInput
-#' @importFrom data.table dcast melt
-#' @importFrom DT dataTableOutput renderDataTable
-#' @import shinydashboard
-#' @importFrom shinyalert runExample
-#' @importFrom shinyWidgets alert
 #' @importFrom grDevices dev.copy2pdf
 #' @importFrom graphics plot
 #' @author Hao Chen
