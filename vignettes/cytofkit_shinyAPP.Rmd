@@ -3,11 +3,11 @@ title: "cytofkit2: Usage of Shiny APP"
 output:
   BiocStyle::html_document:
     toc: true
----
-<!--
-%% \VignetteEngine{knitr::rmarkdown}
+vignette: >
 %\VignetteIndexEntry{ShinyAPP tutorial}
--->
+%\VignetteEngine{knitr::rmarkdown}
+%\VignetteEncoding{UTF-8}
+---
 
 
 
