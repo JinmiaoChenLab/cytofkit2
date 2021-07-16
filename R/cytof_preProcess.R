@@ -54,7 +54,7 @@ cytof_exprsMerge <- function(fcsFiles,
   }
   
   if(is.numeric(sampleSeed))
-    set.seed(sampleSeed)
+    #set.seed(sampleSeed)
   ## test if number of events in any fcs less than fixedNum
   if(mergeMethod == "fixed"){
     if(!is.null(fixedNum)){
