@@ -29,9 +29,9 @@ shinyServer = function(input, output, session)
     , sampleInfo = NULL
     , sample_selected_index = NULL
     , sample_choices = NULL
-    , sample_init = F
-    , sample_ready = F
-    , sample_update = F
+    , sample_init = FALSE
+    , sample_ready = FALSE
+    , sample_update = FALSE
   )
   
   inputs = reactiveValues(
@@ -105,7 +105,7 @@ shinyServer = function(input, output, session)
     if(!is.null(input$sample_anno)){
       res_fn = paste0(input$project_name, ".RData")
       load(res_fn)
-      meta_data = read.table(input$sample_anno$datapath, sep = "\t", header = T, row.names = 1)
+      meta_data = read.table(input$sample_anno$datapath, sep = "\t", header = TRUE, row.names = 1)
       analysis_results$meta_data = meta_data
       analysis_results$sampel_name_ori = analysis_results$sampleNames
       # analysis_results$sampleInfo_ori = analysis_results$sampleInfo
@@ -221,7 +221,7 @@ shinyServer = function(input, output, session)
                                  cellSample = factor(sub("_[0-9]*$", "", row.names(v$data$expressionData))),
                                  stringsAsFactors = FALSE)
       v$data$sampleInfo <- v$sampleInfo
-      v$sample_ready = T
+      v$sample_ready = TRUE
       v$ori_sampleInfo = v$sampleInfo
       v$ori_data = v$data
       updateSelectInput(session, "sample_info_selection", choices = colnames(v$data$meta_data))
@@ -475,7 +475,7 @@ shinyServer = function(input, output, session)
         # browser()
         res_folder = paste0(input$project_name, "_results")
         if(!dir.exists(res_folder)){
-          dir.create(res_folder, recursive = T)
+          dir.create(res_folder, recursive = TRUE)
         }
         ## NOTE: if samples are regrouped, then new FCS file cannot be saved
         incProgress(1/2)
@@ -483,13 +483,13 @@ shinyServer = function(input, output, session)
         analysis_results <<- v$data
         cytof_writeResults(analysis_results,
                            saveToRData = input$saveRData,
-                           saveToFCS = F,
+                           saveToFCS = FALSE,
                            saveToFiles = input$saveCsv
                            , resultDir = res_folder)
         incProgress(1/2)
         # ## open the results directory
         # opendir(v$data$resultDir)
-        files = dir(path = res_folder, pattern = ".*", full.names = T)
+        files = dir(path = res_folder, pattern = ".*", full.names = TRUE)
         zip::zip(file, files)
         #stopApp(returnValue = invisible())
       })
@@ -524,7 +524,7 @@ shinyServer = function(input, output, session)
           # browser()
           param_names = as.list(match.call()$script)
           param_names = param_names[-1]
-          r_option = "```{r, echo = F"
+          r_option = "```{r, echo = FALSE"
           if (!is.null(chunk_option)) {
             r_option = paste0(r_option, ", ", chunk_option)
           }
@@ -538,7 +538,7 @@ shinyServer = function(input, output, session)
           res = paste(title, r_option, paste(param_names, collapse = "\n"), "```", sep = "\n")
           if (!is.null(values)) {
             for (i in 1:length(values)) {
-              res = gsub(values[i], paste0("\"", eval_string(values[i], envir = parent.frame()), "\""), res, fixed = T)
+              res = gsub(values[i], paste0("\"", eval_string(values[i], envir = parent.frame()), "\""), res, fixed = TRUE)
             }
           }
           res
@@ -550,7 +550,7 @@ shinyServer = function(input, output, session)
           script_id = paste0("####* ", script_id, " *####")
           #### substitue script
           script = paste(scripts, collapse = "\n")
-          script_res = gsub(script_id, script, all_script, fixed = T)
+          script_res = gsub(script_id, script, all_script, fixed = TRUE)
           write_string(script_res, output_name = output_file)
         }
         
@@ -572,14 +572,14 @@ shinyServer = function(input, output, session)
             script1 = create_script(paste0("## ", temp_name, " plot color by sample\n", "Based on the markers: "
                                         , paste0(analysis_results$temp2, collapse = ', ')), {
                                           plot_scatter(analysis_results$dimReducedRes[[dr_names[i]]]
-                                                       , analysis_results$sampleInfo[, "cellSample", drop = F]) + coord_fixed()
+                                                       , analysis_results$sampleInfo[, "cellSample", drop = FALSE]) + coord_fixed()
                                         }, values = c("dr_names[i]"))
             script2 = create_script(paste0("## ", temp_name, " plot color by sample (splitted version)"), {
               p = plot_split_scatter(analysis_results$dimReducedRes[[dr_names[i]]]
-                                     , analysis_results$sampleInfo[, "cellSample", drop = F], ncol = 2, show_legend = F)
+                                     , analysis_results$sampleInfo[, "cellSample", drop = FALSE], ncol = 2, show_legend = FALSE)
               p[[1]]
             }, values = c("dr_names[i]"), fig_width = 8, fig_height = 20)
-            forplot3 <<- as.data.frame(cbind(analysis_results$dimReducedRes[[dr_names[i]]], analysis_results$expressionData[,analysis_results$dimRedMarkers, drop = F]))
+            forplot3 <<- as.data.frame(cbind(analysis_results$dimReducedRes[[dr_names[i]]], analysis_results$expressionData[,analysis_results$dimRedMarkers, drop = FALSE]))
             script3 = create_script(paste0("## ", temp_name, " plot color by marker expression"), {
               for (x in 1:length(analysis_results$dimRedMarkers)){
                 print(ggplot(forplot3, aes(x = umap_1, y = umap_2)) + geom_point(aes(color = get(colnames(forplot3)[x+2]))) + 
@@ -623,10 +623,10 @@ shinyServer = function(input, output, session)
             
             temp = as.data.frame(analysis_results$clusterRes$Rphenograph)
             rownames(analysis_results$sampleInfo) = analysis_results$sampleInfo[, 1]
-            temp = ezcbind(temp, analysis_results$sampleInfo[, "cellSample", drop = F])
+            temp = ezcbind(temp, analysis_results$sampleInfo[, "cellSample", drop = FALSE])
             freq = as.data.frame.matrix(table(temp))
             freq = freq/rowSums(freq)
-            pheatmap(freq, silent = F)
+            pheatmap(freq, silent = FALSE)
             # print(p)
           })
           unlist(scripts)
@@ -653,8 +653,8 @@ shinyServer = function(input, output, session)
               lapply(1:length(marker_list), function(k){
                 all_plots = lapply(1:length(marker_list[[k]]), function(j){
                   plot_scatter(analysis_results$dimReducedRes[[dr_names[i]]]
-                               , analysis_results$expressionData[, marker_list[[k]][j], drop = F]
-                               , colors = c("#BEBEBE",brewer.pal(9,"Reds")), color_as_factor = F) +
+                               , analysis_results$expressionData[, marker_list[[k]][j], drop = FALSE]
+                               , colors = c("#BEBEBE",brewer.pal(9,"Reds")), color_as_factor = FALSE) +
                     coord_fixed() 
                 })
                 p = plot_grid(plotlist = all_plots, ncol = 3)
@@ -670,7 +670,7 @@ shinyServer = function(input, output, session)
         create_express_heatmap = function(analysis_results){
           res = create_script(paste0("## Expression heatmap"), {
             selected_markers = which(!(grepl("NA", colnames(analysis_results$expressionData))))
-            expression = as.data.frame(analysis_results$expressionData[, selected_markers, drop = F])
+            expression = as.data.frame(analysis_results$expressionData[, selected_markers, drop = FALSE])
             expression$clusters = analysis_results$clusterRes$Rphenograph[, 1]
             cluster_expression = fast_aggr(expression, ncol(expression))
             dt = seurat_sacle_data(cluster_expression)
