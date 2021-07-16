@@ -944,7 +944,7 @@ ez_flattern_list = function (x, recursive = TRUE, use.name = TRUE)
 }
 
 plot_split_scatter = function (pos, color = NULL, colors = NULL, shape = NULL, size = NULL, 
-                               color_as_factor = F, order = NULL, sort_color = TRUE, title = NULL, 
+                               color_as_factor = FALSE, order = NULL, sort_color = TRUE, title = NULL, 
                                return_type = "ggplot", ncol = NULL, show_legend = TRUE, coor_fix = TRUE, 
                                ...) 
 {
