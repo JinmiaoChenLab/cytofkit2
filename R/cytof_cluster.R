@@ -48,7 +48,7 @@ cytof_cluster <- function(ydata = NULL,
            },
            FlowSOM = {
                message("  Running FlowSOM...")
-               set.seed(flowSeed)
+               #set.seed(flowSeed)
                clusters <- FlowSOM_integrate2cytofkit(xdata, FlowSOM_k, flowSeed = flowSeed)
            })
     
