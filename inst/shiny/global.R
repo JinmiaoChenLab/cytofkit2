@@ -877,7 +877,7 @@ ez_flattern_list = function (x, recursive = TRUE, use.name = TRUE)
   temp = x
   res = list()
   num = 1
-  finished = F
+  finished = FALSE
   for (i in seq_along(temp)) {
     if (class(temp[[i]])[1] == "list") {
       for (j in seq_along(temp[[i]])) {
@@ -923,7 +923,7 @@ ez_flattern_list = function (x, recursive = TRUE, use.name = TRUE)
             }
             num = num + 1
           }
-          finished = F
+          finished = FALSE
         }
         else {
           if (is.null(temp[[i]])) {
@@ -1014,7 +1014,7 @@ plot_underline_points = function (pos, selected_points, color = NULL, colors = "
                                   selected_points_name = "selected", background_name = "Others", 
                                   ...) 
 {
-  cell_type = pos[, 1, drop = F]
+  cell_type = pos[, 1, drop = FALSE]
   colnames(cell_type) = ""
   cell_type[, 1] = background_name
   cell_type[selected_points, 1] = selected_points_name
