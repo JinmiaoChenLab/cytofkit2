@@ -4,9 +4,9 @@ output:
   BiocStyle::html_document:
     toc: true
 vignette: >
-%\VignetteIndexEntry{Quick Start}
-%\VignetteEngine{knitr::rmarkdown}
-%\VignetteEncoding{UTF-8}
+  %\VignetteIndexEntry{Quick Start}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 
