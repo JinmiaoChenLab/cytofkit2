@@ -206,7 +206,7 @@ cytofkit <- function(fcsFiles = getwd(),
     message("* Subset progression analysis method: ")
     message(progressionMethod, "\n\n")
     
-    set.seed(seed)
+    #set.seed(seed)
     ## get transformed, combined exprs data
     message("Extract expression data...")
     exprs_data <- cytof_exprsMerge(fcsFiles, comp = ifCompensation, verbose = FALSE, 
@@ -231,7 +231,7 @@ cytofkit <- function(fcsFiles = getwd(),
     
     ## cluster results, a list
     message("Run clustering...")
-    set.seed(seed)
+    #set.seed(seed)
     cluster_res <- lapply(clusterMethods, cytof_cluster, 
                           ydata = allDimReducedList[[dimReductionMethod]], 
                           xdata = exprs_data[, markers],
