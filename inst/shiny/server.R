@@ -286,7 +286,7 @@ shinyServer = function(input, output, session)
         sampleNames <- isolate(unique(as.character(v$sampleInfo$cellSample)))
         v$sample_choices = sampleNames
         v$sample_selected_index = 1:length(sampleNames)
-        v$sample_init = T
+        v$sample_init = TRUE
         checkboxGroupInput(inputId = 'samples', label = NULL,
                            choices = sampleNames, selected = sampleNames)
       }
