@@ -4,9 +4,9 @@ output:
   BiocStyle::html_document:
     toc: true
 vignette: >
-%\VignetteIndexEntry{Analysis Pipeline}
-%\VignetteEngine{knitr::rmarkdown}
-%\VignetteEncoding{UTF-8}
+  %\VignetteIndexEntry{Analysis Pipeline}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 # Introduction
