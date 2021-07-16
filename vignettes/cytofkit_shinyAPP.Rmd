@@ -4,9 +4,9 @@ output:
   BiocStyle::html_document:
     toc: true
 vignette: >
-%\VignetteIndexEntry{ShinyAPP tutorial}
-%\VignetteEngine{knitr::rmarkdown}
-%\VignetteEncoding{UTF-8}
+  %\VignetteIndexEntry{ShinyAPP tutorial}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 
