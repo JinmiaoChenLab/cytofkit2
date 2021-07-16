@@ -3,11 +3,11 @@ title: "cytofkit2: Analysis Pipeline"
 output:
   BiocStyle::html_document:
     toc: true
----
-<!--
-%% \VignetteEngine{knitr::rmarkdown}
+vignette: >
 %\VignetteIndexEntry{Analysis Pipeline}
--->
+%\VignetteEngine{knitr::rmarkdown}
+%\VignetteEncoding{UTF-8}
+---
 
 # Introduction
 
