@@ -567,10 +567,10 @@ ezcbind = function (..., type = c("sync", "keep_all", "all", "outer", "keep_left
           for (i in 2:length(argl)) {
             common_genes = intersect(common_genes, rownames(argl[[i]]))
           }
-          res = argl[[1]][common_genes, , drop = F]
+          res = argl[[1]][common_genes, , drop = FALSE]
           for (i in 2:length(argl)) {
             res = cbind(res, argl[[i]][common_genes, 
-                                       , drop = F])
+                                       , drop = FALSE])
           }
         }
       }
@@ -606,25 +606,25 @@ ezcbind = function (..., type = c("sync", "keep_all", "all", "outer", "keep_left
       temp2 = setkey(as.data.table(temp2), "row_name")
       if (type == "keep_all" || type == "all" || type == 
           "outer") {
-        res = merge(temp1, temp2, by = "row_name", all = T, 
-                    allow.cartesian = T)
+        res = merge(temp1, temp2, by = "row_name", all = TRUE, 
+                    allow.cartesian = TRUE)
       }
       else if (type == "keep_left" || type == "left") {
-        res = temp2[temp1, allow.cartesian = T]
+        res = temp2[temp1, allow.cartesian = TRUE]
       }
       else if (type == "keep_right" || type == "right") {
-        res = temp1[temp2, allow.cartesian = T]
+        res = temp1[temp2, allow.cartesian = TRUE]
       }
       else if (type == "keep_common" || type == "common" || 
                type == "inner") {
-        res = temp1[temp2, nomatch = 0L, allow.cartesian = T]
+        res = temp1[temp2, nomatch = 0L, allow.cartesian = TRUE]
       }
       else if (type == "cross") {
         res = merge(res, argl[[i]], by = NULL)
       }
       res = as.data.frame(res)
       rownames(res) = res[, 1]
-      res = res[, -1, drop = F]
+      res = res[, -1, drop = FALSE]
     }
     return(res)
   }
@@ -672,8 +672,8 @@ sync_variable = function (base_order, to_be_sorted, base_dim = 1, to_be_sorted_d
   if (all(name1 %in% name2) || all(name2 %in% name1)) {
     name_i = intersect(name1, name2)
     sorted = if (to_be_sorted_dim == 1) 
-      to_be_sorted[name_i, , drop = F]
-    else to_be_sorted[, name_i, drop = F]
+      to_be_sorted[name_i, , drop = FALSE]
+    else to_be_sorted[, name_i, drop = FALSE]
   }
   else {
     stop("Can not synchronize two variables!")
@@ -691,13 +691,13 @@ fast_aggr = function (mat, col_id, func = sum)
   b = as.data.frame(b)
   b = remove_all_NA(b)
   rownames(b) = b[, 1]
-  b = b[, -1, drop = F]
+  b = b[, -1, drop = FALSE]
   return(b)
 }
 
 remove_all_NA = function (raw_data) 
 {
-  raw_data = raw_data[complete.cases(raw_data), , drop = F]
+  raw_data = raw_data[complete.cases(raw_data), , drop = FALSE]
 }
 
 seurat_sacle_data = function (data.use, genes.use = NULL, do.scale = TRUE, do.center = TRUE, 
@@ -759,12 +759,12 @@ plot_scatter = function (pos, color = NULL, colors = NULL, colors_lims = NULL,
     color = create_group(list(rownames(pos)), c(color))
   }
   color = as.data.frame(color)
-  color = color[ez_order(color[, 1]), , drop = F]
+  color = color[ez_order(color[, 1]), , drop = FALSE]
   pos = sync_variable(color, pos)
   color = sync_variable(pos, color)
   if (color_as_factor == "auto") {
     color_as_factor = ifelse((nrow(color)/length(unique(color[, 
-                                                              1]))) > 4, yes = T, no = F)
+                                                              1]))) > 4, yes = TRUE, no = FALSE)
   }
   if (color_as_factor) {
     color[, 1] = factor(color[, 1], levels = ez_sort(unique(color[, 
@@ -838,7 +838,7 @@ plot_scatter = function (pos, color = NULL, colors = NULL, colors_lims = NULL,
 }
 
 
-ez_order = function (dt, order_nchar_first = T) 
+ez_order = function (dt, order_nchar_first = TRUE) 
 {
   if (is.character(dt) && order_nchar_first) {
     res = order(nchar(dt), dt)
@@ -849,7 +849,7 @@ ez_order = function (dt, order_nchar_first = T)
   res
 }
 
-ez_sort = function (dt, sort_nchar_first = T) 
+ez_sort = function (dt, sort_nchar_first = TRUE) 
 {
   res = dt[ez_order(dt, sort_nchar_first)]
   res
@@ -872,7 +872,7 @@ ez_param = function (...)
   return(res)
 }
 
-ez_flattern_list = function (x, recursive = T, use.name = T) 
+ez_flattern_list = function (x, recursive = TRUE, use.name = TRUE) 
 {
   temp = x
   res = list()
@@ -1029,18 +1029,18 @@ plot_underline_points = function (pos, selected_points, color = NULL, colors = "
     labs(color = "")
 }
 
-dataframe_reorder = function (ori_data, n_col = 1, order = NULL, order_item = T) 
+dataframe_reorder = function (ori_data, n_col = 1, order = NULL, order_item = TRUE) 
 {
   if (is.null(order)) {
     print(paste0("c(\"", paste(unique(ori_data[, n_col]), 
-                               collapse = "\", \""), "\")"), quote = F)
+                               collapse = "\", \""), "\")"), quote = FALSE)
     return()
   }
   else {
     ori_data[, n_col] = factor(ori_data[, n_col], levels = order)
   }
   if (order_item) {
-    ori_data = ori_data[order(ori_data[, n_col]), , drop = F]
+    ori_data = ori_data[order(ori_data[, n_col]), , drop = FALSE]
   }
   ori_data
 }
