@@ -9,6 +9,14 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
 # Introduction
 
 The **cytofkit2** package is designed to facilitate the analysis of mass cytometry data from one or multiple FCS files. User can customize their data merging strategy to combine data from multiple files with proper transformation; apply state-of-the-art clustering methods like *DensVM* [1] and *PhenoGraph* [2] as well as a in-house developed algorithm *ClusterX* to automatically detect cell subsets; visualize the high dimensional data with cluster labels by either linear transformation like *PCA* or non-linear dimensionality reduction like *ISOMAP* [3] or *t-SNE* [4]; map the progression of cellular subtypes estimated by *ISOMAP* or *Diffusion map* [5] and profile the marker expression along the cell progression. In 
