@@ -703,7 +703,7 @@ shinyServer = function(input, output, session)
                     , ", ", cluster_num, " cluster", ifelse(cluster_num > 1, "s", "")
                     , ", ", cell_num, " cell", ifelse(cluster_num > 1, "s", "")
                     , " in the project \"", analysis_results$projectName, "\".\n\n")
-          res = paste0(res, "  The dimensionality reduction, clustering and markers expression anaylysis were conducted on the project data.")
+          res = paste0(res, "  The dimensionality reduction, clustering and markers expression analysis were conducted on the project data.")
           res
         }
         
