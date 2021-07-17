@@ -49,9 +49,11 @@ Inside the cluster panel, there are three tab panels, **Cluster Plot**, **Annota
 
 1. **Cluster Plot**: visualize the clusters on the scatter plot of dimensionality reduced data. Use `Plot Data` to choose the dimensionality reduced data, and `Plot Option` to choose clustering results. Point size and label size can be adjusted to fit your needs.
 
-2. **Annotate Clusters**: clusters can be annotated with cell population names. Once submitted, an annotated clustering option will be added to `Plot Option`.
+2. **Change Cluster Color**: Choose color for each cluster for visualization on TSNE/UMAP.
 
-3. **Run FlowSOM**: if the clustering results doesn't make sense, another clustering option named FlowSOM can be tried. For FlowSOM, you need to specify the number of clusters. Once done, a FlowSOM clustering results will be added to `Plot Option`.
+3. **Annotate Clusters**: clusters can be annotated with cell population names. Once submitted, an annotated clustering option will be added to `Plot Option`.
+
+4. **Run FlowSOM**: if the clustering results doesn't make sense, another clustering option named FlowSOM can be tried. For FlowSOM, you need to specify the number of clusters. Once done, a FlowSOM clustering results will be added to `Plot Option`.
 
 # Marker Panel
 
