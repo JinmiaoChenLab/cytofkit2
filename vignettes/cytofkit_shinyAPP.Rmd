@@ -21,7 +21,6 @@ knitr::opts_chunk$set(
 
 - cytofkit Shiny APP is integrated into the cytofkit2 pacakge, and can be deployed locally using the following command:
     ```{r, eval=FALSE}
-    require(cytofkit)
     cytofkitShinyAPP()
     ```
 
