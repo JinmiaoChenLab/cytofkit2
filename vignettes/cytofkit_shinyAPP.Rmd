@@ -47,7 +47,7 @@ Inside the cluster panel, there are three tab panels, **Cluster Plot**, **Annota
 
 ![](cluster_panel.png)
 
-1. **Cluster Plot**: visualize the clusters on the scatter plot of dimensionality reduced data. Use `Plot Data` to choose the dimensionality reduced data, and `Plot Option` to choose clustering results. Point size and label size can be adjusted to fit your needs.
+1. **Cluster Plot**: visualize the clusters on the scatter plot of dimensionality reduced data. Use `Visualization Method` to choose the dimensionality reduced data, and `Cluster By` to choose clustering results. Point size and label size can be adjusted to fit your needs.
 
 2. **Change Cluster Color**: Choose color for each cluster for visualization on TSNE/UMAP.
 
