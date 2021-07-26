@@ -14,7 +14,7 @@ BugReports: https://github.com/JinmiaoChenLab/cytofkit2/issues
 biocViews: FlowCytometry, GUI, CellBiology, Clustering,
     DimensionReduction, BiomedicalInformatics
 Depends:
-    R (>= 4.0.0), ggplot2, plyr, reticulate, VGAM
+    R (>= 4.1.0), ggplot2, plyr, reticulate, VGAM
 VignetteBuilder: knitr
 Suggests:
     knitr,
