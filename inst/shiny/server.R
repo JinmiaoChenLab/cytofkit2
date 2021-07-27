@@ -120,7 +120,7 @@ shinyServer = function(input, output, session)
     content = function(file) {
       # browser()
       cur_dir = './'
-      files = dir(path = cur_dir, pattern = input$project_name)
+      files = dir(path = cur_dir, pattern = input$project_name, full.names = T)
       utils::zip(file, files)
       #stopApp(returnValue = invisible())
     }
