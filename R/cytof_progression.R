@@ -55,7 +55,7 @@ cytof_progression <- function(data, cluster,
     if(is.numeric(sampleSeed))
         #set.seed(sampleSeed) # Set a seed if you want reproducible results
     
-    cellClusterList <- split(1:nrow(data), cluster)
+    cellClusterList <- split(seq_len(nrow(data)), cluster)
     switch(clusterSampleMethod,
            ceil = {
                mergeFunc <- function(x) {
