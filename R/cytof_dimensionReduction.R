@@ -164,8 +164,8 @@ cytof_dimReduction <- function(data,
             out_dim <- ncol(mapped)
             message("Run ",method," for dimensional reduction, out dimension coerced to ",out_dim)
         }
-        mapped <- mapped[ ,c(1:out_dim)]
-        colnames(mapped) <- paste(method, c(1:out_dim), sep = "_")
+        mapped <- mapped[ ,c(seq_len(out_dim))]
+        colnames(mapped) <- paste(method, c(seq_len(out_dim)), sep = "_")
         rownames(mapped) <- rnames
     }
     message("  DONE\n")
