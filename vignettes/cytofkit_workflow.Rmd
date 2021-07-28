@@ -118,3 +118,9 @@ Among the saved results, an R data object will be saved with suffix of *.RData*,
 [5] Haghverdi L, Buettner F, Theis FJ. Diffusion maps for high-dimensional single-cell analysis of differentiation data. Bioinformatics. 2015; 1-10. doi:10.1093/bioinformatics/btv325
 
 [6] Van Gassen S, Callebaut B, Van Helden MJ, Lambrecht BN, Demeester P, Dhaene T, et al. FlowSOM: Using Self-Organizing Maps for Visualization and Interpretation of Cytometry Data. Cytometry A. 2015; 1-10. doi:10.1002/cyto.a.22625
+
+# Session Information
+
+```{r}
+sessionInfo()
+```
