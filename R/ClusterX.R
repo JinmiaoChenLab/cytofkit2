@@ -313,7 +313,7 @@ clusterAssign <- function(peakID, higherID, rho){
 haloDetect <- function(data, rho, cluster, peakID, dc){
     
     clusterID <- sort(unique(cluster), decreasing = FALSE)
-    clusterRhoThres <- sapply(clusterID, function(clusteri){
+    clusterRhoThres <- vapply(clusterID, function(clusteri){
         dataOfClusteri <- data[cluster == clusteri, ]
         otherData <- data[cluster != clusteri, ]
         rhoOfClusteri <- rho[cluster == clusteri]
