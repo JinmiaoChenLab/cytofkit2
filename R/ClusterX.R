@@ -337,7 +337,7 @@ splitFactorGenerator <- function(rowNum, colNum){
         colNum <- rowNum                    ## square matrix
     foldSize <- round(65545326 / colNum)    ## chunk maxi 500Mb, 8kb per num
     foldNum <- ceiling(rowNum / foldSize)
-    sampleID <- sample(1:foldNum, rowNum, replace = TRUE)
+    sampleID <- sample(seq_len(foldNum), rowNum, replace = TRUE)
     splitFactor <- sort(sampleID, decreasing = FALSE)
     
     return(splitFactor)
@@ -361,7 +361,7 @@ splitFactorGenerator <- function(rowNum, colNum){
 detect_anoms_sd <- function(data, max_anoms=0.1, alpha = 0.01, direction='pos') {
     
     num_obs <- length(data)
-    names(data) <- 1:num_obs
+    names(data) <- seq_len(num_obs)
     data <- na.omit(data)
     max_outliers <- trunc(num_obs*max_anoms)
     
