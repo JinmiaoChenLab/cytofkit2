@@ -35,7 +35,7 @@ DensVM <- function(ydata, xdata) {
     peak_list <- mapply(peakFind, sig_tol = sig_tol_range, MoreArgs = list(ydata = ydata), 
                         SIMPLIFY = FALSE)
     
-    Npeaks <- sapply(peak_list, function(x) {
+    Npeaks <- vapply(peak_list, function(x) {
         x$Npeaks
     })
     peakdata <- data.frame(numpeaks = Npeaks, sig_range = sig_tol_range)
