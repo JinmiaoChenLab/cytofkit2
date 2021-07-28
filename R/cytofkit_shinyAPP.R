@@ -244,7 +244,7 @@ cytofkitShinyAPP <- function(RData = NULL, onServer = FALSE) {
                                                         uiOutput("C_colourCluster")
                                                       ),
                                                       hr(),
-                                                      lapply(1:100, function(i) {
+                                                      lapply(seq_len(100), function(i) {
                                                         uiOutput(paste0('Cluster_', i, '_col'))
                                                       }),
                                                       hr(),
@@ -267,7 +267,7 @@ cytofkitShinyAPP <- function(RData = NULL, onServer = FALSE) {
                                                         uiOutput("C_labelCluster_name")
                                                       ),
                                                       hr(),
-                                                      lapply(1:100, function(i) {
+                                                      lapply(seq_len(100), function(i) {
                                                         uiOutput(paste0('Cluster', i))
                                                       }),
                                                       hr(),
@@ -396,7 +396,7 @@ cytofkitShinyAPP <- function(RData = NULL, onServer = FALSE) {
                                              tabPanel(title="Update Marker Names", value="M_tab4", 
                                                       h5('Type in Your New Name for Each Marker:'),
                                                       hr(),
-                                                      lapply(1:100, function(i) {
+                                                      lapply(seq_len(100), function(i) {
                                                         uiOutput(paste0('Marker_', i, "_name"))
                                                       }),
                                                       hr(),
@@ -443,7 +443,7 @@ cytofkitShinyAPP <- function(RData = NULL, onServer = FALSE) {
                                              tabPanel(title="Regroup Samples", value="S_tab3",
                                                       br(),
                                                       h4("Type in the Group Name for Each Sample:"),
-                                                      lapply(1:100, function(i) {
+                                                      lapply(seq_len(100), function(i) {
                                                         uiOutput(paste0('S_sample', i))
                                                       }),
                                                       hr(),
@@ -950,7 +950,7 @@ cytofkitShinyAPP <- function(RData = NULL, onServer = FALSE) {
           
           ## currently use 100 as a limit for cluster numbers 
           ## --- TODO: use reactiveValues to automatically retrive cluster numbers --- ## 
-          lapply(1:100, function(i) {
+          lapply(seq_len(100), function(i) {
             output[[paste0('Cluster_', i, "_col")]] <- renderUI({
               if(is.null(v$data) || is.null(v$data$clusterRes) || is.null(input$c_colourCluster)){
                 return(NULL)
@@ -981,7 +981,7 @@ cytofkitShinyAPP <- function(RData = NULL, onServer = FALSE) {
               clusterVec<- v$data$clusterRes[[clusterMethod]]
               clusters <- levels(as.factor(clusterVec))
               clusterCols <- NULL
-              for (i in 1:length(clusters)){
+              for (i in seq_len(length(clusters))){
                 clusteri <- clusters[i]
                 iCol <- input[[paste0('cluster_', i, '_col')]]
                 clusterCols <- c(clusterCols, iCol)
@@ -1032,7 +1032,7 @@ cytofkitShinyAPP <- function(RData = NULL, onServer = FALSE) {
           
           ## currently use 100 as a limit for cluster numbers 
           ## --- TODO: use reactiveValues to automatically retrive cluster numbers --- ## 
-          lapply(1:100, function(i) {
+          lapply(seq_len(100), function(i) {
             output[[paste0('Cluster', i)]] <- renderUI({
               if(is.null(v$data) || is.null(v$data$clusterRes) || is.null(input$c_labelCluster)){
                 return(NULL)
@@ -1057,7 +1057,7 @@ cytofkitShinyAPP <- function(RData = NULL, onServer = FALSE) {
               clusterLabels <- clusterVec
               clusters <- sort(unique(clusterVec))
               
-              for (i in 1:length(clusters)){
+              for (i in seq_len(length(clusters))){
                 clusteri <- clusters[i]
                 ilabel <- input[[paste0('cluster', i)]]
                 if(ilabel == ""){
@@ -1127,7 +1127,7 @@ cytofkitShinyAPP <- function(RData = NULL, onServer = FALSE) {
               markerNames <- sorted_markerNames[order(sorted_markerNames)]
               initNum <- ifelse(length(markerNames) >=4, 4, 1)
               selectizeInput('m_heatmapmarkerSelect', 'Select Markers:', 
-                             choices = markerNames, selected = markerNames[1:initNum], 
+                             choices = markerNames, selected = markerNames[seq_len(initNum)], 
                              multiple = TRUE, width = "100%")
             }   
           })
@@ -1300,7 +1300,7 @@ cytofkitShinyAPP <- function(RData = NULL, onServer = FALSE) {
               markerNames <- sorted_markerNames[order(sorted_markerNames)]
               initNum <- ifelse(length(markerNames) >=4, 4, 1)
               selectizeInput('m_markerSelect', 'Select Markers:', 
-                             choices = markerNames, selected = markerNames[1:initNum], 
+                             choices = markerNames, selected = markerNames[seq_len(initNum)], 
                              multiple = TRUE, width = "100%")
             }   
           })
@@ -1397,7 +1397,7 @@ cytofkitShinyAPP <- function(RData = NULL, onServer = FALSE) {
           
           ## currently use 100 as a limit for marker number
           ## --- TODO: use reactiveValues to automatically retrive marker numbers --- ## 
-          lapply(1:100, function(i) {
+          lapply(seq_len(100), function(i) {
             output[[paste0('Marker_', i, "_name")]] <- renderUI({
               if(is.null(v$data)){
                 return(NULL)
@@ -1420,7 +1420,7 @@ cytofkitShinyAPP <- function(RData = NULL, onServer = FALSE) {
             if(!is.null(v$data)){
               markerNames <- colnames(v$data$expressionData)
               newMarkerNames <- NULL
-              for (i in 1:length(markerNames)){
+              for (i in seq_len(length(markerNames))){
                 iName <- input[[paste0('marker_', i, '_name')]]
                 newMarkerNames <- c(newMarkerNames, iName)
               }
@@ -1601,7 +1601,7 @@ cytofkitShinyAPP <- function(RData = NULL, onServer = FALSE) {
           
           ## currently use 100 as a limit for sample numbers 
           ## --- TODO: use reactiveValues to automatically retrive sample numbers --- ## 
-          lapply(1:100, function(i) {
+          lapply(seq_len(100), function(i) {
             output[[paste0('S_sample', i)]] <- renderUI({
               if(is.null(v$data) || is.null(v$sampleInfo)){
                 return(NULL)
@@ -1624,7 +1624,7 @@ cytofkitShinyAPP <- function(RData = NULL, onServer = FALSE) {
               uniqueSampleNames <- sort(unique(v$sampleInfo$originalCellSample))
               
               sampleGroupNames <- NULL
-              for(i in 1:length(uniqueSampleNames)){
+              for(i in seq_len(length(uniqueSampleNames))){
                 sampleGroupNames <- c(sampleGroupNames, input[[paste0("Sample", i)]])
                 v$data$sampleNames[[i]] <- c(v$data$sampleNames[[i]], input[[paste0("Sample", i)]])
               }
@@ -1650,7 +1650,7 @@ cytofkitShinyAPP <- function(RData = NULL, onServer = FALSE) {
               ## newCellID = "sampleGroup" + "_cellID" + "globalID" to avoid duplicates
               v$sampleInfo$newCellID <- paste0(as.character(v$sampleInfo$cellSample), 
                                                "_",
-                                               1:length(cellID_number))
+                                               seq_len(length(cellID_number)))
               
               
               ## update reactive object v$data
@@ -1817,7 +1817,7 @@ cytofkitShinyAPP <- function(RData = NULL, onServer = FALSE) {
               markerNames <- sorted_markerNames[order(sorted_markerNames)]
               initNum <- ifelse(length(markerNames) >=4, 4, 1)
               selectizeInput('p_markerSelect', 'Select Markers:', 
-                             choices = markerNames, selected = markerNames[1:initNum], 
+                             choices = markerNames, selected = markerNames[seq_len(initNum)], 
                              multiple = TRUE, width = "100%")
               # checkboxGroupInput('p_markerSelect', strong('Select Markers:'), 
               #                    markerNames, selected = markerNames, inline = TRUE)
