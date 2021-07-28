@@ -43,7 +43,7 @@ DensVM <- function(ydata, xdata) {
     ## Locate plateau(knee)
     flag <- 0
     sig_id <- 0
-    for (i in 1:length(sig_tol_range)) {
+    for (i in seq_len(length(sig_tol_range))) {
         if (i > 1) {
             if ((Npeaks[i - 1] - Npeaks[i]) <= 1) {
                 sig_opt <- sig_tol_range[i - 1]
@@ -93,7 +93,7 @@ assign_pop <- function(opt_densityIMG, ydata, xdata) {
     ind_vector <- vector()
     cluster_vector <- vector()
     
-    for (i in 1:p_num) {
+    for (i in seq_len(p_num)) {
         # Find closest subpopulation and determine appropriate radius
         # of 2-d space to draw sample from
         dists <- (base::kronecker(matrix(1, p_num - 1, 1), matrix(p[i, 
@@ -151,7 +151,7 @@ peakFind <- function(ydata, sig_tol) {
         x <- x + edg - 1
         y <- y + edg - 1
         
-        for (j in 1:length(y)) {
+        for (j in seq_len(length(y))) {
             
             if (d[x[j], y[j]] >= d[x[j] - 1, y[j] - 1] && d[x[j], 
                                                             y[j]] > d[x[j] - 1, y[j]] && d[x[j], y[j]] >= d[x[j] - 
