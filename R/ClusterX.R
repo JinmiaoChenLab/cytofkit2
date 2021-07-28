@@ -141,7 +141,7 @@ estimateDc <- function(data, sampleSize = 5000, neighborRateLow=0.01, neighborRa
     data <- as.matrix(data)
     dataLens <- nrow(data)
     if(dataLens > sampleSize){
-        sample <- data[sample(1:dataLens, sampleSize, replace = FALSE), ]
+        sample <- data[sample(seq_len(dataLens), sampleSize, replace = FALSE), ]
     }else{ sample <- data }
     
     comb <- as.matrix(dist(sample, method = "euclidean"))
