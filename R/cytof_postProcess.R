@@ -102,7 +102,7 @@ cytof_writeResults <- function(analysis_results,
         
         ## save clusterData
         if(!is.null(clusterData) && length(clusterData) > 0){
-            for(j in 1:length(clusterData)){
+            for(j in seq_len(length(clusterData))){
                 methodj <- names(clusterData)[j]
                 dataj <- clusterData[[j]]
                 if(!is.null(dataj)){
@@ -143,12 +143,12 @@ cytof_writeResults <- function(analysis_results,
         
         ## visualizationData x clusterData plot
         visualizationData <- analysis_results$dimReducedRes[analysis_results$visualizationMethods]
-        for(i in 1:length(visualizationData)){
+        for(i in seq_len(length(visualizationData))){
             if(!is.null(visualizationData[[i]])){
                 methodi <- names(visualizationData)[i]
                 datai <- as.data.frame(visualizationData[[i]])
                 if(!is.null(clusterData) && length(clusterData) > 0){
-                    for(j in 1:length(clusterData)){
+                    for(j in seq_len(length(clusterData))){
                         if(!is.null(clusterData[[j]])){
                             methodj <- names(clusterData)[j]
                             dataj <- clusterData[[j]]
@@ -272,9 +272,9 @@ cytof_clusterPlot <- function(data, xlab, ylab, cluster, sample, title = "cluste
     size_legend_row <- ceiling(sample_num/4)
     grid_row_num <- round(sqrt(sample_num))
     if (sample_num >= 8) {
-        shape_value <- LETTERS[1:sample_num]
+        shape_value <- LETTERS[seq_len(sample_num)]
     } else {
-        shape_value <- c(1:sample_num) + 15
+        shape_value <- c(seq_len(sample_num)) + 15
     }
     if (is.null(point_size)) {
         point_size <- ifelse(nrow(data) > 10000, 1, 1.5)
@@ -866,7 +866,7 @@ cytof_addToFCS <- function(data,
     ## transform cluster_cols
     if (!is.null(cluster_cols)) {
         if(inLgclTrans){
-            for(i in 1:length(cluster_cols)){
+            for(i in seq_len(length(cluster_cols))){
                 cCol <- data[, cluster_cols[i]]
                 clust_cor_1 <- as.numeric(cCol)%%10
                 clust_cor_2 <- floor(as.numeric(cCol)/10)
@@ -906,7 +906,7 @@ cytof_addToFCS <- function(data,
     sample <- unique(sub("_[0-9]*$", "", row.names(to_add)))
     # add argument for old sample names use match()
     
-    for (i in 1:length(sample)) {
+    for (i in seq_len(length(sample))) {
       # refer to old sample name
       if(!is.null(origSampNames)){
         fn <- paste0(rawFCSdir, .Platform$file.sep, origSampNames[i], ".fcs")
@@ -930,7 +930,7 @@ cytof_addToFCS <- function(data,
         pd <- pData(params)
         keyval <- keyword(fcs)
         
-        for (j in 1:length(addColNames)) {
+        for (j in seq_len(length(addColNames))) {
             ## update the parameters
             if (addColNames[j] %in% colnames(fcs@exprs)) {
                 addColNames[j] <- paste(addColNames[j], "_new", sep = "")
@@ -978,8 +978,8 @@ cytof_addToFCS <- function(data,
         out_frame <- flowFrame(exprs = sub_exprs, parameters = params, description = keyval)
         
         #### changes made on 23 Jan 2019 by jinmiao chen to ensure tsne and clustering show on flowjo
-        out_frame@exprs <- out_frame@exprs[,c((ncol(fcs@exprs)+1):ncol(out_frame@exprs),1:ncol(fcs@exprs))]
-        out_frame@parameters@data <- out_frame@parameters@data[c((ncol(fcs@exprs)+1):ncol(out_frame@exprs),1:ncol(fcs@exprs)),]
+        out_frame@exprs <- out_frame@exprs[,c((ncol(fcs@exprs)+1):ncol(out_frame@exprs),seq_len(ncol(fcs@exprs)))]
+        out_frame@parameters@data <- out_frame@parameters@data[c((ncol(fcs@exprs)+1):ncol(out_frame@exprs),seq_len(ncol(fcs@exprs))),]
         ####
         suppressWarnings(write.FCS(out_frame, paste0(analyzedFCSdir, "/cytofkit_", sample[i], ".fcs")))
     }
