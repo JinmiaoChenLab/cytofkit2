@@ -93,7 +93,7 @@ cytof_writeResults <- function(analysis_results,
         write.csv(exprs, paste0(projectName, "_markerFiltered_transformed_merged_exprssion_data.csv"))
         
         ## save dimReducedData
-        for(i in 1:length(dimReducedData)){
+        for(i in seq_len(length(dimReducedData))){
             methodi <- names(dimReducedData)[i]
             if(!is.null(dimReducedData[[i]])){
                 write.csv(dimReducedData[[i]], paste(projectName, methodi,"dimension_reduced_data.csv", sep="_"))
