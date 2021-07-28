@@ -49,7 +49,7 @@ cytof_exprsMerge <- function(fcsFiles,
       common_markers = intersect(common_markers, colnames(exprsL[[i]]))
     }
   }
-  for (i in 1:length(exprsL)) {
+  for (i in seq_len(length(exprsL))) {
     exprsL[[i]] = exprsL[[i]][, common_markers, drop = FALSE]
   }
   
@@ -223,7 +223,7 @@ cytof_exprsExtract <- function(fcsFile,
     ## add rownames and colnames   
     col_names <- paste0(pd$name, "<", pd$desc,">")
     colnames(exprs) <- col_names[marker_id]
-    row.names(exprs) <- paste(name, 1:nrow(exprs), sep = "_")
+    row.names(exprs) <- paste(name, seq_len(nrow(exprs)), sep = "_")
     
     return(exprs)
 }
