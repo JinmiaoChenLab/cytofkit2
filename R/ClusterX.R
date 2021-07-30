@@ -36,15 +36,15 @@
 #' data <- as.matrix(iris_unique[,1:4])
 #' ClusterXRes <- ClusterX(data)
 ClusterX <- function(data,
-                     dimReduction = NULL,
-                     outDim=2,
-                     dc,
-                     gaussian=TRUE,
-                     alpha = 0.001,
-                     detectHalos = FALSE,
-                     SVMhalos = FALSE,
-                     parallel = FALSE,
-                     nCore = 4 ){
+                    dimReduction = NULL,
+                    outDim=2,
+                    dc,
+                    gaussian=TRUE,
+                    alpha = 0.001,
+                    detectHalos = FALSE,
+                    SVMhalos = FALSE,
+                    parallel = FALSE,
+                    nCore = 4 ){
     
     odata <- data
     if(!is.null(dimReduction))
