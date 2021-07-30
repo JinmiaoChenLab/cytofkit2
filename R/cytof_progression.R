@@ -21,7 +21,7 @@
 #' @export
 #' 
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' d<-system.file('extdata', package='cytofkit2')
 #' fcsFile <- list.files(d, pattern='.fcs$', full=TRUE)
 #' parameters <- list.files(d, pattern='.txt$', full=TRUE)
