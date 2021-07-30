@@ -913,11 +913,11 @@ cytof_addToFCS <- function(data,
       }else{
         fn <- paste0(rawFCSdir, .Platform$file.sep, sample[i], ".fcs")
       }
-    	if(!file.exists(fn)){
-    	    ## stop the writing if cannot find the file
-    	    message(paste("Cannot find raw FCS file:", fn))
-    	    return(NULL)
-    	}
+    if(!file.exists(fn)){
+    ## stop the writing if cannot find the file
+    message(paste("Cannot find raw FCS file:", fn))
+    return(NULL)
+    }
         message("Save to file:", fn, "\n")
         fcs <- read.FCS(fn, transformation = FALSE)
         pattern <- paste(sample[i], "_", sep = "")
