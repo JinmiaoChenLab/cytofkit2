@@ -73,7 +73,7 @@ py_install("umap-learn")
 if(!require(devtools)){
   install.packages("devtools") # If not already installed
 }
-devtools::install_github("JinmiaoChenLab/cytofkit2")
+devtools::install_github("JinmiaoChenLab/cytofkit2", dependencies=TRUE)
 ```
 
 ### Usage
