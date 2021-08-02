@@ -20,7 +20,7 @@
 #' #cytofkitShinyAPP(Rdata)
 cytofkitShinyAPP <- function(RData = NULL, onServer = FALSE) {
     
-    source(system.file('shiny', "global.R", package = 'cytofkit2'))
+    source(system.file('shiny', package = 'cytofkit2'))
   
     analysis_results <- NULL
     sampleInformation <- NULL
