@@ -7,7 +7,6 @@ source('./ui.R')
 library(flowCore)
 #library(cytofkit)
 library(shinyalert)
-source('./global.R')
 library(shinyWidgets)
 
 # library(ezTools)
