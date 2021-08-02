@@ -5,13 +5,8 @@ library(shiny)
 library(data.table)
 source('./ui.R')
 library(flowCore)
-#library(cytofkit)
 library(shinyalert)
 library(shinyWidgets)
-
-# library(ezTools)
-# library(monocle)
-# library(jsTree)
 
 options(bitmapType='cairo')
 # maximum size 10000MB
