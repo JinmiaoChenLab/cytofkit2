@@ -43,7 +43,7 @@ library("cytofkit2")
 Read the package description:
 
 ```{r, eval=FALSE}
-?"cytofkit-package"
+?"cytofkit2-package"
 ```
 
 
@@ -79,7 +79,7 @@ Depends on the size of your data, it will take some time to run the analysis. On
 
 ## Run with the Core Function 
 
-**Cytofkit** provides a core function `cytofkit()` to drive the analysis pipeline of mass cytometry data. Users only need to define several key parameters to start their analysis automatically. One simple example of running cytofkit using the core function is like this:
+**Cytofkit2** provides a core function `cytofkit()` to drive the analysis pipeline of mass cytometry data. Users only need to define several key parameters to start their analysis automatically. One simple example of running cytofkit using the core function is like this:
 
 ```{r, eval=FALSE}
 set.seed(100)
