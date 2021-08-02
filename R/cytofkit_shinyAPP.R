@@ -1180,7 +1180,7 @@ cytofkitShinyAPP <- function(RData = NULL, onServer = FALSE) {
           })
           
           session$onSessionEnded(function(){
-            file.remove("cytofkit_shinyAPP_marker_heatmap.pdf")
+            #file.remove("cytofkit_shinyAPP_marker_heatmap.pdf")
           })
           
           ##-----level plot-----
