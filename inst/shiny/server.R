@@ -3,6 +3,7 @@ library(data.table)
 source('./ui.R')
 library(flowCore)
 library(shinyalert)
+source('./global.R')
 library(shinyWidgets)
 
 options(bitmapType='cairo')
