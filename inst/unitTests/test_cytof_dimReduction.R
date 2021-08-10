@@ -4,3 +4,4 @@ test_cytof_dimReduction <- function() {
     out_data <- cytof_dimReduction(in_data, method = "tsne")
     checkEquals(dim(out_data)[2], 2)
 }
+
