@@ -605,7 +605,7 @@ shinyServer = function(input, output, session)
             # fig_height = ceiling(length(unique(analysis_results$clusterRes$Rphenograph[, 1]))/4)*2.5
             # script2 = create_script(paste0("## ", temp_name, " plot color by cluster (splitted version)"), {
             #   p = plot_split_scatter(analysis_results$dimReducedRes[[dr_names[i]]]
-            #                          , analysis_results$clusterRes$Rphenograph, ncol = 4, show_legend = F) 
+            #                          , analysis_results$clusterRes$Rphenograph, ncol = 4, show_legend = FALSE) 
             #   p[[1]]
             # }, values = c("dr_names[i]"), fig_height = fig_height, fig_width = 9)
             # return(c(script1, script2))
@@ -733,7 +733,7 @@ shinyServer = function(input, output, session)
         
         render(output_file_name, output_file = file)
         # output_pdf = basename(output_file_name)
-        # output_pdf = paste0(get_file_name(output_pdf, with_ext = F), ".pdf")
+        # output_pdf = paste0(get_file_name(output_pdf, with_ext = FALSE), ".pdf")
         # system(paste0("cp ", output_file_name, " ", file))
         
       })
