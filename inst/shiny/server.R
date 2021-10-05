@@ -52,7 +52,7 @@ shinyServer = function(input, output, session)
     inputs$fcsFiles = paste0(cur_dir, input$rawfcs$name)
     # input$rawfcs$datapath = paste0(cur_dir, input$rawfcs$name)
     
-    fcs <- suppressWarnings(read.FCS(inputs$fcsFiles[1]), truncate_max_range = FALSE)
+    fcs <- suppressWarnings(read.FCS(inputs$fcsFiles[1]))
     pd <- fcs@parameters@data
     markers <- paste(pd$name, "<", pd$desc, ">", sep = "")
     inputs$markers = markers
