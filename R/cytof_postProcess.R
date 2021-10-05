@@ -919,7 +919,7 @@ cytof_addToFCS <- function(data,
     return(NULL)
     }
         message("Save to file:", fn, "\n")
-        fcs <- read.FCS(fn, transformation = FALSE, truncate_max_range = FALSE)
+        fcs <- read.FCS(fn, transformation = FALSE)
         pattern <- paste(sample[i], "_", sep = "")
         to_add_i <- as.data.frame(to_add[grep(pattern, row.names(to_add), fixed = TRUE), ])
         m <- regexpr("_[0-9]*$", row.names(to_add_i))
