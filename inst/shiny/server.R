@@ -838,9 +838,9 @@ shinyServer = function(input, output, session)
         temp_sample_names = lapply(1:length(v$data$sampleNames), function(i){
           v$data$sampleNames[[i]][length(v$data$sampleNames[[i]])]
         })
-        if(!all(temp_sample_names %in% input$samples)){
-          return(NULL)
-        }
+        #if(!all(temp_sample_names %in% input$samples)){
+        #  return(NULL)
+        #}
         # browser()
         gp <- scatterPlot(obj = v$data,
                           plotMethod = input$c_PlotMethod,
